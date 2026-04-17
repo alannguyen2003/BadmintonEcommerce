@@ -6,4 +6,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Entities\Inventory\" />
+      <Folder Include="Events\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BadmintonEcommerce.SharedKernel\BadmintonEcommerce.SharedKernel.csproj" />
+    </ItemGroup>
+
 </Project>
