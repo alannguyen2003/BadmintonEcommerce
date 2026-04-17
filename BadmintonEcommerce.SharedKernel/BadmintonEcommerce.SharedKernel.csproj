@@ -7,4 +7,8 @@
         <RootNamespace>SharedKernel</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Exceptions\" />
+    </ItemGroup>
+
 </Project>
