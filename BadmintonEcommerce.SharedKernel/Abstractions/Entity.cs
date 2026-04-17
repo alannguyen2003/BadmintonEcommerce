@@ -1,18 +1,14 @@
 ﻿namespace SharedKernel.Abstractions;
 
-public abstract class Entity
+public abstract class Entity<T> : IEntityId<T>, IAuditable
 {
-    private readonly List<IDomainEvent> _domainEvents = [];
-
-    public List<IDomainEvent> DomainEvents => [.. _domainEvents];
-
-    public void ClearDomainEvents()
-    {
-        _domainEvents.Clear();
-    }
-
-    public void Raise(IDomainEvent domainEvent)
-    {
-        _domainEvents.Add(domainEvent);
-    }
+    #region Fields, Properties and Indexers
+    
+    public T Id { get; set; }
+    public DateTimeOffset CreatedOnUtc { get; set; }
+    public string? CreatedBy { get; set; }
+    public DateTimeOffset? LastModifiedOnUtc { get; set; }
+    public string? LastModifiedBy { get; set; }
+    
+    #endregion
 }
