@@ -1,6 +1,6 @@
 ﻿namespace SharedKernel.Abstractions;
 
-public class Aggregate<TId> : Entity<TId>, IAggregate<TId>
+public abstract class Aggregate<TId> : Entity<TId>, IAggregate<TId>
 {
     #region Fields, Properties and Indexers
 
