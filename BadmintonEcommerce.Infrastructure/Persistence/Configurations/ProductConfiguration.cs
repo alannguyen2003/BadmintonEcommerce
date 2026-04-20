@@ -23,6 +23,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(b => b.Brand)
             .IsRequired()
             .HasMaxLength(100);
+        builder.Property(b => b.Slug)
+            .IsRequired()
+            .HasMaxLength(200);
         
         //foreign key defined 
         builder.HasOne(b => b.Category)

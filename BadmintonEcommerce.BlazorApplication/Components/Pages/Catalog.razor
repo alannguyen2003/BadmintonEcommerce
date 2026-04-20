@@ -1,0 +1,154 @@
+﻿@page "/catalog"
+@using BadmintonEcommerce.BlazorApplication.Models
+@using BadmintonEcommerce.BlazorApplication.Services
+@rendermode InteractiveServer
+
+@inject ProductCatalog CatalogService
+@inject NavigationManager Nav
+
+<div class="space-y-6">
+    <div>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-energy-blue">Sản phẩm</h1>
+        <p class="text-slate-600 mt-1">Tìm kiếm, lọc danh mục và chọn đúng biến thể bạn cần.</p>
+    </div>
+
+    <div class="bg-white/70 backdrop-blur rounded-2xl ring-1 ring-slate-200/70 p-4 md:p-6">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+            <div class="md:col-span-5">
+                <label class="text-sm font-semibold text-slate-700">Tìm kiếm</label>
+                <input class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-energy-blue/30"
+                       placeholder="VD: vợt, giày, grip..."
+                       @bind="searchTerm" />
+            </div>
+
+            <div class="md:col-span-3">
+                <label class="text-sm font-semibold text-slate-700">Danh mục</label>
+                <select class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-energy-blue/30"
+                        @bind="selectedCategorySlug">
+                    <option value="">Tất cả</option>
+                    @foreach (var cat in CatalogService.Categories)
+                    {
+                        <option value="@cat.Slug">@cat.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="md:col-span-4">
+                <label class="text-sm font-semibold text-slate-700">Sắp xếp</label>
+                <select class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-energy-blue/30"
+                        @bind="sortKey">
+                    <option value="popular">Phổ biến (mặc định)</option>
+                    <option value="priceAsc">Giá tăng dần</option>
+                    <option value="priceDesc">Giá giảm dần</option>
+                    <option value="nameAsc">Tên A-Z</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    @if (filteredProducts.Count == 0)
+    {
+        <div class="text-center py-10 text-slate-600">
+            <div class="font-semibold">Không tìm thấy sản phẩm</div>
+            <div class="text-sm mt-2">Thử đổi từ khóa hoặc chọn danh mục khác.</div>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach (var p in filteredProducts)
+            {
+                <button class="text-left rounded-2xl overflow-hidden ring-1 ring-slate-200/70 bg-white/70 hover:shadow-sm hover:ring-energy-blue/30 transition shadow-sm"
+                        style="touch-action: manipulation;"
+                                @onclick="() => GoToProduct(p.Slug)">
+                    <div class="aspect-[4/3] bg-slate-50">
+                        <img src="@p.HeroImageUrl" alt="@p.Name" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="p-4 space-y-2">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <div class="font-bold text-slate-900 truncate">@p.Name</div>
+                                <div class="text-sm text-slate-500 truncate">@p.Brand</div>
+                            </div>
+                            @if (p.DiscountPercent is not null && p.DiscountPercent > 0)
+                            {
+                                <div class="shrink-0 inline-flex items-center rounded-full bg-energy-red/10 text-energy-red px-3 py-1 text-xs font-bold">
+                                    -@p.DiscountPercent.Value%
+                                </div>
+                            }
+                        </div>
+
+                        <div class="flex items-end gap-2">
+                            <div class="text-energy-blue font-extrabold">
+                                @MoneyFormat.Vnd(p.GetMinPriceAfterDiscount())
+                            </div>
+                            @if (p.DiscountPercent is not null && p.DiscountPercent > 0)
+                            {
+                                var beforeMin = p.Variants.Min(v => p.GetPrices(v).UnitPriceBeforeDiscount);
+                                <div class="text-xs text-slate-400 line-through">
+                                    @MoneyFormat.Vnd(beforeMin)
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </button>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private string searchTerm = string.Empty;
+    private string selectedCategorySlug = string.Empty;
+    private string sortKey = "popular";
+
+    private List<Product> filteredProducts = new();
+
+    protected override void OnParametersSet()
+    {
+        // No route params; refresh when bound fields change.
+        ApplyFilter();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            ApplyFilter();
+        }
+    }
+
+    private void ApplyFilter()
+    {
+        var q = (searchTerm ?? string.Empty).Trim();
+        IEnumerable<Product> items = CatalogService.Products;
+
+        if (!string.IsNullOrWhiteSpace(q))
+        {
+            items = items.Where(p =>
+                p.Name.Contains(q, StringComparison.OrdinalIgnoreCase) ||
+                p.Brand.Contains(q, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(selectedCategorySlug))
+        {
+            items = items.Where(p => p.CategorySlug.Equals(selectedCategorySlug, StringComparison.OrdinalIgnoreCase));
+        }
+
+        items = sortKey switch
+        {
+            "priceAsc" => items.OrderBy(p => p.GetMinPriceAfterDiscount()),
+            "priceDesc" => items.OrderByDescending(p => p.GetMinPriceAfterDiscount()),
+            "nameAsc" => items.OrderBy(p => p.Name),
+            _ => items
+        };
+
+        filteredProducts = items.ToList();
+    }
+
+    private void GoToProduct(string slug)
+    {
+        Nav.NavigateTo($"/product/{slug}");
+    }
+}
+

@@ -7,6 +7,7 @@ public class Product : Aggregate<Guid>
     public string Name { get; set; }
     public string Description { get; set; }
     public string Brand { get; set; }
+    public string Slug { get; set; }
     
     //Category
     public Guid CategoryId { get; set; }
