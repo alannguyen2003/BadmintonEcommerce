@@ -14,4 +14,8 @@
       <PackageReference Include="Serilog" Version="4.3.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\BadmintonEcommerce.Domain\BadmintonEcommerce.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

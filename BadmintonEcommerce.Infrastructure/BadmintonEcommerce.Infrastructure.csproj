@@ -10,8 +10,20 @@
       <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0" />
       <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.15" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.15" />
       <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.15" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BadmintonEcommerce.Application\BadmintonEcommerce.Application.csproj" />
+      <ProjectReference Include="..\BadmintonEcommerce.Domain\BadmintonEcommerce.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Authentication\" />
+      <Folder Include="Authorization\" />
+      <Folder Include="Persistence\Profiles\" />
     </ItemGroup>
 
 </Project>
