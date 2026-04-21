@@ -1,7 +1,150 @@
 ﻿@page "/"
+@using BadmintonEcommerce.BlazorApplication.Models
+@using BadmintonEcommerce.BlazorApplication.Services
 
-<PageTitle>Home</PageTitle>
+@rendermode InteractiveServer
 
-<h1>Hello, world!</h1>
+@inject ProductCatalog Catalog
+@inject NavigationManager Nav
 
-Welcome to your new app.
+<PageTitle>Nguyên Cầu Lông Shop</PageTitle>
+
+<div class="space-y-8">
+    <section class="relative overflow-hidden rounded-3xl ring-1 ring-slate-200/70 bg-white/60 backdrop-blur">
+        <div class="absolute inset-0 bg-gradient-to-r from-energy-blue/15 via-white to-energy-red/10"></div>
+        <div class="absolute inset-0 pointer-events-none shop-hero-pattern"></div>
+        <div class="relative p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-7 space-y-4">
+                <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900">
+                    Nguyên Cầu Lông Shop
+                </h1>
+                <p class="text-slate-600 text-base md:text-lg">
+                    Vợt, giày, quả cầu, quần áo và phụ kiện cầu lông - chọn đúng chất lượng, tập đúng phong cách.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button class="inline-flex items-center justify-center rounded-xl bg-energy-red px-6 py-3 text-white font-extrabold hover:bg-energy-red/90"
+                            @onclick="GoToCatalog">
+                        Khám phá sản phẩm
+                    </button>
+                    <button class="inline-flex items-center justify-center rounded-xl ring-1 ring-slate-200 px-6 py-3 text-slate-800 font-bold hover:ring-energy-blue/30"
+                            @onclick="GoToCart">
+                        Xem giỏ hàng
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 pt-3">
+                    <div class="rounded-2xl bg-white/70 ring-1 ring-slate-200/70 p-3">
+                        <div class="text-xs text-slate-500 font-semibold">Danh mục</div>
+                        <div class="text-lg font-extrabold text-energy-blue">@Catalog.Categories.Count</div>
+                    </div>
+                    <div class="rounded-2xl bg-white/70 ring-1 ring-slate-200/70 p-3">
+                        <div class="text-xs text-slate-500 font-semibold">Sản phẩm</div>
+                        <div class="text-lg font-extrabold text-energy-red">@Catalog.Products.Count</div>
+                    </div>
+                    <div class="rounded-2xl bg-white/70 ring-1 ring-slate-200/70 p-3">
+                        <div class="text-xs text-slate-500 font-semibold">Giảm giá</div>
+                        <div class="text-lg font-extrabold text-slate-900">
+                            @(Catalog.Products.Count(p => p.DiscountPercent is not null && p.DiscountPercent > 0))
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5">
+                <div class="rounded-3xl overflow-hidden ring-1 ring-slate-200/70 bg-slate-50">
+                    <div class="aspect-[4/3] relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-energy-blue/20 via-white to-energy-red/15"></div>
+                        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+                            <div class="inline-flex items-center gap-2 rounded-2xl bg-white/75 backdrop-blur ring-1 ring-slate-200/70 px-4 py-3">
+                                <div class="h-10 w-10 rounded-2xl bg-energy-blue/20 ring-1 ring-energy-blue/30 flex items-center justify-center font-extrabold text-energy-blue">
+                                    NC
+                                </div>
+                                <div>
+                                    <div class="text-sm font-extrabold text-slate-900">Năng lượng cho mỗi buổi tập</div>
+                                    <div class="text-xs text-slate-600">Chọn vợt, giày và phụ kiện phù hợp</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-sm text-slate-600">
+                    Gợi ý: vào mục <span class="font-semibold text-energy-blue">Sản phẩm</span> để chọn biến thể và thêm vào giỏ.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="space-y-4">
+        <div class="flex items-end justify-between gap-4">
+            <div>
+                <h2 class="text-xl font-extrabold text-slate-900">Danh mục nổi bật</h2>
+                <div class="text-sm text-slate-600 mt-1">Mọi thứ bạn cần cho cầu lông.</div>
+            </div>
+            <button class="text-sm font-bold text-energy-blue hover:text-energy-blue/90"
+                    @onclick="GoToCatalog">
+                Xem tất cả
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            @foreach (var c in Catalog.Categories)
+            {
+                <div class="rounded-2xl bg-white/70 backdrop-blur ring-1 ring-slate-200/70 p-4 hover:ring-energy-blue/30 transition">
+                    <div class="font-extrabold text-slate-900">@c.Name</div>
+                    <div class="text-xs text-slate-600 mt-2">Tìm sản phẩm ngay tại cửa hàng.</div>
+                    <button class="mt-3 text-sm font-bold text-energy-blue hover:text-energy-blue/90"
+                            @onclick="GoToCatalog">
+                        Mua ngay
+                    </button>
+                </div>
+            }
+        </div>
+    </section>
+
+    <section class="space-y-4">
+        <div class="flex items-end justify-between gap-4">
+            <div>
+                <h2 class="text-xl font-extrabold text-slate-900">Sản phẩm đề xuất</h2>
+                <div class="text-sm text-slate-600 mt-1">Gợi ý theo danh sách seed hiện tại.</div>
+            </div>
+        </div>
+
+        @{
+            var featured = Catalog.Products.Take(6).ToList();
+        }
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach (var p in featured)
+            {
+                <button class="text-left rounded-2xl overflow-hidden ring-1 ring-slate-200/70 bg-white/70 hover:shadow-sm hover:ring-energy-blue/30 transition shadow-sm"
+                        @onclick="() => GoToProduct(p.Slug)">
+                    <div class="aspect-[4/3] bg-slate-50">
+                        <img src="@p.HeroImageUrl" alt="@p.Name" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="p-4 space-y-2">
+                        <div class="font-extrabold text-slate-900 truncate">@p.Name</div>
+                        <div class="text-sm text-slate-500 truncate">@p.Brand</div>
+                        <div class="flex items-end gap-2">
+                            <div class="text-energy-blue font-extrabold">
+                                @MoneyFormat.Vnd(p.GetMinPriceAfterDiscount())
+                            </div>
+                            @if (p.DiscountPercent is not null && p.DiscountPercent > 0)
+                            {
+                                <div class="text-xs text-slate-400 line-through">
+                                    @MoneyFormat.Vnd(p.Variants.Min(v => p.GetPrices(v).UnitPriceBeforeDiscount))
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </button>
+            }
+        </div>
+    </section>
+</div>
+
+@code {
+    private void GoToCatalog() => Nav.NavigateTo("/catalog");
+    private void GoToCart() => Nav.NavigateTo("/cart");
+    private void GoToProduct(string slug) => Nav.NavigateTo($"/product/{slug}");
+}
