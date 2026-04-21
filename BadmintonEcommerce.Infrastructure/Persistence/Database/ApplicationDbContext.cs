@@ -1,4 +1,4 @@
-﻿using BadmintonEcommerce.Application.Data;
+﻿using BadmintonEcommerce.Application.Abstraction.Data;
 using BadmintonEcommerce.Domain.Entities.Catalog;
 using BadmintonEcommerce.Domain.Entities.Inventory;
 using BadmintonEcommerce.Infrastructure.DomainEvents;
@@ -16,6 +16,8 @@ public class ApplicationDbContext(
     public virtual DbSet<ProductOption> ProductOptions { get; set; }
     public virtual DbSet<ProductOptionValue> ProductOptionValues { get; set; }
     public virtual DbSet<ProductVariant> ProductVariants { get; set; }
+    public virtual DbSet<VariantCombination> Combinations { get; set; }
+    public virtual DbSet<ProductImage> ProductImages { get; set; }
     public virtual DbSet<InventoryItem> InventoryItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

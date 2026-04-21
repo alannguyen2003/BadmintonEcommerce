@@ -11,4 +11,5 @@ public class ProductVariant : Entity<Guid>
     private List<OptionValueId> _valueIds;
 
     public IReadOnlyCollection<OptionValueId> ValueIds => _valueIds;
+    public ICollection<VariantCombination> Combinations { get; set; }
 }

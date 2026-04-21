@@ -9,12 +9,14 @@ public class Product : Aggregate<Guid>
     public string Brand { get; set; }
     public string Slug { get; set; }
     
-    //Category
+    #region Foreign Keys
     public Guid CategoryId { get; set; }
     public ProductCategory Category { get; set; }
+    #endregion
     
-    //Options 
+    #region Collections 
     public ICollection<ProductOption> Options { get; set; }
-    
+    public ICollection<ProductImage> Images { get; set; }
+    #endregion  
     
 }

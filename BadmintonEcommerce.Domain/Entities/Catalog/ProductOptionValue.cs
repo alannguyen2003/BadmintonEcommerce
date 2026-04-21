@@ -8,4 +8,7 @@ public class ProductOptionValue : Entity<Guid>
     
     public Guid OptionId { get; set; }
     public ProductOption Option { get; set; }
+    
+    //Collections
+    public ICollection<VariantCombination> Combinations { get; set; }
 }

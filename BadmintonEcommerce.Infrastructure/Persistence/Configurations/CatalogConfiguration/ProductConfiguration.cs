@@ -1,19 +1,23 @@
 ﻿using BadmintonEcommerce.Domain.Entities.Catalog;
+using BadmintonEcommerce.Infrastructure.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BadmintonEcommerce.Infrastructure.Persistence.Configurations;
+namespace BadmintonEcommerce.Infrastructure.Persistence.Configurations.CatalogConfiguration;
 
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("products");
+        #region Table
+        builder.ToTable(EntityTypeConfiguration.Table.CatalogContext.ProductTable);
+        #endregion
         
-        //Primary key defined
+        #region Keys
         builder.HasKey(b => b.Id);
+        #endregion
         
-        //Properties defined
+        #region Property
         builder.Property(b => b.Name)
             .IsRequired()
             .HasMaxLength(100);
@@ -26,11 +30,13 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(b => b.Slug)
             .IsRequired()
             .HasMaxLength(200);
+        #endregion  
         
-        //foreign key defined 
+        #region Foreign Keys
         builder.HasOne(b => b.Category)
             .WithMany(c => c.Products)
             .HasForeignKey(b => b.CategoryId)
             .OnDelete(DeleteBehavior.SetNull);
+        #endregion
     }
 }

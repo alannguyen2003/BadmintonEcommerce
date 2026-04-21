@@ -8,5 +8,7 @@ public class ProductCategory : Entity<Guid>
     public Guid? ParentCategoryId { get; set; }
     public ProductCategory? ParentCategory { get; set; }
     
+    //Collections
     public ICollection<Product> Products { get; set; }
+    public ICollection<ProductCategory> ChildCategories { get; set; }
 }
