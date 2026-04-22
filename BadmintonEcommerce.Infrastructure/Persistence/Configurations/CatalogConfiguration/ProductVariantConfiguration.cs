@@ -24,5 +24,13 @@ public class ProductVariantConfiguration : IEntityTypeConfiguration<ProductVaria
         builder.Property(pv => pv.Price)
             .IsRequired();
         #endregion
+        
+        #region Foreign Keys
+
+        builder.HasOne(b => b.Inventory)
+            .WithOne(p => p.Variant)
+            .HasForeignKey<ProductVariant>(b => b.InventoryItemId);
+        
+        #endregion
     }
 }
