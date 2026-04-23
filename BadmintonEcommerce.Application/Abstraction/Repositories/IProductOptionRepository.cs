@@ -2,6 +2,7 @@
 
 namespace BadmintonEcommerce.Application.Abstraction.Repositories;
 
-public interface IProductImageRepository : IRepository<ProductImage>
+public interface IProductOptionRepository : IRepository<ProductOption>
 {
+    
 }
