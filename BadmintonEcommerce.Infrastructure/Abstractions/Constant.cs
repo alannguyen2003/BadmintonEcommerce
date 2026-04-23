@@ -2,6 +2,13 @@
 
 public static class Constant
 {
+    public static class Connection
+    {
+        public static class Database
+        {
+            public const string DefaultConnection = "DefaultConnection";
+        }
+    }
     public static class Queryable
     {
         public static class Default
