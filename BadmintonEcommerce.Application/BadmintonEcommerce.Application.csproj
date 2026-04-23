@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Abstraction\" />
+      <Folder Include="Abstraction\Services\" />
     </ItemGroup>
 
 </Project>

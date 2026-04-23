@@ -21,9 +21,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Authentication\" />
       <Folder Include="Authorization\" />
       <Folder Include="Persistence\Profiles\" />
+      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>

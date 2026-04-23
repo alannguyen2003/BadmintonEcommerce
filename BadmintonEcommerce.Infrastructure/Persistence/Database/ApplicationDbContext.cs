@@ -1,5 +1,4 @@
-﻿using BadmintonEcommerce.Application.Abstraction.Data;
-using BadmintonEcommerce.Domain.Entities.Catalog;
+﻿using BadmintonEcommerce.Domain.Entities.Catalog;
 using BadmintonEcommerce.Domain.Entities.Inventory;
 using BadmintonEcommerce.Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,7 @@ namespace BadmintonEcommerce.Infrastructure.Persistence.Database;
 public class ApplicationDbContext(
     DbContextOptions<ApplicationDbContext> options,
     IDomainEventDispatcher domainEventDispatcher)
-    : DbContext(options), IApplicationDbContext
+    : DbContext(options)
 {
     public virtual DbSet<Product> Products { get; set; }
     public virtual DbSet<ProductCategory> Categories { get; set; }
