@@ -15,6 +15,12 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
 
         #endregion
         
+        #region Primary Key
+
+        builder.HasKey(b => b.Id);
+        
+        #endregion
+        
         #region Properties
         
         builder.Property(p => p.CategoryName)

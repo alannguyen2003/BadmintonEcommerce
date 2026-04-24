@@ -15,6 +15,12 @@ public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
 
         #endregion
         
+        #region Primary Key
+
+        builder.HasKey(b => b.Id);
+        
+        #endregion
+        
         #region Properties
 
         builder.Property(b => b.Url)

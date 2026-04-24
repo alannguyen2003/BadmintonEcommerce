@@ -6,7 +6,7 @@ public static class Constant
     {
         public static class Database
         {
-            public const string DefaultConnection = "DefaultConnection";
+            public const string DefaultConnection = "BadmintonShopDb";
         }
     }
     public static class Queryable

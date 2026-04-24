@@ -15,6 +15,12 @@ public class ProductOptionValueConfiguration : IEntityTypeConfiguration<ProductO
 
         #endregion
         
+        #region Primary Key
+
+        builder.HasKey(b => b.Id);
+        
+        #endregion
+        
         #region Properties
         
         

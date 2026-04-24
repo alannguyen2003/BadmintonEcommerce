@@ -1,8 +1,10 @@
 ﻿using System.Text;
 using BadmintonEcommerce.Application.Abstraction.Authentication;
+using BadmintonEcommerce.Application.Abstraction.Repositories;
 using BadmintonEcommerce.Infrastructure.Abstractions;
 using BadmintonEcommerce.Infrastructure.DomainEvents;
 using BadmintonEcommerce.Infrastructure.Persistence.Database;
+using BadmintonEcommerce.Infrastructure.Repositories;
 using BadmintonEcommerce.Infrastructure.Time;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +20,17 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureLayer(
         this IServiceCollection services,
         IConfiguration configuration)
-        => services;
+        => services
+            .AddRepositories()
+            .AddServices()
+            .AddDatabase(configuration)
+            .AddHealthChecks(configuration);
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+        return services;
+    }
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
@@ -33,15 +45,15 @@ public static class DependencyInjection
         string? connectionString = configuration.GetConnectionString(Constant.Connection.Database.DefaultConnection);
 
         services.AddDbContext<ApplicationDbContext>(options => options
-            .UseSqlServer(connectionString)
-            .UseSnakeCaseNamingConvention());
+            .UseSqlServer(connectionString));
         return services;
     }
 
     private static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
+        Console.WriteLine(configuration.GetConnectionString(Constant.Connection.Database.DefaultConnection));
         services.AddHealthChecks()
-            .AddSqlServer(configuration.GetConnectionString(Constant.Connection.Database.DefaultConnection));
+            .AddSqlServer(configuration.GetConnectionString(Constant.Connection.Database.DefaultConnection) ?? string.Empty);
         return services;
     }
 

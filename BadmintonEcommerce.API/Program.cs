@@ -1,5 +1,6 @@
 using System.Reflection;
 using BadmintonEcommerce.API;
+using BadmintonEcommerce.API.Extensions;
 using BadmintonEcommerce.Application;
 using BadmintonEcommerce.Infrastructure;
 using HealthChecks.UI.Client;
@@ -15,26 +16,20 @@ builder.Services.AddSwaggerGenWithAuth();
 */
 
 builder.Services
+    .AddInfrastructureLayer(builder.Configuration)
     .AddApplication()
-    .AddPresentation()
-    .AddInfrastructureLayer(builder.Configuration);
+    .AddPresentation();
 
-/*
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
-*/
 
 WebApplication app = builder.Build();
 
 
 if (app.Environment.IsDevelopment())
 {
-    /*
     app.UseSwaggerWithUi();
-    */
 
-    /*
     app.ApplyMigrations();
-    */
 
     app.MapGet("/", () => Results.Redirect("/swagger"));
 }
@@ -55,9 +50,7 @@ app.UseExceptionHandler();
 app.UseAuthentication();
 
 app.UseAuthorization();
-/*
 app.MapEndpoints();
-*/
 
 
 // REMARK: If you want to use Controllers, you'll need this.

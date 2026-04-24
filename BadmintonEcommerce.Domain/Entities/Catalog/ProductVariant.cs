@@ -1,4 +1,5 @@
-﻿using BadmintonEcommerce.Domain.Entities.Inventory;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using BadmintonEcommerce.Domain.Entities.Inventory;
 using BadmintonEcommerce.Domain.ValueObjects;
 using SharedKernel.Abstractions;
 
@@ -14,6 +15,7 @@ public class ProductVariant : Entity<Guid>
     public Guid InventoryItemId { get; set; }
     public InventoryItem Inventory { get; set; }
 
+    [NotMapped]
     public IReadOnlyCollection<OptionValueId> ValueIds => _valueIds;
     public ICollection<VariantCombination> Combinations { get; set; }
 }
