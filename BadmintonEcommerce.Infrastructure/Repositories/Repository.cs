@@ -69,4 +69,9 @@ public class Repository<TEntity>(ApplicationDbContext context) : IRepository<TEn
     {
         context.Entry(entity).State = EntityState.Modified;
     }
+
+    public async Task SaveChangesAsync()
+    {
+        await context.SaveChangesAsync();
+    }
 }

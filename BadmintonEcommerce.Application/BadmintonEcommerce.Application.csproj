@@ -20,8 +20,4 @@
       <ProjectReference Include="..\BadmintonEcommerce.Mapper\BadmintonEcommerce.Mapper.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Features\ProductCategory\Create\" />
-    </ItemGroup>
-
 </Project>

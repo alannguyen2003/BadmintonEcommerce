@@ -8,7 +8,7 @@ using SharedKernel.Services;
 
 namespace BadmintonEcommerce.API.Endpoints.Image;
 
-public class Get : IEndpoint
+public class Create : IEndpoint
 {
     public class UploadRequest 
     {

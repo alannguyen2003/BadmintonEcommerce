@@ -4,6 +4,7 @@ using BadmintonEcommerce.Mapper.Configurations;
 
 namespace BadmintonEcommerce.Application.Abstraction.Profile;
 
+
 public class ProductCategoryProfile : IMappingProfile
 {
     public void Configure(MapperConfiguration configuration)
@@ -12,5 +13,7 @@ public class ProductCategoryProfile : IMappingProfile
             .ForMember(des => des.CategoryName, src => src.CategoryName)
             .ForMember(des => des.ParentCategoryName, src => src.ParentCategory.ParentCategory)
             .ReverseMap();
+        
+        
     }
 }

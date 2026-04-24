@@ -17,4 +17,5 @@ public interface IRepository<TEntity> where TEntity : class
     Task Delete(object id);
     Task Delete(TEntity entity);
     Task Update(TEntity entity);
+    Task SaveChangesAsync();
 }
