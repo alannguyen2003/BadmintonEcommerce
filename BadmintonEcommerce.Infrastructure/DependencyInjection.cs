@@ -1,10 +1,12 @@
 ﻿using System.Text;
 using BadmintonEcommerce.Application.Abstraction.Authentication;
 using BadmintonEcommerce.Application.Abstraction.Repositories;
+using BadmintonEcommerce.Application.Abstraction.Services;
 using BadmintonEcommerce.Infrastructure.Abstractions;
 using BadmintonEcommerce.Infrastructure.DomainEvents;
 using BadmintonEcommerce.Infrastructure.Persistence.Database;
 using BadmintonEcommerce.Infrastructure.Repositories;
+using BadmintonEcommerce.Infrastructure.Services;
 using BadmintonEcommerce.Infrastructure.Time;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +26,9 @@ public static class DependencyInjection
             .AddRepositories()
             .AddServices()
             .AddDatabase(configuration)
-            .AddHealthChecks(configuration);
+            .AddHealthChecks(configuration)
+            .AddCloudinary(configuration)
+            .AddThirdPartyServices();
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
@@ -91,6 +95,18 @@ public static class DependencyInjection
 
     private static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
     {
+        return services;
+    }
+
+    private static IServiceCollection AddCloudinary(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<CloudinarySetting>(configuration.GetSection("Cloudinary"));
+        return services;
+    }
+
+    private static IServiceCollection AddThirdPartyServices(this IServiceCollection services)
+    {
+        services.AddScoped<IFileService, FileService>();
         return services;
     }
 }
