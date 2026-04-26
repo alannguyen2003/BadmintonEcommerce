@@ -9,8 +9,7 @@ public static class ServiceCollectionExtension
     {
         services.AddSwaggerGen(static o =>
         {
-            o.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));
-
+            o.CustomSchemaIds(type => type.FullName);
             var securityScheme = new OpenApiSecurityScheme()
             {
                 Name = "JWT Authentication",
