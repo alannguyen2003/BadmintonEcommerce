@@ -12,11 +12,10 @@ public sealed class Get : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("categories", async (
-            IQueryHandler<GetProductCategoriesQuery, List<Domain.Entities.Catalog.ProductCategory>> handler,
+            IQueryHandler<GetProductCategoriesQuery, List<ProductCategoryResponse>> handler,
             CancellationToken ct) =>
         {
-            var query = new GetProductCategoriesQuery();
-            Result<List<Domain.Entities.Catalog.ProductCategory>> result = await handler.Handle(query, ct);
+            Result<List<ProductCategoryResponse>> result = await handler.Handle(new GetProductCategoriesQuery(), ct);
 
             return result.Match(Results.Ok, CustomResult.Problem);
         });

@@ -15,7 +15,7 @@ public sealed class Create : IEndpoint
     }
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("categories/create", async (
+        app.MapPost("categories", async (
             Request request,
             ICommandHandler<CreateProductCategoryCommand, Guid> handler, 
             CancellationToken cancellationToken) =>

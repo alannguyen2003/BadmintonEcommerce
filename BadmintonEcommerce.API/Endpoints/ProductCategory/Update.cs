@@ -15,7 +15,7 @@ public class Update : IEndpoint
     
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("categories/update", async (
+        app.MapPut("categories", async (
             [FromBody] UpdateProductCategoryRequest request,
             [FromServices] ICommandHandler<UpdateProductCategoryCommand> handler,
             CancellationToken cancellationToken

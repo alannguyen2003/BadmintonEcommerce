@@ -5,13 +5,17 @@ using SharedKernel.Patterns;
 
 namespace BadmintonEcommerce.Application.Features.ProductCategory.Get;
 
-public class GetProductCategoriesQueryHandler(IMapper mapper, IProductCategoryRepository productCategoryRepository) : IQueryHandler<GetProductCategoriesQuery, List<Domain.Entities.Catalog.ProductCategory>>
+public class GetProductCategoriesQueryHandler(IMapper mapper, IProductCategoryRepository productCategoryRepository) : 
+    IQueryHandler<GetProductCategoriesQuery, List<ProductCategoryResponse>>
 {
-    public async Task<Result<List<Domain.Entities.Catalog.ProductCategory>>> Handle(GetProductCategoriesQuery query, CancellationToken cancellationToken)
+    public async Task<Result<List<ProductCategoryResponse>>> Handle(GetProductCategoriesQuery query, CancellationToken cancellationToken)
     {
         IEnumerable<Domain.Entities.Catalog.ProductCategory> categories =
-            await productCategoryRepository.Get(null, null, "");
-        return categories
-            .ToList();
+            await productCategoryRepository.Get(null, null, "ParentCategory");
+        
+        List<Domain.Entities.Catalog.ProductCategory> productCategoriesRaw = categories.ToList();
+        
+        List<ProductCategoryResponse> responses = mapper.Map<List<ProductCategoryResponse>>(productCategoriesRaw);
+        return responses;
     }
 }

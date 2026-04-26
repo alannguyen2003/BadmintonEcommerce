@@ -11,9 +11,7 @@ public class ProductCategoryProfile : IMappingProfile
     {
         configuration.CreateMap<ProductCategory, ProductCategoryResponse>()
             .ForMember(des => des.CategoryName, src => src.CategoryName)
-            .ForMember(des => des.ParentCategoryName, src => src.ParentCategory.ParentCategory)
+            .ForMember(des => des.ParentCategoryName, src => (src.ParentCategory != null ? src.ParentCategory.CategoryName : null) ?? string.Empty)
             .ReverseMap();
-        
-        
     }
 }
