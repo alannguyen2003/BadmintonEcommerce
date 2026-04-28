@@ -3,13 +3,15 @@ using BadmintonEcommerce.Application.Abstraction.Repositories;
 using BadmintonEcommerce.Domain.Errors;
 using BadmintonEcommerce.Mapper.Abstractions;
 using SharedKernel.Patterns;
+using SharedKernel.Services;
 
 namespace BadmintonEcommerce.Application.Features.Product.Create;
 
 public class CreateProductCommandHandler(
     IProductRepository productRepository,
     IProductCategoryRepository productCategoryRepository,
-    IMapper mapper) : ICommandHandler<CreateProductCommand, Guid>
+    IMapper mapper,
+    IDateTimeProvider dateTimeProvider) : ICommandHandler<CreateProductCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
@@ -19,6 +21,7 @@ public class CreateProductCommandHandler(
             return Result.Failure<Guid>(ProductCategoryError.NotFound(command.CategoryId));
 
         Domain.Entities.Catalog.Product product = mapper.Map<Domain.Entities.Catalog.Product>(command);
+        product.CreatedOnUtc = dateTimeProvider.UtcNow;
         
         productRepository.Insert(product);
         await productRepository.SaveChangesAsync();

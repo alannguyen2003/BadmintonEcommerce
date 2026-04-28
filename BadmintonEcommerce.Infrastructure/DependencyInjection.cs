@@ -35,6 +35,12 @@ public static class DependencyInjection
             .AddThirdPartyServices()
             .AddCustomMapper();
 
+    private static IServiceCollection AddDateTimeProvider(this IServiceCollection services)
+    {
+        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        return services;
+    }
+
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();

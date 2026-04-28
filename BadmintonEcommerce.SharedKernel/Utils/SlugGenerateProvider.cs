@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace BadmintonEcommerce.Infrastructure.Utils;
+namespace SharedKernel.Utils;
 
 public static class SlugGenerateProvider
 {

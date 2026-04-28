@@ -1,7 +1,10 @@
-﻿using BadmintonEcommerce.Application.Abstraction.Messaging;
+﻿using BadmintonEcommerce.API.Extensions;
+using BadmintonEcommerce.API.Infrastructure;
+using BadmintonEcommerce.Application.Abstraction.Messaging;
 using BadmintonEcommerce.Application.Features.ProductCategory.Update;
 using BadmintonEcommerce.Contracts.API.Presentation.ProductCategory.Requests;
 using Microsoft.AspNetCore.Mvc;
+using SharedKernel.Patterns;
 
 namespace BadmintonEcommerce.API.Endpoints.ProductCategory;
 
@@ -22,8 +25,8 @@ public class Update : IEndpoint
                 CategoryName = request.CategoryName,
                 ParentCategoryId = request.ParentCategoryId
             };
-            await handler.Handle(command, cancellationToken);
-            return;
+            Result result = await handler.Handle(command, cancellationToken);
+            return result.Match(Results.NoContent, CustomResult.Problem);
         });
     }
 }

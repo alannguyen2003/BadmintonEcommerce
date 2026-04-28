@@ -4,12 +4,14 @@ using BadmintonEcommerce.Domain.Errors;
 using BadmintonEcommerce.Mapper.Abstractions;
 using SharedKernel.Errors;
 using SharedKernel.Patterns;
+using SharedKernel.Services;
 
 namespace BadmintonEcommerce.Application.Features.ProductCategory.Update;
 
 public class UpdateProductCategoryCommandHandler(
     IProductCategoryRepository productCategoryRepository,
-    IMapper mapper)
+    IMapper mapper,
+    IDateTimeProvider dateTimeProvider)
     : ICommandHandler<UpdateProductCategoryCommand>
 {
     public async Task<Result> Handle(UpdateProductCategoryCommand command, CancellationToken cancellationToken)
@@ -22,6 +24,7 @@ public class UpdateProductCategoryCommandHandler(
         
         category.CategoryName = command.CategoryName;
         category.ParentCategoryId = command.ParentCategoryId;
+        category.LastModifiedOnUtc = dateTimeProvider.UtcNow;
         
         await productCategoryRepository.Update(category);
         await productCategoryRepository.SaveChangesAsync();
