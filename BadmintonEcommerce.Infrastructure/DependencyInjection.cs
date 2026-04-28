@@ -45,6 +45,12 @@ public static class DependencyInjection
     {
         services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductImageRepository, ProductImageRepository>();
+        services.AddScoped<IProductOptionRepository, ProductOptionRepository>();
+        services.AddScoped<IProductOptionValueRepository, ProductOptionValueRepository>();
+        services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
+        services.AddScoped<IVariantCombinationRepository, VariantCombinationRepository>();
+        services.AddScoped<IInventoryItemRepository, InventoryItemRepository>();
         return services;
     }
 
