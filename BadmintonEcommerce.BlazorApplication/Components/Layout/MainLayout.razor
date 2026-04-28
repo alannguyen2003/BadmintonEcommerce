@@ -1,37 +1,19 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="min-h-screen flex flex-col">
-    <header class="sticky top-0 z-50 border-b border-energy-red/10 bg-white/80 backdrop-blur">
-        <div class="mx-auto max-w-7xl px-4">
-            <div class="flex h-16 items-center justify-between">
-                <a href="/" class="flex items-center gap-3 font-extrabold tracking-tight text-lg text-energy-blue">
-                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-energy-blue/10 text-energy-blue ring-1 ring-energy-blue/20">
-                        <span class="text-base font-bold leading-none">NC</span>
-                    </span>
-                    Nguyên Cầu Lông Shop
-                </a>
+<div class="page">
+    <div class="sidebar">
+        <NavMenu/>
+    </div>
 
-                <NavMenu/>
-            </div>
+    <main>
+        <div class="top-row px-4">
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
-    </header>
 
-    <main class="mx-auto w-full max-w-7xl px-4 py-6">
-        <article class="bg-white/70 backdrop-blur rounded-2xl shadow-sm ring-1 ring-slate-200/70 p-4 md:p-6">
+        <article class="content px-4">
             @Body
         </article>
     </main>
-
-    <footer class="mt-auto border-t border-slate-200/70">
-        <div class="mx-auto max-w-7xl px-4 py-8 text-sm text-slate-600 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-            <span>© @DateTime.Now.Year Nguyên Cầu Lông Shop</span>
-            <span class="flex items-center gap-3">
-                <a href="#" class="hover:text-energy-blue">Chính sách</a>
-                <span class="text-slate-400">|</span>
-                <a href="#" class="hover:text-energy-blue">Liên hệ</a>
-            </span>
-        </div>
-    </footer>
 </div>
 
 <div id="blazor-error-ui" data-nosnippet>

@@ -1,4 +1,4 @@
-﻿namespace BadmintonEcommerce.Application.Features.ProductCategory.Get;
+﻿namespace BadmintonEcommerce.Contracts.API.Presentation.ProductCategory.Responses;
 
 public class ProductCategoryResponse
 {

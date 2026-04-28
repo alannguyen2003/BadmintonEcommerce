@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using BadmintonEcommerce.Application.Abstraction.Behaviours;
 using BadmintonEcommerce.Application.Abstraction.Messaging;
+/*
 using BadmintonEcommerce.Application.Abstraction.Profile;
+*/
 using BadmintonEcommerce.Mapper.Abstractions;
 using BadmintonEcommerce.Mapper.Configurations;
 using FluentValidation;
@@ -14,8 +16,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services
-            .AddCustomMapper();
+        /*services
+            .AddCustomMapper();*/
 
         services.Scan(scan => scan.FromAssembliesOf(typeof(DependencyInjection))
             .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)), publicOnly: true)
@@ -45,7 +47,7 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddCustomMapper(this IServiceCollection services)
+    /*public static IServiceCollection AddCustomMapper(this IServiceCollection services)
     {
         var config = new MapperConfiguration();
 
@@ -61,5 +63,5 @@ public static class DependencyInjection
 
         services.AddSingleton<IMapper>(new global::BadmintonEcommerce.Mapper.Runtime.Mapper(config));
         return services;
-    }
+    }*/
 }

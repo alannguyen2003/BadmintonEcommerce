@@ -7,29 +7,13 @@
     <base href="/"/>
     <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]"/>
     <link rel="stylesheet" href="@Assets["app.css"]"/>
-    <link rel="stylesheet" href="@Assets["BadmintonShopBlazorPage.styles.css"]"/>
-    <!-- Tailwind CSS for fast UI iteration (no compile step needed for local dev). -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        energy: {
-                            red: '#ef4444',
-                            blue: '#3b82f6'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="@Assets["BadmintonEcommerce.BlazorApplication.styles.css"]"/>
     <ImportMap/>
     <link rel="icon" type="image/png" href="favicon.png"/>
     <HeadOutlet/>
 </head>
 
-<body class="min-h-screen text-slate-900">
+<body>
 <Routes/>
 <script src="_framework/blazor.web.js"></script>
 </body>

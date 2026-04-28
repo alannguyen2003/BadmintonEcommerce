@@ -19,11 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-      <Folder Include="Endpoints\Product\" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <ProjectReference Include="..\BadmintonEcommerce.Contracts\BadmintonEcommerce.Contracts.csproj" />
       <ProjectReference Include="..\BadmintonEcommerce.Infrastructure\BadmintonEcommerce.Infrastructure.csproj" />
     </ItemGroup>
 

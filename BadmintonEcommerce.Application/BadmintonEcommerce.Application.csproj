@@ -16,8 +16,13 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BadmintonEcommerce.Contracts\BadmintonEcommerce.Contracts.csproj" />
       <ProjectReference Include="..\BadmintonEcommerce.Domain\BadmintonEcommerce.Domain.csproj" />
       <ProjectReference Include="..\BadmintonEcommerce.Mapper\BadmintonEcommerce.Mapper.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Abstraction\Profile\" />
     </ItemGroup>
 
 </Project>

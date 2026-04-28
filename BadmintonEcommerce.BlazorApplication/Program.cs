@@ -1,5 +1,4 @@
 using BadmintonEcommerce.BlazorApplication.Components;
-using BadmintonEcommerce.BlazorApplication.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddBlazorApplication(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

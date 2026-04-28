@@ -1,4 +1,5 @@
-﻿using BadmintonEcommerce.API.Infrastructure;
+﻿using BadmintonEcommerce.API.Extensions;
+using BadmintonEcommerce.API.Infrastructure;
 
 namespace BadmintonEcommerce.API;
 
@@ -9,7 +10,6 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddControllers();
-
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
         return services;

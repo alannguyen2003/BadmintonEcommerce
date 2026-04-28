@@ -1,22 +1,23 @@
 ﻿using BadmintonEcommerce.API.Extensions;
 using BadmintonEcommerce.API.Infrastructure;
 using BadmintonEcommerce.Application.Abstraction.Messaging;
-using BadmintonEcommerce.Application.Features.ProductCategory.Get;
+using BadmintonEcommerce.Application.Features.ProductCategory.GetById;
 using BadmintonEcommerce.Contracts.API.Presentation.ProductCategory.Responses;
 using SharedKernel.Patterns;
 
 namespace BadmintonEcommerce.API.Endpoints.ProductCategory;
 
-public sealed class Get : IEndpoint
+public class GetById : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("categories", async (
-            IQueryHandler<GetProductCategoriesQuery, List<ProductCategoryResponse>> handler,
-            CancellationToken ct) =>
+        app.MapGet("categories/{id:guid}", async (
+            Guid id,
+            IQueryHandler<GetProductCategoryByIdQuery, ProductCategoryByIdResponse> handler,
+            CancellationToken cancellationToken) =>
         {
-            Result<List<ProductCategoryResponse>> result = await handler.Handle(new GetProductCategoriesQuery(), ct);
-
+            Result<ProductCategoryByIdResponse> result = await handler.Handle(new GetProductCategoryByIdQuery(id), cancellationToken);
+            
             return result.Match(Results.Ok, CustomResult.Problem);
         });
     }

@@ -1,13 +1,17 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
 using BadmintonEcommerce.Application.Abstraction.Authentication;
 using BadmintonEcommerce.Application.Abstraction.Repositories;
 using BadmintonEcommerce.Application.Abstraction.Services;
 using BadmintonEcommerce.Infrastructure.Abstractions;
 using BadmintonEcommerce.Infrastructure.DomainEvents;
 using BadmintonEcommerce.Infrastructure.Persistence.Database;
+using BadmintonEcommerce.Infrastructure.Persistence.Profiles;
 using BadmintonEcommerce.Infrastructure.Repositories;
 using BadmintonEcommerce.Infrastructure.Services;
 using BadmintonEcommerce.Infrastructure.Time;
+using BadmintonEcommerce.Mapper.Abstractions;
+using BadmintonEcommerce.Mapper.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +32,8 @@ public static class DependencyInjection
             .AddDatabase(configuration)
             .AddHealthChecks(configuration)
             .AddCloudinary(configuration)
-            .AddThirdPartyServices();
+            .AddThirdPartyServices()
+            .AddCustomMapper();
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
@@ -108,6 +113,24 @@ public static class DependencyInjection
     private static IServiceCollection AddThirdPartyServices(this IServiceCollection services)
     {
         services.AddScoped<IFileService, FileService>();
+        return services;
+    }
+    
+    public static IServiceCollection AddCustomMapper(this IServiceCollection services)
+    {
+        var config = new MapperConfiguration();
+
+        var profiles = Assembly.GetExecutingAssembly()
+            .GetTypes()
+            .Where(t => typeof(IMappingProfile).IsAssignableFrom(t) && !t.IsInterface);
+
+        foreach (var profile in profiles)
+        {
+            var instance = (IMappingProfile)Activator.CreateInstance(profile);
+            instance.Configure(config);
+        }
+
+        services.AddSingleton<IMapper>(new global::BadmintonEcommerce.Mapper.Runtime.Mapper(config));
         return services;
     }
 }

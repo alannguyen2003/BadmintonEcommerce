@@ -1,13 +1,15 @@
 ﻿using BadmintonEcommerce.Application.Abstraction.Messaging;
 using BadmintonEcommerce.Application.Abstraction.Repositories;
 using BadmintonEcommerce.Domain.Errors;
+using BadmintonEcommerce.Mapper.Abstractions;
 using SharedKernel.Errors;
 using SharedKernel.Patterns;
 
 namespace BadmintonEcommerce.Application.Features.ProductCategory.Update;
 
 public class UpdateProductCategoryCommandHandler(
-    IProductCategoryRepository productCategoryRepository)
+    IProductCategoryRepository productCategoryRepository,
+    IMapper mapper)
     : ICommandHandler<UpdateProductCategoryCommand>
 {
     public async Task<Result> Handle(UpdateProductCategoryCommand command, CancellationToken cancellationToken)

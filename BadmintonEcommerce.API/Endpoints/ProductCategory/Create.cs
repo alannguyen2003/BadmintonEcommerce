@@ -2,21 +2,17 @@
 using BadmintonEcommerce.API.Infrastructure;
 using BadmintonEcommerce.Application.Abstraction.Messaging;
 using BadmintonEcommerce.Application.Features.ProductCategory.Create;
+using BadmintonEcommerce.Contracts.API.Presentation.ProductCategory.Requests;
 using SharedKernel.Patterns;
 
 namespace BadmintonEcommerce.API.Endpoints.ProductCategory;
 
 public sealed class Create : IEndpoint
 {
-    public sealed class Request
-    {
-        public string CategoryName { get; set; }
-        public Guid? ParantCategoryId { get; set; }
-    }
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("categories", async (
-            Request request,
+            CreateProductCategoryRequest request,
             ICommandHandler<CreateProductCategoryCommand, Guid> handler, 
             CancellationToken cancellationToken) =>
         {

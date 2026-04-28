@@ -1,6 +1,6 @@
 ﻿using BadmintonEcommerce.Mapper.Configurations;
 
-namespace BadmintonEcommerce.Application.Abstraction.Profile;
+namespace BadmintonEcommerce.Infrastructure.Persistence.Profiles;
 
 public interface IMappingProfile
 {

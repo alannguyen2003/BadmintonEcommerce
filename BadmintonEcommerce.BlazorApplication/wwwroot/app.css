@@ -1,45 +1,5 @@
 html, body {
-    /* Prefer Windows fonts to avoid missing glyphs for Vietnamese characters. */
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-:root {
-    --energy-blue: #3b82f6;
-    --energy-red: #ef4444;
-}
-
-/* Global energetic background (gradient + lightweight SVG pattern). */
-body {
-    background-color: #f8fafc;
-    background-image:
-            radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.18), transparent 40%),
-            radial-gradient(circle at 85% 20%, rgba(239, 68, 68, 0.16), transparent 38%),
-            radial-gradient(circle at 40% 90%, rgba(59, 130, 246, 0.10), transparent 45%),
-            url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20width%3D'120'%20height%3D'120'%20viewBox%3D'0%200%20120%20120'%3E%3Cg%20fill%3D'none'%20stroke%3D'%233b82f6'%20stroke-opacity%3D'0.14'%20stroke-width%3D'2'%3E%3Cpath%20d%3D'M60%2025%20L70%2050%20L60%2040%20L50%2050%20Z'/%3E%3Cpath%20d%3D'M60%2080%20L60%2050'%20/%3E%3Cpath%20d%3D'M50%2050%20L60%2040%20L70%2050'%20/%3E%3C/g%3E%3C/svg%3E");
-    background-size:
-            auto,
-            auto,
-            auto,
-            120px 120px;
-    background-position:
-            center,
-            center,
-            center,
-            0 0;
-}
-
-/* Used by Home hero section to add a subtle illustration pattern. */
-.shop-hero-pattern {
-    opacity: 1;
-    background-image:
-            radial-gradient(circle at 30% 25%, rgba(59, 130, 246, 0.20), transparent 35%),
-            radial-gradient(circle at 75% 65%, rgba(239, 68, 68, 0.16), transparent 40%),
-            url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20width%3D'96'%20height%3D'96'%20viewBox%3D'0%200%2096%2096'%3E%3Cg%20fill%3D'none'%20stroke%3D'%233b82f6'%20stroke-opacity%3D'0.18'%20stroke-width%3D'2'%20stroke-linecap%3D'round'%3E%3Cpath%20d%3D'M50%2090%20L62%2050%20L48%2062%20L40%2042%20L50%2030%20Z'/%3E%3Cpath%20d%3D'M35%2062%20L45%2052%20L62%2050'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: auto, auto, 96px 96px;
-    background-position: center;
-    background-repeat: repeat;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 a, .btn-link {
@@ -53,7 +13,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -82,9 +42,9 @@ h1:focus {
     color: white;
 }
 
-.blazor-error-boundary::after {
-    content: "An error has occurred."
-}
+    .blazor-error-boundary::after {
+        content: "An error has occurred."
+    }
 
 .darker-border-checkbox.form-check-input {
     border-color: #929292;

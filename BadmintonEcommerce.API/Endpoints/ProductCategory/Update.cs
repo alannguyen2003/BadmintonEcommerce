@@ -1,17 +1,12 @@
 ﻿using BadmintonEcommerce.Application.Abstraction.Messaging;
 using BadmintonEcommerce.Application.Features.ProductCategory.Update;
+using BadmintonEcommerce.Contracts.API.Presentation.ProductCategory.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BadmintonEcommerce.API.Endpoints.ProductCategory;
 
 public class Update : IEndpoint
 {
-    public class UpdateProductCategoryRequest
-    {
-        public Guid Id { get; set; }
-        public string CategoryName { get; set; }
-        public Guid? ParentCategoryId { get; set; }
-    }
     
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
