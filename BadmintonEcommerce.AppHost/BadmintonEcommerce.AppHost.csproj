@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BadmintonEcommerce.API\BadmintonEcommerce.API.csproj" />
+      <ProjectReference Include="..\BadmintonEcommerce.BlazorApplication\BadmintonEcommerce.BlazorApplication.csproj" />
     </ItemGroup>
 
 </Project>
