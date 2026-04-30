@@ -5,15 +5,15 @@ using BadmintonEcommerce.Domain.Errors;
 using BadmintonEcommerce.Mapper.Abstractions;
 using SharedKernel.Patterns;
 
-namespace BadmintonEcommerce.Application.Features.Product.Get;
+namespace BadmintonEcommerce.Application.Features.Product.GetByCategory;
 
-public class GetProductQueryHandler(
+public class GetProductsByCategoryQueryHandler(
     IProductRepository productRepository,
     IProductCategoryRepository productCategoryRepository,
     IMapper mapper)
-    : IQueryHandler<GetProductQuery, List<ProductResponse>>
+    : IQueryHandler<GetProductsByCategoryQuery, List<ProductResponse>>
 {
-    public async Task<Result<List<ProductResponse>>> Handle(GetProductQuery query, CancellationToken cancellationToken)
+    public async Task<Result<List<ProductResponse>>> Handle(GetProductsByCategoryQuery query, CancellationToken cancellationToken)
     {
         Domain.Entities.Catalog.ProductCategory productCategory = productCategoryRepository.GetById(query.ProductCategoryId);
 

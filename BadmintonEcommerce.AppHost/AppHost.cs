@@ -7,8 +7,8 @@ var api = builder.AddProject<Projects.BadmintonEcommerce_API>("api")
     .WithReference(badmintonShopDb)
     .WaitFor(badmintonShopDb);
 
-/*var blazorApplication = builder.AddProject<Projects.BadmintonEcommerce_BlazorApplication>("web")
+var blazorApplication = builder.AddProject<Projects.BadmintonEcommerce_BlazorApplication>("web")
     .WithReference(api)
-    .WaitFor(api);*/
+    .WaitFor(api);
 
 builder.Build().Run();

@@ -1,6 +1,9 @@
+using BadmintonEcommerce.BlazorApplication;
 using BadmintonEcommerce.BlazorApplication.Components;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddBlazorApplication(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
