@@ -13,6 +13,12 @@ public class InventoryItem : Aggregate<Guid>
     public int Reserved { get; set; }
     
     public int Available => Quantity - Reserved;
+    
+    #region Collections
+    
+    public ICollection<InventoryTransaction> Transactions { get; set; }
+    
+    #endregion
 
     /*public void Import(int quantity)
     {

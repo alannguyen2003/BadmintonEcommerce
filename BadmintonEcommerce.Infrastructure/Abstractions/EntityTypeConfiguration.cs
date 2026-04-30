@@ -18,6 +18,7 @@ public static class EntityTypeConfiguration
         public static class InventoryContext
         {
             public const string InventoryItemTable = "InventoryItems";
+            public const string InventoryTransactionTable = "InventoryTransactions";
         }
     }
 }

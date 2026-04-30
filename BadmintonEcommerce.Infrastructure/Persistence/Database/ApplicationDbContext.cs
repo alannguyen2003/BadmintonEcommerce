@@ -18,6 +18,7 @@ public class ApplicationDbContext(
     public virtual DbSet<VariantCombination> Combinations { get; set; }
     public virtual DbSet<ProductImage> ProductImages { get; set; }
     public virtual DbSet<InventoryItem> InventoryItems { get; set; }
+    public virtual DbSet<InventoryTransaction> InventoryTransactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

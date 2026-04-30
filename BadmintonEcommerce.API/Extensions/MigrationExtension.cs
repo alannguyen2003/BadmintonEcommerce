@@ -12,5 +12,6 @@ public static class MigrationExtension
         using ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
         context.Database.Migrate();
+        
     }
 }
