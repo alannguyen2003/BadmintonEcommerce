@@ -27,6 +27,6 @@ public class Update : IEndpoint
             };
             Result result = await handler.Handle(command, cancellationToken);
             return result.Match(Results.NoContent, CustomResult.Problem);
-        });
+        }).WithTags(Tags.ProductCategory);
     }
 }

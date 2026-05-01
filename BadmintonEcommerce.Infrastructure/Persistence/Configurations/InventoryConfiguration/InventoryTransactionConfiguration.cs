@@ -32,7 +32,9 @@ public class InventoryTransactionConfiguration : IEntityTypeConfiguration<Invent
 
         #region Foreign Keys
 
-        
+        builder.HasOne(b => b.Inventory)
+            .WithMany(b => b.Transactions)
+            .HasForeignKey(b => b.InventoryItemId);
 
         #endregion
     }

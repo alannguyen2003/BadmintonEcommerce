@@ -19,6 +19,6 @@ public class Delete : IEndpoint
             Result result = await handler.Handle(new DeleteProductCommand(id), cancellationToken);
 
             return result.Match(Results.NoContent, CustomResult.Problem);
-        });
+        }).WithTags(Tags.Product);
     }
 }

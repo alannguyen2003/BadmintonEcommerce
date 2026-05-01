@@ -20,6 +20,6 @@ public class GetByCategory : IEndpoint
             Result<List<ProductResponse>> result = await handler.Handle(new GetProductsByCategoryQuery(categoryId), cancellationToken);
 
             return result.Match(Results.Ok, CustomResult.Problem);
-        });
+        }).WithTags(Tags.Product);
     }
 }

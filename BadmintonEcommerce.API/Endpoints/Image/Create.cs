@@ -12,7 +12,7 @@ public class Create : IEndpoint
 {
     public class UploadRequest 
     {
-        public IFormFile File { get; set; }
+        public IFormFileCollection Files { get; set; }
     }
     
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -22,7 +22,9 @@ public class Create : IEndpoint
             [FromServices] ICommandHandler<UploadImageCommand, string> handler, 
             CancellationToken cancellationToken) =>
         {
-            var command = new UploadImageCommand()
+            Result<UploadRequest> demo = Result.Success(request);
+            return demo.Match(Results.Ok, CustomResult.Problem);
+            /*var command = new UploadImageCommand()
             {
                 FileUpload = new FileUploadStream()
                 {
@@ -34,7 +36,7 @@ public class Create : IEndpoint
 
             Result<string> result = await handler.Handle(command, cancellationToken);
 
-            return result.Match(Results.Ok, CustomResult.Problem);
+            return result.Match(Results.Ok, CustomResult.Problem);*/
         }).DisableAntiforgery();
     }
 }

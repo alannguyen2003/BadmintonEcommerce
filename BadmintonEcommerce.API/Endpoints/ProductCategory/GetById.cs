@@ -19,6 +19,6 @@ public class GetById : IEndpoint
             Result<ProductCategoryByIdResponse> result = await handler.Handle(new GetProductCategoryByIdQuery(id), cancellationToken);
             
             return result.Match(Results.Ok, CustomResult.Problem);
-        });
+        }).WithTags(Tags.ProductCategory);
     }
 }

@@ -17,6 +17,6 @@ public class Get : IEndpoint
         {
             Result<List<ProductResponse>> result = await handler.Handle(new GetProductsQuery(), cancellationToken);
             return result.Match(Results.Ok, CustomResult.Problem);
-        });
+        }).WithTags(Tags.Product);
     }
 }

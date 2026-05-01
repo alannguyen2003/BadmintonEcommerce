@@ -95,40 +95,22 @@ export function ProductsPage() {
     );
   };
 
-  const regenerateSkuFromOptions = () => {
-    const validOptions = options
-      .map((o) => ({ ...o, name: o.name.trim(), values: o.values.map((v) => v.trim()).filter(Boolean) }))
-      .filter((o) => o.name && o.values.length);
-
-    if (!validOptions.length) {
-      setSkuRows([]);
-      return;
-    }
-
-    const combos = validOptions.reduce<Record<string, string>[]>((acc, option) => {
-      if (!acc.length) return option.values.map((v) => ({ [option.id]: v }));
-      const next: Record<string, string>[] = [];
-      for (const row of acc) for (const value of option.values) next.push({ ...row, [option.id]: value });
-      return next;
-    }, []);
-
-    setSkuRows(
-      combos.map((optionValues, idx) => ({
-        comboKey: JSON.stringify(optionValues),
-        optionValues,
-        code: `SKU-${idx + 1}`,
-        price: 0,
-        stock: 0,
-      })),
-    );
+  const updateSkuOptionValue = (skuIdx: number, optionId: string, value: string) => {
+    setSkuRows((prev) => prev.map((r, i) => (i === skuIdx ? { ...r, optionValues: { ...r.optionValues, [optionId]: value } } : r)));
   };
 
   const addManualSku = () => {
+    const initialOptionValues: Record<string, string> = {};
+    options.forEach((o) => {
+      if (o.name.trim() && o.values.length > 0) {
+        initialOptionValues[o.id] = "";
+      }
+    });
     setSkuRows((prev) => [
       ...prev,
       {
         comboKey: `manual_${crypto.randomUUID()}`,
-        optionValues: {},
+        optionValues: initialOptionValues,
         code: `SKU-M-${prev.length + 1}`,
         price: 0,
         stock: 0,
@@ -170,7 +152,7 @@ export function ProductsPage() {
           <tbody>
             {rows.length === 0 ? <EmptyTableRow colSpan={7} /> : rows.map((p, idx) => {
               const totalStock = p.skus.reduce((sum, s) => sum + s.stock, 0);
-              return <tr key={p.id} className="border-t border-slate-800"><td className="py-2">{(page - 1) * PAGE_SIZE + idx + 1}</td><td className="py-2">{p.name}</td><td className="py-2">{categoryPath(p.categoryId)}</td><td className="py-2">{p.skus.length}</td><td className="py-2">{formatInteger(totalStock)}</td><td className="py-2" title={p.status}>{getStatusTone(p.status) === "success" ? <CircleCheck className="h-4 w-4 text-emerald-400" /> : getStatusTone(p.status) === "warning" ? <Circle className="h-4 w-4 text-amber-400" /> : <CircleAlert className="h-4 w-4 text-rose-400" />}</td><td className="py-2"><div className="flex gap-2"><IconButton title="Edit" icon={<Edit3 size={14} />} variant="accent" onClick={() => { setEditing(p); setName(p.name); setCategoryId(p.categoryId); setStatus(p.status); setDescription(p.description); setImages(p.images); setOptions(p.options.length ? p.options : [emptyOption()]); setSkuRows(p.skus.map((s) => ({ comboKey: JSON.stringify(s.optionValues), code: s.code, price: s.price, stock: s.stock, optionValues: s.optionValues }))); setProductModalOpen(true); }} /><IconButton title="Delete" icon={<Trash2 size={14} />} variant="danger" onClick={() => { setDeletingProductId(p.id); setDeleteModalOpen(true); }} /></div></td></tr>;
+              return <tr key={p.id} className="border-t border-slate-800"><td className="py-2">{(page - 1) * PAGE_SIZE + idx + 1}</td><td className="py-2">{p.name}</td><td className="py-2">{categoryPath(p.categoryId)}</td><td className="py-2">{p.skus.length}</td><td className="py-2">{formatInteger(totalStock)}</td><td className="py-2" title={p.status}>{getStatusTone(p.status) === "success" ? <CircleCheck className="h-4 w-4 text-emerald-400" /> : getStatusTone(p.status) === "warning" ? <Circle className="h-4 w-4 text-amber-400" /> : <CircleAlert className="h-4 w-4 text-rose-400" />}</td><td className="py-2"><div className="flex gap-2"><IconButton title="Edit" icon={<Edit3 size={14} />} variant="accent" onClick={() => { setEditing(p); setName(p.name); setCategoryId(p.categoryId); setStatus(p.status); setDescription(p.description); setImages(p.images); setOptions(p.options.length ? p.options : [emptyOption()]); const currentOptions = p.options.length ? p.options : [emptyOption()]; const mergedSkuRows = p.skus.map((s) => { const mergedOptionValues: Record<string, string> = {}; currentOptions.forEach((o) => { if (o.name.trim() && o.values.length > 0) { mergedOptionValues[o.id] = s.optionValues[o.id] || ""; } }); return { comboKey: JSON.stringify(mergedOptionValues), code: s.code, price: s.price, stock: s.stock, optionValues: mergedOptionValues }; }); setSkuRows(mergedSkuRows); setProductModalOpen(true); }} /><IconButton title="Delete" icon={<Trash2 size={14} />} variant="danger" onClick={() => { setDeletingProductId(p.id); setDeleteModalOpen(true); }} /></div></td></tr>;
             })}
           </tbody>
         </table>
@@ -213,16 +195,16 @@ export function ProductsPage() {
                 </div>
               ))}
             </div>
-            <div className="mt-2 flex gap-2"><button className="rounded bg-slate-700 px-3 py-1 text-xs" onClick={regenerateSkuFromOptions}><Check className="inline h-3 w-3" /></button><button className="rounded bg-slate-700 px-3 py-1 text-xs" onClick={addManualSku}><Plus className="inline h-3 w-3" /></button></div>
+            <div className="mt-2 flex gap-2"><button className="rounded bg-slate-700 px-3 py-1 text-xs" onClick={addManualSku}><Plus className="inline h-3 w-3" /></button></div>
           </div>
 
           <div className="rounded border border-slate-700 p-3">
             <p className="mb-2 text-xs text-slate-400">SKU Variant Table</p>
             <div className="max-h-56 overflow-auto">
               <table className="w-full text-center text-xs">
-                <thead><tr><th className="pb-1">Combination</th><th className="pb-1">Code</th><th className="pb-1">Price</th><th className="pb-1">Stock</th><th className="pb-1">Fn</th></tr></thead>
+                <thead><tr>{options.filter(o => o.name.trim() && o.values.length > 0).map(o => <th key={o.id} className="pb-1">{o.name}</th>)}<th className="pb-1">Code</th><th className="pb-1">Price</th><th className="pb-1">Stock</th><th className="pb-1">Fn</th></tr></thead>
                 <tbody>
-                  {skuRows.length === 0 ? <tr><td colSpan={5} className="py-3 text-center text-slate-400">Khong co ban ghi nao hien co</td></tr> : skuRows.map((row, idx) => <tr key={row.comboKey} className="border-t border-slate-800"><td className="py-1">{Object.values(row.optionValues).join(" / ") || "Manual"}</td><td><input value={row.code} onChange={(e) => setSkuRows((prev) => prev.map((r, i) => (i === idx ? { ...r, code: e.target.value } : r)))} className="mx-auto w-28 rounded border border-slate-700 bg-slate-900 px-1 text-center" /></td><td><input type="number" value={row.price} onChange={(e) => setSkuRows((prev) => prev.map((r, i) => (i === idx ? { ...r, price: Number(e.target.value) } : r)))} className="mx-auto w-24 rounded border border-slate-700 bg-slate-900 px-1 text-center" /><p className="text-[10px] text-slate-500">{formatInteger(row.price)}</p></td><td><input type="number" value={row.stock} onChange={(e) => setSkuRows((prev) => prev.map((r, i) => (i === idx ? { ...r, stock: Number(e.target.value) } : r)))} className="mx-auto w-20 rounded border border-slate-700 bg-slate-900 px-1 text-center" /><p className="text-[10px] text-slate-500">{formatInteger(row.stock)}</p></td><td><IconButton title="Delete SKU" icon={<Trash2 size={12} />} variant="danger" onClick={() => setSkuRows((prev) => prev.filter((_, i) => i !== idx))} /></td></tr>)}
+                  {skuRows.length === 0 ? <tr><td colSpan={options.filter(o => o.name.trim() && o.values.length > 0).length + 4} className="py-3 text-center text-slate-400">Khong co ban ghi nao hien co</td></tr> : skuRows.map((row, idx) => <tr key={row.comboKey} className="border-t border-slate-800">{options.filter(o => o.name.trim() && o.values.length > 0).map(o => <td key={o.id} className="py-1"><select value={row.optionValues[o.id] || ""} onChange={(e) => updateSkuOptionValue(idx, o.id, e.target.value)} className="w-full rounded border border-slate-700 bg-slate-900 px-1 text-center text-xs"><option value="">Select</option>{o.values.map(v => <option key={v} value={v}>{v}</option>)}</select></td>)}<td><input value={row.code} onChange={(e) => setSkuRows((prev) => prev.map((r, i) => (i === idx ? { ...r, code: e.target.value } : r)))} className="mx-auto w-28 rounded border border-slate-700 bg-slate-900 px-1 text-center" /></td><td><input type="number" value={row.price} onChange={(e) => setSkuRows((prev) => prev.map((r, i) => (i === idx ? { ...r, price: Number(e.target.value) } : r)))} className="mx-auto w-24 rounded border border-slate-700 bg-slate-900 px-1 text-center" /><p className="text-[10px] text-slate-500">{formatInteger(row.price)}</p></td><td><input type="number" value={row.stock} onChange={(e) => setSkuRows((prev) => prev.map((r, i) => (i === idx ? { ...r, stock: Number(e.target.value) } : r)))} className="mx-auto w-20 rounded border border-slate-700 bg-slate-900 px-1 text-center" /><p className="text-[10px] text-slate-500">{formatInteger(row.stock)}</p></td><td><IconButton title="Delete SKU" icon={<Trash2 size={12} />} variant="danger" onClick={() => setSkuRows((prev) => prev.filter((_, i) => i !== idx))} /></td></tr>)}
                 </tbody>
               </table>
             </div>

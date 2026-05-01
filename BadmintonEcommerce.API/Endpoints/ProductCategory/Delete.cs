@@ -20,6 +20,6 @@ public class Delete : IEndpoint
             Result result = await handler.Handle(new DeleteProductCategoryCommand(id), cancellationToken);
 
             return result.Match(Results.NoContent, CustomResult.Problem);
-        });
+        }).WithTags(Tags.ProductCategory);
     }
 }

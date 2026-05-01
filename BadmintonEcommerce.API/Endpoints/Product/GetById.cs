@@ -20,6 +20,6 @@ public class GetById : IEndpoint
             Result<ProductResponse> result = await handler.Handle(new GetProductByIdQuery(id), cancellationToken);
 
             return result.Match(Results.Ok, CustomResult.Problem);
-        });
+        }).WithTags(Tags.Product);
     }
 }

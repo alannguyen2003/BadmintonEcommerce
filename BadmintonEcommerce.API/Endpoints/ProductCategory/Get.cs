@@ -18,6 +18,6 @@ public sealed class Get : IEndpoint
             Result<List<ProductCategoryResponse>> result = await handler.Handle(new GetProductCategoriesQuery(), ct);
 
             return result.Match(Results.Ok, CustomResult.Problem);
-        });
+        }).WithTags(Tags.ProductCategory);
     }
 }

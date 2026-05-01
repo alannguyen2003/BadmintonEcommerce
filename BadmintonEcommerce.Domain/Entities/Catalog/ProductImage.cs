@@ -6,7 +6,7 @@ public class ProductImage : Entity<Guid>
 {
     public string Url { get; set; }
     public string? ImageMetadata { get; set; }
-    
+    public bool IsPrimary { get; set; }
     
     //Product
     public Guid ProductId { get; set; }

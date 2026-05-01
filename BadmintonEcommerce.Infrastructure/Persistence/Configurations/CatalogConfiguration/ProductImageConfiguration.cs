@@ -25,6 +25,8 @@ public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
 
         builder.Property(b => b.Url)
             .IsRequired();
+        builder.Property(b => b.IsPrimary)
+            .IsRequired();
 
         #endregion
 

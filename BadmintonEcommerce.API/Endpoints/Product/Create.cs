@@ -28,6 +28,6 @@ public class Create : IEndpoint
             Result<Guid> result = await handler.Handle(command, cancellationToken);
 
             return result.Match(Results.Created, CustomResult.Problem);
-        });
+        }).WithTags(Tags.Product);
     }
 }

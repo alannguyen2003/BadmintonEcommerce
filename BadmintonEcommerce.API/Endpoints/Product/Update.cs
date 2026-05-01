@@ -22,6 +22,6 @@ public class Update : IEndpoint
             var command = mapper.Map<UpdateProductCommand>(request);
             Result result = await handler.Handle(command, cancellationToken);
             return result.Match(Results.NoContent, CustomResult.Problem);
-        });
+        }).WithTags(Tags.Product);
     }
 }
