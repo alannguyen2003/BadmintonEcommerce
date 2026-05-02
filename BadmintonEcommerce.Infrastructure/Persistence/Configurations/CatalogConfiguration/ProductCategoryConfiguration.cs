@@ -27,6 +27,10 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
             .IsRequired() 
             .HasMaxLength(100);
         
+        builder.Property(b => b.Level)
+            .IsRequired()
+            .HasDefaultValue(1);
+        
         #endregion
 
         #region Foreign Keys

@@ -40,6 +40,7 @@ public class UploadImage : IEndpoint
             }
             Result<List<ProductImageResponse>> result = await handler.Handle(command, cancellationToken);
             return result.Match(Results.Ok, CustomResult.Problem);
-        }).DisableAntiforgery();
+        }).DisableAntiforgery()
+        .WithTags(Tags.Product);
     }
 }

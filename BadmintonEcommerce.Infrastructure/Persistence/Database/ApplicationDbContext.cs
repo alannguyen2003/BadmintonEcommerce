@@ -1,5 +1,9 @@
-﻿using BadmintonEcommerce.Domain.Entities.Catalog;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using BadmintonEcommerce.Domain.Entities.Authentication;
+using BadmintonEcommerce.Domain.Entities.Catalog;
 using BadmintonEcommerce.Domain.Entities.Inventory;
+using BadmintonEcommerce.Domain.Entities.Order;
 using BadmintonEcommerce.Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +23,12 @@ public class ApplicationDbContext(
     public virtual DbSet<ProductImage> ProductImages { get; set; }
     public virtual DbSet<InventoryItem> InventoryItems { get; set; }
     public virtual DbSet<InventoryTransaction> InventoryTransactions { get; set; }
+    public virtual DbSet<Account> Accounts { get; set; }
+    public virtual DbSet<Role> Roles { get; set; }
+    public virtual DbSet<AccountRole> AccountRoles { get; set; }
+    public virtual DbSet<CartItem> Carts { get; set; }
+    public virtual DbSet<Order> Orders { get; set; }
+    public virtual DbSet<OrderItem> OrderItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

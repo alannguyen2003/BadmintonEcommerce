@@ -17,6 +17,7 @@ public class Product : Aggregate<Guid>
     #region Collections 
     public ICollection<ProductOption> Options { get; set; }
     public ICollection<ProductImage> Images { get; set; }
+    public ICollection<ProductVariant> Variants { get; set; } 
     #endregion  
     
 }

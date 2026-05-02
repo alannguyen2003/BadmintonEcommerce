@@ -20,5 +20,19 @@ public static class EntityTypeConfiguration
             public const string InventoryItemTable = "InventoryItems";
             public const string InventoryTransactionTable = "InventoryTransactions";
         }
+
+        public static class AuthenticationContext
+        {
+            public const string AccountTable = "Accounts";
+            public const string RoleTable = "Roles";
+            public const string AccountRoleTable = "AccountRoles";
+        }
+
+        public static class OrderContext
+        {
+            public const string CartTable = "CartItems";
+            public const string OrderTable = "Orders";
+            public const string OrderItemTable = "OrderItems";
+        }
     }
 }

@@ -4,6 +4,7 @@ using BadmintonEcommerce.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BadmintonEcommerce.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260501163558_AddAuthenticationContextDomain")]
+    partial class AddAuthenticationContextDomain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -322,17 +325,12 @@ namespace BadmintonEcommerce.Infrastructure.Persistence.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("SKU")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductVariants", (string)null);
                 });
@@ -425,141 +423,6 @@ namespace BadmintonEcommerce.Infrastructure.Persistence.Migrations
                     b.ToTable("InventoryTransactions", (string)null);
                 });
 
-            modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Order.CartItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedOnUtc")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastModifiedOnUtc")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<decimal>("ProvisionalPrice")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
-
-                    b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
-                    b.Property<Guid>("VariantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VariantId");
-
-                    b.ToTable("CartItems", (string)null);
-                });
-
-            modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Order.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AbsoluteAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AdditionalNotes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AddressOptionalInformation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedOnUtc")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastModifiedOnUtc")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Orders", (string)null);
-                });
-
-            modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Order.OrderItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedOnUtc")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastModifiedOnUtc")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("ProvisionalCost")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
-
-                    b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<Guid>("VariantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("VariantId");
-
-                    b.ToTable("OrderItems", (string)null);
-                });
-
             modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Authentication.AccountRole", b =>
                 {
                     b.HasOne("BadmintonEcommerce.Domain.Entities.Authentication.Account", "Account")
@@ -632,17 +495,6 @@ namespace BadmintonEcommerce.Infrastructure.Persistence.Migrations
                     b.Navigation("Option");
                 });
 
-            modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Catalog.ProductVariant", b =>
-                {
-                    b.HasOne("BadmintonEcommerce.Domain.Entities.Catalog.Product", "Product")
-                        .WithMany("Variants")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Catalog.VariantCombination", b =>
                 {
                     b.HasOne("BadmintonEcommerce.Domain.Entities.Catalog.ProductOptionValue", "OptionValue")
@@ -684,47 +536,6 @@ namespace BadmintonEcommerce.Infrastructure.Persistence.Migrations
                     b.Navigation("Inventory");
                 });
 
-            modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Order.CartItem", b =>
-                {
-                    b.HasOne("BadmintonEcommerce.Domain.Entities.Catalog.ProductVariant", "Variant")
-                        .WithMany("CartItems")
-                        .HasForeignKey("VariantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Variant");
-                });
-
-            modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Order.Order", b =>
-                {
-                    b.HasOne("BadmintonEcommerce.Domain.Entities.Authentication.Account", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Order.OrderItem", b =>
-                {
-                    b.HasOne("BadmintonEcommerce.Domain.Entities.Order.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BadmintonEcommerce.Domain.Entities.Catalog.ProductVariant", "Variant")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("VariantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Variant");
-                });
-
             modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Authentication.Account", b =>
                 {
                     b.Navigation("AccountRoles");
@@ -740,8 +551,6 @@ namespace BadmintonEcommerce.Infrastructure.Persistence.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("Options");
-
-                    b.Navigation("Variants");
                 });
 
             modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Catalog.ProductCategory", b =>
@@ -763,24 +572,15 @@ namespace BadmintonEcommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Catalog.ProductVariant", b =>
                 {
-                    b.Navigation("CartItems");
-
                     b.Navigation("Combinations");
 
                     b.Navigation("Inventory")
                         .IsRequired();
-
-                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Inventory.InventoryItem", b =>
                 {
                     b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("BadmintonEcommerce.Domain.Entities.Order.Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

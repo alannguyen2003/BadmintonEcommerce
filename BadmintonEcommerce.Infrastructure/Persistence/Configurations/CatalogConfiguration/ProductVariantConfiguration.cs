@@ -31,6 +31,10 @@ public class ProductVariantConfiguration : IEntityTypeConfiguration<ProductVaria
             .WithOne(p => p.Variant)
             .HasForeignKey<ProductVariant>(b => b.InventoryItemId);
         
+        builder.HasOne(b => b.Product)
+            .WithMany(p => p.Variants)
+            .HasForeignKey(b => b.ProductId);
+        
         #endregion
     }
 }
