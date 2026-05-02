@@ -7,5 +7,6 @@ public class ProductCategoryByIdResponse
     public Guid Id { get; set; }
     public string CategoryName { get; set; }
     public string ParentCategoryName { get; set; }
+    public int Level { get; set; }
     public List<ProductResponse> Products { get; set; }
 }

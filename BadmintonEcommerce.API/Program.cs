@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGenWithAuth();
 builder.Services
     .AddInfrastructureLayer(builder.Configuration)
     .AddApplication()
-    .AddPresentation();
+    .AddPresentation(builder.Configuration);
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
@@ -42,7 +42,7 @@ app.MapHealthChecks("health", new HealthCheckOptions
 /*
 app.UseRequestContextLogging();
 */
-
+app.UseCorsApplication();
 app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();

@@ -3,5 +3,5 @@
 public sealed class CreateProductCategoryRequest
 {
     public string CategoryName { get; set; }
-    public Guid? ParantCategoryId { get; set; }
+    public Guid? ParentCategoryId { get; set; }
 }

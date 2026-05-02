@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Check, Circle, CircleAlert, CircleCheck, Edit3, ImagePlus, Plus, Star, Trash2 } from "lucide-react";
 import { EmptyTableRow } from "../../components/EmptyTableRow";
 import { IconButton } from "../../components/IconButton";
@@ -6,6 +6,7 @@ import { Modal } from "../../components/Modal";
 import { Pagination } from "../../components/Pagination";
 import { deleteProduct, getStatusTone, listCategories, listProducts, upsertProduct } from "../../services/shopService";
 import type { Product, ProductImage, ProductOption } from "../../types/domain";
+import type { ProductCategory } from "../../types/product";
 
 const PAGE_SIZE = 8;
 const emptyOption = (): ProductOption => ({ id: crypto.randomUUID(), name: "", values: [] });
@@ -28,10 +29,13 @@ export function ProductsPage() {
   const [images, setImages] = useState<ProductImage[]>([]);
   const [options, setOptions] = useState<ProductOption[]>([emptyOption()]);
   const [skuRows, setSkuRows] = useState<Array<{ comboKey: string; code: string; price: number; stock: number; optionValues: Record<string, string> }>>([]);
-
-  const categories = listCategories();
+  const [categories, setCategories] = useState<ProductCategory[]>([]);
   const products = listProducts();
   void tick;
+
+  useEffect(() => {
+    
+  }, [])
 
   const filteredProducts = useMemo(() => products.filter((p) => p.name.toLowerCase().includes(query.toLowerCase())), [products, query]);
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PAGE_SIZE));

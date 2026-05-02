@@ -1,4 +1,5 @@
-﻿using BadmintonEcommerce.Application.Features.ProductCategory.Get;
+﻿using System;
+using BadmintonEcommerce.Application.Features.ProductCategory.Get;
 using BadmintonEcommerce.Application.Features.ProductCategory.GetById;
 using BadmintonEcommerce.Contracts.API.Presentation.ProductCategory.Responses;
 using BadmintonEcommerce.Domain.Entities.Catalog;
@@ -13,13 +14,19 @@ public class ProductCategoryProfile : IMappingProfile
         configuration.CreateMap<ProductCategory, ProductCategoryResponse>()
             .ForMember(des => des.CategoryName, 
                 src => src.CategoryName)
+            .ForMember(des => des.Level,
+                src => src.Level)
+            .ForMember(des => des.ParentCategoryId,
+                src => src.ParentCategoryId)
             .ForMember(des => des.ParentCategoryName, 
                 src => (src.ParentCategory != null ? src.ParentCategory.CategoryName : null) ?? string.Empty)
             .ReverseMap();
         
         configuration.CreateMap<ProductCategory, ProductCategoryByIdResponse>() 
             .ForMember(des => des.CategoryName, 
-                src => src.CategoryName)    
+                src => src.CategoryName)   
+            .ForMember(des => des.Level,
+                src => src.Level)
             .ForMember(des => des.ParentCategoryName, 
                 src => (src.ParentCategory != null ? src.ParentCategory.CategoryName : null) ?? string.Empty)
             .ReverseMap();

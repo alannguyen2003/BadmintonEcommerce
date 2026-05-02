@@ -1,5 +1,7 @@
 import { readDb, updateDb } from "../lib/storage";
 import type { Category, InventoryAction, Order, OrderStatus, Product, ProductOption, SKU } from "../types/domain";
+import type { ProductCategory } from "../types/product";
+import { getCategories, createCategory as apiCreateCategory, updateCategory as apiUpdateCategory, deleteCategory as apiDeleteCategory } from "./product-service";
 
 const id = (prefix: string) => `${prefix}_${Math.random().toString(36).slice(2, 9)}`;
 
@@ -12,34 +14,67 @@ export const getStatusTone = (status: string): "success" | "warning" | "danger" 
   return "danger";
 };
 
-export const listCategories = (): Category[] => readDb().categories;
-
-export const createCategory = (name: string, parentId: string | null) => {
-  updateDb((db) => {
-    const parent = parentId ? db.categories.find((c) => c.id === parentId) : null;
-    const level = parent ? ((parent.level + 1) as 1 | 2 | 3) : 1;
-    if (level > 3) return db;
-    return {
-      ...db,
-      categories: [{ id: id("cat"), name, parentId, level }, ...db.categories],
-    };
-  });
+export const listCategories = async (): Promise<ProductCategory[]> => {
+  try {
+    return await getCategories();
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    // Fallback to local storage if API fails
+    // return readDb().categories;
+    return [];
+  }
 };
 
-export const updateCategory = (categoryId: string, name: string) => {
-  updateDb((db) => ({ ...db, categories: db.categories.map((c) => (c.id === categoryId ? { ...c, name } : c)) }));
+export const createCategory = async (name: string, parentId: string | null) => {
+  try {
+    await apiCreateCategory({
+      categoryName: name,
+      parentCategoryId: parentId || undefined
+    });
+  } catch (error) {
+    console.error('Error creating category:', error);
+    // Fallback to local storage
+    updateDb((db) => {
+      const parent = parentId ? db.categories.find((c) => c.id === parentId) : null;
+      const level = parent ? ((parent.level + 1) as 1 | 2 | 3) : 1;
+      if (level > 3) return db;
+      return {
+        ...db,
+        categories: [{ id: id("cat"), name, parentId, level }, ...db.categories],
+      };
+    });
+  }
 };
 
-export const deleteCategory = (categoryId: string) => {
-  updateDb((db) => {
-    const childIds = db.categories.filter((c) => c.parentId === categoryId).map((c) => c.id);
-    const removeIds = new Set([categoryId, ...childIds]);
-    return {
-      ...db,
-      categories: db.categories.filter((c) => !removeIds.has(c.id)),
-      products: db.products.filter((p) => !removeIds.has(p.categoryId)),
-    };
-  });
+export const updateCategory = async (categoryId: string, name: string) => {
+  try {
+    await apiUpdateCategory({
+      id: categoryId,
+      categoryName: name
+    });
+  } catch (error) {
+    console.error('Error updating category:', error);
+    // Fallback to local storage
+    updateDb((db) => ({ ...db, categories: db.categories.map((c) => (c.id === categoryId ? { ...c, name } : c)) }));
+  }
+};
+
+export const deleteCategory = async (categoryId: string) => {
+  try {
+    await apiDeleteCategory(categoryId);
+  } catch (error) {
+    console.error('Error deleting category:', error);
+    // Fallback to local storage
+    updateDb((db) => {
+      const childIds = db.categories.filter((c) => c.parentId === categoryId).map((c) => c.id);
+      const removeIds = new Set([categoryId, ...childIds]);
+      return {
+        ...db,
+        categories: db.categories.filter((c) => !removeIds.has(c.id)),
+        products: db.products.filter((p) => !removeIds.has(p.categoryId)),
+      };
+    });
+  }
 };
 
 const combosFromOptions = (options: ProductOption[]) => {

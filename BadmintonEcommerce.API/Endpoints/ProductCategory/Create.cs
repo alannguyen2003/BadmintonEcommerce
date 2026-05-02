@@ -19,7 +19,7 @@ public sealed class Create : IEndpoint
             var command = new CreateProductCategoryCommand()
             {
                 CategoryName = request.CategoryName,
-                ParentCategoryId = request.ParantCategoryId != null ? request.ParantCategoryId : null
+                ParentCategoryId = request.ParentCategoryId != null ? request.ParentCategoryId : null
             };
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);

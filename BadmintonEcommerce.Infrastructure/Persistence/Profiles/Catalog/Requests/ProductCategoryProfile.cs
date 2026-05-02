@@ -15,7 +15,7 @@ public class ProductCategoryProfile : IMappingProfile
             .ForMember(des => des.CategoryName,
                 src => src.CategoryName)
             .ForMember(des => des.ParentCategoryId,
-                src => src.ParantCategoryId.ToString() == string.Empty ? null : src.ParantCategoryId);
+                src => src.ParentCategoryId.ToString() == string.Empty ? null : src.ParentCategoryId);
         
         configuration.CreateMap<CreateProductCategoryCommand, ProductCategory>()
             .ForMember(des => des.ParentCategoryId,
