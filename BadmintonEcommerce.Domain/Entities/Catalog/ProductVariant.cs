@@ -15,12 +15,10 @@ public class ProductVariant : Entity<Guid>
     public Product Product { get; set; }
 
     private List<OptionValueId> _valueIds;
-    
-    public Guid InventoryItemId { get; set; }
-    public InventoryItem Inventory { get; set; }
 
     [NotMapped]
     public IReadOnlyCollection<OptionValueId> ValueIds => _valueIds;
+    public InventoryItem InventoryItem { get; set; }
     public ICollection<VariantCombination> Combinations { get; set; }
     public ICollection<CartItem> CartItems { get; set; }
     public ICollection<OrderItem> OrderItems { get; set; }

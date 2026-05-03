@@ -6,14 +6,12 @@ import { Modal } from "../../components/Modal";
 import { Pagination } from "../../components/Pagination";
 import { deleteProduct, getStatusTone, listCategories, listProducts, upsertProduct } from "../../services/shopService";
 import type { Product, ProductImage, ProductOption } from "../../types/domain";
-import type { ProductCategory } from "../../types/product";
 
 const PAGE_SIZE = 8;
 const emptyOption = (): ProductOption => ({ id: crypto.randomUUID(), name: "", values: [] });
 const formatInteger = (value: number) => new Intl.NumberFormat("vi-VN").format(value || 0);
 
 export function ProductsPage() {
-  const [tick, setTick] = useState(0);
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
 
@@ -29,27 +27,42 @@ export function ProductsPage() {
   const [images, setImages] = useState<ProductImage[]>([]);
   const [options, setOptions] = useState<ProductOption[]>([emptyOption()]);
   const [skuRows, setSkuRows] = useState<Array<{ comboKey: string; code: string; price: number; stock: number; optionValues: Record<string, string> }>>([]);
-  const [categories, setCategories] = useState<ProductCategory[]>([]);
-  const products = listProducts();
-  void tick;
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    
+    const fetchData = async () => {
+      try {
+        const [productsData, categoriesData] = await Promise.all([
+          listProducts(),
+          listCategories()
+        ]);
+        setProducts(productsData);
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [])
 
-  const filteredProducts = useMemo(() => products.filter((p) => p.name.toLowerCase().includes(query.toLowerCase())), [products, query]);
+  const filteredProducts = useMemo(() => products.filter((p) => (p.name || '').toLowerCase().includes((query || '').toLowerCase())), [products, query]);
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PAGE_SIZE));
   const rows = filteredProducts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const categoryPath = (id: string) => {
-    const node = categories.find((c) => c.id === id);
+    if (!id) return "-";
+    const node = categories.find((c: any) => c.id === id);
     if (!node) return "-";
-    const chain = [node.name];
+    const chain = [node.categoryName];
     let current = node;
-    while (current.parentId) {
-      const parent = categories.find((c) => c.id === current.parentId);
+    while (current.parentCategoryId) {
+      const parent = categories.find((c: any) => c.id === current.parentCategoryId);
       if (!parent) break;
-      chain.unshift(parent.name);
+      chain.unshift(parent.categoryName);
       current = parent;
     }
     return chain.join(" > ");
@@ -122,10 +135,10 @@ export function ProductsPage() {
     ]);
   };
 
-  const submitProduct = () => {
+  const submitProduct = async () => {
     if (!name.trim() || !categoryId) return;
     const normalizedImages = images.map((img, idx) => ({ ...img, isPrimary: idx === images.findIndex((i) => i.isPrimary) }));
-    upsertProduct({
+    await upsertProduct({
       id: editing?.id,
       name: name.trim(),
       categoryId,
@@ -137,8 +150,14 @@ export function ProductsPage() {
     });
     setProductModalOpen(false);
     resetProductForm();
-    setTick((v) => v + 1);
+    // Refresh products list
+    const productsData = await listProducts();
+    setProducts(productsData);
   };
+
+  if (loading) {
+    return <div className="flex items-center justify-center h-64"><div className="text-lg">Loading products...</div></div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -155,8 +174,9 @@ export function ProductsPage() {
           <thead className="text-slate-400"><tr><th className="pb-2">#</th><th className="pb-2">Name</th><th className="pb-2">Category</th><th className="pb-2">SKU</th><th className="pb-2">Stock</th><th className="pb-2">Status</th><th className="pb-2">Actions</th></tr></thead>
           <tbody>
             {rows.length === 0 ? <EmptyTableRow colSpan={7} /> : rows.map((p, idx) => {
-              const totalStock = p.skus.reduce((sum, s) => sum + s.stock, 0);
-              return <tr key={p.id} className="border-t border-slate-800"><td className="py-2">{(page - 1) * PAGE_SIZE + idx + 1}</td><td className="py-2">{p.name}</td><td className="py-2">{categoryPath(p.categoryId)}</td><td className="py-2">{p.skus.length}</td><td className="py-2">{formatInteger(totalStock)}</td><td className="py-2" title={p.status}>{getStatusTone(p.status) === "success" ? <CircleCheck className="h-4 w-4 text-emerald-400" /> : getStatusTone(p.status) === "warning" ? <Circle className="h-4 w-4 text-amber-400" /> : <CircleAlert className="h-4 w-4 text-rose-400" />}</td><td className="py-2"><div className="flex gap-2"><IconButton title="Edit" icon={<Edit3 size={14} />} variant="accent" onClick={() => { setEditing(p); setName(p.name); setCategoryId(p.categoryId); setStatus(p.status); setDescription(p.description); setImages(p.images); setOptions(p.options.length ? p.options : [emptyOption()]); const currentOptions = p.options.length ? p.options : [emptyOption()]; const mergedSkuRows = p.skus.map((s) => { const mergedOptionValues: Record<string, string> = {}; currentOptions.forEach((o) => { if (o.name.trim() && o.values.length > 0) { mergedOptionValues[o.id] = s.optionValues[o.id] || ""; } }); return { comboKey: JSON.stringify(mergedOptionValues), code: s.code, price: s.price, stock: s.stock, optionValues: mergedOptionValues }; }); setSkuRows(mergedSkuRows); setProductModalOpen(true); }} /><IconButton title="Delete" icon={<Trash2 size={14} />} variant="danger" onClick={() => { setDeletingProductId(p.id); setDeleteModalOpen(true); }} /></div></td></tr>;
+              const skus = (p as any).skus || [];
+              const totalStock = skus.reduce((sum: number, s: any) => sum + s.stock, 0);
+              return <tr key={p.id} className="border-t border-slate-800"><td className="py-2">{(page - 1) * PAGE_SIZE + idx + 1}</td><td className="py-2">{p.name || ''}</td><td className="py-2">{categoryPath(p.categoryId || '')}</td><td className="py-2">{skus.length}</td><td className="py-2">{formatInteger(totalStock)}</td><td className="py-2" title={p.status || 'draft'}>{getStatusTone(p.status || 'draft') === "success" ? <CircleCheck className="h-4 w-4 text-emerald-400" /> : getStatusTone(p.status || 'draft') === "warning" ? <Circle className="h-4 w-4 text-amber-400" /> : <CircleAlert className="h-4 w-4 text-rose-400" />}</td><td className="py-2"><div className="flex gap-2"><IconButton title="Edit" icon={<Edit3 size={14} />} variant="accent" onClick={() => { setEditing(p as any); setName(p.name || ''); setCategoryId(p.categoryId || ''); setStatus(p.status || 'draft'); setDescription(p.description || ''); setImages(p.images || []); setOptions(p.options?.length ? p.options : [emptyOption()]); const currentOptions = p.options?.length ? p.options : [emptyOption()]; const mergedSkuRows = skus.map((s: any) => { const mergedOptionValues: Record<string, string> = {}; currentOptions.forEach((o) => { if (o.name?.trim() && o.values?.length > 0) { mergedOptionValues[o.id] = s.optionValues[o.id] || ""; } }); return { comboKey: JSON.stringify(mergedOptionValues), code: s.code, price: s.price, stock: s.stock, optionValues: mergedOptionValues }; }); setSkuRows(mergedSkuRows); setProductModalOpen(true); }} /><IconButton title="Delete" icon={<Trash2 size={14} />} variant="danger" onClick={() => { setDeletingProductId(p.id); setDeleteModalOpen(true); }} /></div></td></tr>;
             })}
           </tbody>
         </table>
@@ -167,7 +187,7 @@ export function ProductsPage() {
         <div className="space-y-3 text-sm">
           <div className="grid grid-cols-2 gap-2">
             <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Product name" className="rounded border border-slate-700 bg-slate-950 px-3 py-2" />
-            <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="rounded border border-slate-700 bg-slate-950 px-3 py-2"><option value="">Select category</option>{categories.map((c) => <option key={c.id} value={c.id}>{"-".repeat(c.level - 1)} {c.name}</option>)}</select>
+            <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="rounded border border-slate-700 bg-slate-950 px-3 py-2"><option value="">Select category</option>{categories.map((c: any) => <option key={c.id} value={c.id}>{c.categoryName}</option>)}</select>
           </div>
           <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder="Description" className="w-full rounded border border-slate-700 bg-slate-950 px-3 py-2" />
           <select value={status} onChange={(e) => setStatus(e.target.value as "draft" | "active")} className="rounded border border-slate-700 bg-slate-950 px-3 py-2"><option value="draft">draft</option><option value="active">active</option></select>
@@ -219,7 +239,7 @@ export function ProductsPage() {
       </Modal>
 
       <Modal open={deleteModalOpen} title="Delete Product" onClose={() => setDeleteModalOpen(false)}>
-        <div className="space-y-2"><p className="text-sm text-slate-300">Confirm delete?</p><button className="rounded bg-rose-600 px-3 py-2" onClick={() => { deleteProduct(deletingProductId); setDeleteModalOpen(false); setTick((v) => v + 1); }}><Trash2 className="inline h-4 w-4" /></button></div>
+        <div className="space-y-2"><p className="text-sm text-slate-300">Confirm delete?</p><button className="rounded bg-rose-600 px-3 py-2" onClick={async () => { await deleteProduct(deletingProductId); setDeleteModalOpen(false); const productsData = await listProducts(); setProducts(productsData); }}><Trash2 className="inline h-4 w-4" /></button></div>
       </Modal>
     </div>
   );

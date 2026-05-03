@@ -36,7 +36,7 @@ public class InventoryItemConfiguration : IEntityTypeConfiguration<InventoryItem
         #region Foreign Keys
 
         builder.HasOne(b => b.Variant)
-            .WithOne(p => p.Inventory)
+            .WithOne(p => p.InventoryItem)
             .HasForeignKey<InventoryItem>(b => b.VariantId);
         
         #endregion

@@ -23,6 +23,9 @@ public class ProductOptionConfiguration : IEntityTypeConfiguration<ProductOption
         builder.Property(b => b.OptionName)
             .IsRequired()
             .HasMaxLength(100);
+        builder.Property(b => b.Code)
+            .IsRequired()
+            .HasMaxLength(100);
 
         #endregion
         

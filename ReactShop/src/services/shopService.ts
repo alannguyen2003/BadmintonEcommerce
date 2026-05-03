@@ -1,7 +1,7 @@
 import { readDb, updateDb } from "../lib/storage";
-import type { Category, InventoryAction, Order, OrderStatus, Product, ProductOption, SKU } from "../types/domain";
+import type { InventoryAction, Order, OrderStatus, Product, ProductOption, SKU } from "../types/domain";
 import type { ProductCategory } from "../types/product";
-import { getCategories, createCategory as apiCreateCategory, updateCategory as apiUpdateCategory, deleteCategory as apiDeleteCategory } from "./product-service";
+import { getCategories, createCategory as apiCreateCategory, updateCategory as apiUpdateCategory, deleteCategory as apiDeleteCategory, getProducts, createProduct as apiCreateProduct, deleteProduct as apiDeleteProduct } from "./product-service";
 
 const id = (prefix: string) => `${prefix}_${Math.random().toString(36).slice(2, 9)}`;
 
@@ -89,12 +89,18 @@ const combosFromOptions = (options: ProductOption[]) => {
   }, []);
 };
 
-export const listProducts = () => {
-  const db = readDb();
-  return db.products.map((p) => ({ ...p, skus: db.skus.filter((s) => s.productId === p.id) }));
+export const listProducts = async (): Promise<Product[]> => {
+  try {
+    return await getProducts();
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    // Fallback to local storage
+    const db = readDb();
+    return db.products.map((p) => ({ ...p, skus: db.skus.filter((s) => s.productId === p.id) }));
+  }
 };
 
-export const upsertProduct = (input: {
+export const upsertProduct = async (input: {
   id?: string;
   name: string;
   categoryId: string;
@@ -104,44 +110,72 @@ export const upsertProduct = (input: {
   options: ProductOption[];
   skuRows: Array<{ comboKey: string; price: number; stock: number; code: string; optionValues: Record<string, string> }>;
 }) => {
-  const now = new Date().toISOString();
-  const productId = input.id ?? id("p");
-  updateDb((db) => {
-    const existing = db.products.find((p) => p.id === productId);
-    const product: Product = {
-      id: productId,
+  try {
+    // Convert status from string to boolean for API
+    const statusBoolean = input.status === 'active';
+    
+    await apiCreateProduct({
       name: input.name,
       categoryId: input.categoryId,
-      status: input.status,
+      status: statusBoolean,
       description: input.description,
-      images: input.images,
       options: input.options,
-      createdAt: existing?.createdAt ?? now,
-      updatedAt: now,
-    };
-    const skus: SKU[] = input.skuRows.map((row) => ({
-      id: id("sku"),
-      productId,
-      code: row.code,
-      optionValues: row.optionValues,
-      price: row.price,
-      stock: row.stock,
-    }));
-    return {
-      ...db,
-      products: [product, ...db.products.filter((p) => p.id !== productId)],
-      skus: [...db.skus.filter((s) => s.productId !== productId), ...skus],
-    };
-  });
+      skuRows: input.skuRows.map(row => ({
+        code: row.code,
+        price: row.price,
+        stock: row.stock,
+        optionValues: row.optionValues
+      })),
+      images: input.images
+    });
+  } catch (error) {
+    console.error('Error creating/updating product:', error);
+    // Fallback to local storage
+    const now = new Date().toISOString();
+    const productId = input.id ?? id("p");
+    updateDb((db) => {
+      const existing = db.products.find((p) => p.id === productId);
+      const product: Product = {
+        id: productId,
+        name: input.name,
+        categoryId: input.categoryId,
+        status: input.status,
+        description: input.description,
+        images: input.images,
+        options: input.options,
+        createdAt: existing?.createdAt ?? now,
+        updatedAt: now,
+      };
+      const skus: SKU[] = input.skuRows.map((row) => ({
+        id: id("sku"),
+        productId,
+        code: row.code,
+        optionValues: row.optionValues,
+        price: row.price,
+        stock: row.stock,
+      }));
+      return {
+        ...db,
+        products: [product, ...db.products.filter((p) => p.id !== productId)],
+        skus: [...db.skus.filter((s) => s.productId !== productId), ...skus],
+      };
+    });
+  }
 };
 
-export const deleteProduct = (productId: string) => {
-  updateDb((db) => ({
-    ...db,
-    products: db.products.filter((p) => p.id !== productId),
-    skus: db.skus.filter((s) => s.productId !== productId),
-    inventoryTransactions: db.inventoryTransactions.filter((t) => db.skus.find((s) => s.id === t.skuId)?.productId !== productId),
-  }));
+export const deleteProduct = async (productId: string) => {
+  try {
+    await apiDeleteProduct(productId);
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    // Fallback to local storage
+    updateDb((db) => ({
+      ...db,
+      products: db.products.filter((p) => p.id !== productId),
+      skus: db.skus.filter((s) => s.productId !== productId),
+      inventoryTransactions: db.inventoryTransactions.filter((t) => db.skus.find((s) => s.id === t.skuId)?.productId !== productId),
+    }));
+  }
 };
 
 export const buildSkuRows = (options: ProductOption[]) => {
