@@ -114,7 +114,7 @@ public class CreateFullProductCommandHandler(
                 CreatedOnUtc = dateTimeProvider.UtcNow,
             };
             inventoryItem.Variant = productVariant;
-            
+            inventoryItemRepository.Insert(inventoryItem);
             //Tạo combinations
             foreach (var combination in item.Values)
             {
