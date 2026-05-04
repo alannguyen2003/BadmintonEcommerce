@@ -20,8 +20,4 @@
       <ProjectReference Include="..\BadmintonEcommerce.Domain\BadmintonEcommerce.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Authorization\" />
-    </ItemGroup>
-
 </Project>
