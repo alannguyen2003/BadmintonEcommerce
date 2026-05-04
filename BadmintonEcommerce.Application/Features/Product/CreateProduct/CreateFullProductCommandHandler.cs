@@ -99,7 +99,9 @@ public class CreateFullProductCommandHandler(
                 Id = Guid.NewGuid(),
                 CreatedOnUtc = dateTimeProvider.UtcNow,
                 Price = item.Price,
-                SKU = new Guid().ToString(),
+                SKU = 
+                    GenerateSku(product.Slug, 
+                        item.Values.Select(v => (v.Code, v.Value)).ToList()),
                 Combinations = new List<VariantCombination>()
             };
             InventoryItem inventoryItem = new InventoryItem()
@@ -134,9 +136,22 @@ public class CreateFullProductCommandHandler(
         return Result.Success(product.Id);
     }
 
-    private bool CheckIfAnyOptionDuplicate(List<CreateOptionRequest> options)
+    public bool CheckIfAnyOptionDuplicate(List<CreateOptionRequest> options)
     {
         return options.GroupBy(item => item.Code)
             .Any(item => item.Count() > 1);
+    }
+
+    public string GenerateSku(string productSlug, List<(string code, string value)> values)
+    {
+        string Normalize(string s) =>
+            s.Trim().ToLowerInvariant().Replace(" ", "-");
+
+        var optionPart = string.Join("-",
+            values
+                .OrderBy(v => v.code)
+                .Select(v => Normalize(v.value)));
+
+        return $"{productSlug}-{optionPart}";
     }
 }

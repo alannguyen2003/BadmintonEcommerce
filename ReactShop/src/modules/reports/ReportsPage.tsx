@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { EmptyTableRow } from "../../components/EmptyTableRow";
 import { Pagination } from "../../components/Pagination";
-import { formatMoney, revenueByDay, revenueByMonth } from "../../services/shopService";
+import { formatMoney, revenueByDay, revenueByMonth } from "../../services/appService";
 
 const PAGE_SIZE = 10;
 

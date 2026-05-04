@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { Box, Boxes, ChartColumn, FolderTree, Receipt } from "lucide-react";
 import { seedIfNeeded } from "../services/bootstrap";
-import { dashboardStats, formatMoney } from "../services/shopService";
+import { dashboardStats, formatMoney } from "../services/appService";
 
 seedIfNeeded();
 

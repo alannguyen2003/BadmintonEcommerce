@@ -4,7 +4,7 @@ import { EmptyTableRow } from "../../components/EmptyTableRow";
 import { IconButton } from "../../components/IconButton";
 import { Modal } from "../../components/Modal";
 import { Pagination } from "../../components/Pagination";
-import { deleteOrder, formatMoney, getStatusTone, listOrders, updateOrderStatus } from "../../services/shopService";
+import { deleteOrder, formatMoney, getStatusTone, listOrders, updateOrderStatus } from "../../services/appService";
 import type { OrderStatus } from "../../types/domain";
 
 const PAGE_SIZE = 10;

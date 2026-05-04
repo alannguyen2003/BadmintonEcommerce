@@ -4,7 +4,7 @@ import { EmptyTableRow } from "../../components/EmptyTableRow";
 import { IconButton } from "../../components/IconButton";
 import { Modal } from "../../components/Modal";
 import { Pagination } from "../../components/Pagination";
-import { createInventoryTransaction, deleteInventoryTransaction, formatMoney, listInventoryTransactions, listSkus } from "../../services/shopService";
+import { createInventoryTransaction, deleteInventoryTransaction, formatMoney, listInventoryTransactions, listSkus } from "../../services/appService";
 import type { InventoryAction } from "../../types/domain";
 
 const PAGE_SIZE = 10;

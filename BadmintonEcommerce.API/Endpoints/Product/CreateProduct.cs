@@ -23,12 +23,6 @@ public class CreateProduct : IEndpoint
         public string SkuRows { get; set; }
         public IFormFileCollection Images { get; set; }
     }
-
-    public class Option
-    {
-        public string Name { get; set; }
-        public string[] Values { get; set; }
-    }
     
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -73,6 +67,7 @@ public class CreateProduct : IEndpoint
             command.VariantRequests = variants;
             Result<Guid> result = await handler.Handle(command, cancellationToken);
             return result.Match(Results.Ok, CustomResult.Problem);
-        }).DisableAntiforgery();
+        }).DisableAntiforgery()
+        .WithTags(Tags.Product);
     }
 }

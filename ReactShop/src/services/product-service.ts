@@ -79,10 +79,14 @@ export const getProducts = async (): Promise<Product[]> => {
       categoryId: item.categoryId,
       status: item.status ? 'active' : 'draft', // Convert boolean to string
       description: item.description,
-      options: item.options || [],
+      options: (item.options || []).map((option: any) => ({
+        id: option.code || option.id || option.name || crypto.randomUUID(),
+        name: option.name,
+        values: option.values || [],
+      })),
       images: item.images || [],
       createdAt: item.createdAt,
-      updatedAt: item.updatedAt
+      updatedAt: item.updatedAt,
     }));
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -112,28 +116,45 @@ export const createProduct = async (data: {
     formData.append('name', data.name);
     formData.append('brand', data.name);
     formData.append('categoryId', data.categoryId);
-    formData.append('status', data.status.toString());
+    formData.append('status', data.status ? 'true' : 'false');
     formData.append('description', data.description);
     if (data.brand) {
       formData.append('brand', data.brand);
     }
 
-    // Serialize options and skuRows to JSON
-    formData.append('options', JSON.stringify(data.options));
-    formData.append('skuRows', JSON.stringify(data.skuRows));
+    // Serialize options in API shape
+    const requestOptions = data.options.map((option) => ({
+      name: option.name,
+      code: option.id,
+      values: option.values || []
+    }));
+    formData.append('options', JSON.stringify(requestOptions));
+
+    // Serialize skuRows in API shape
+    const requestSkuRows = data.skuRows.map((row) => ({
+      code: row.code,
+      price: row.price,
+      stock: row.stock,
+      values: Object.entries(row.optionValues).map(([optionId, value]) => {
+        const option = data.options.find((o) => o.id === optionId);
+        return {
+          code: option?.id || optionId,
+          name: option?.name || optionId,
+          value,
+        };
+      }),
+    }));
+    formData.append('skuRows', JSON.stringify(requestSkuRows));
 
     // Add images
     data.images.forEach((img) => {
       if (img.dataUrl.startsWith('data:')) {
-        // Convert base64 to blob
         const blob = dataURLToBlob(img.dataUrl);
         formData.append('images', blob, img.name);
       }
     });
 
-    const response = await axios.post(`${API_BASE_URL}/products/create-products`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await axios.post(`${API_BASE_URL}/products/create-products`, formData);
 
     const item = response.data;
     return {
@@ -142,10 +163,14 @@ export const createProduct = async (data: {
       categoryId: item.categoryId,
       status: item.status ? 'active' : 'draft',
       description: item.description,
-      options: item.options || [],
+      options: (item.options || []).map((option: any) => ({
+        id: option.code || option.id || option.name || crypto.randomUUID(),
+        name: option.name,
+        values: option.values || [],
+      })),
       images: item.images || [],
       createdAt: item.createdAt,
-      updatedAt: item.updatedAt
+      updatedAt: item.updatedAt,
     };
   } catch (error) {
     console.error('Error creating product:', error);

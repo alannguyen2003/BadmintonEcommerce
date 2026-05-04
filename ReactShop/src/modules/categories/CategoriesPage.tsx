@@ -7,9 +7,9 @@ import { Pagination } from "../../components/Pagination";
 import {
   createCategory,
   deleteCategory,
-  listCategories,
+  getCategories,
   updateCategory,
-} from "../../services/shopService";
+} from "../../services/product-service";
 import type { ProductCategory } from "../../types/product";
 
 const PAGE_SIZE = 10;
@@ -26,7 +26,7 @@ export function CategoriesPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const data = await listCategories();
+        const data = await getCategories();
         setCategories(data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -40,7 +40,7 @@ export function CategoriesPage() {
   const handleDelete = async (id: string) => {
     try {
       await deleteCategory(id);
-      const data = await listCategories();
+      const data = await getCategories();
       setCategories(data);
     } catch (error) {
       console.error("Failed to delete category:", error);
@@ -51,12 +51,12 @@ export function CategoriesPage() {
     if (!name.trim()) return;
     try {
       if (editingId) {
-        await updateCategory(editingId, name.trim());
+        await updateCategory({ id: editingId, categoryName: name.trim() });
       } else {
         console.log(parentId);
-        await createCategory(name.trim(), parentId || null);
+        await createCategory({ categoryName: name.trim(), parentCategoryId: parentId || undefined });
       }
-      const data = await listCategories();
+      const data = await getCategories();
       setCategories(data);
       setOpen(false);
       setName("");
