@@ -18,6 +18,10 @@ public class ProductProfile : IMappingProfile
             .ForMember(des => des.Brand,
                 src => src.Brand)
             .ForMember(des => des.Slug,
-                src => src.Slug);
+                src => src.Slug)
+            .ForMember(des => des.CategoryId,
+                src => src.CategoryId)
+            .ForMember(des => des.TotalVariants,
+                src => src.Variants.Count);
     }
 }

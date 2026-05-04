@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Check,
   Circle,
-  CircleAlert,
   CircleCheck,
   Edit3,
   ImagePlus,
@@ -18,9 +17,9 @@ import {
   createProduct,
   deleteProduct,
   getCategories,
+  getProductDetail,
   getProducts,
 } from "../../services/product-service";
-import { getStatusTone } from "../../services/appService";
 import type { Product, ProductImage, ProductOption } from "../../types/domain";
 
 const PAGE_SIZE = 8;
@@ -101,23 +100,6 @@ export function ProductsPage() {
     Math.ceil(filteredProducts.length / PAGE_SIZE),
   );
   const rows = filteredProducts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
-  const categoryPath = (id: string) => {
-    if (!id) return "-";
-    const node = categories.find((c: any) => c.id === id);
-    if (!node) return "-";
-    const chain = [node.categoryName];
-    let current = node;
-    while (current.parentCategoryId) {
-      const parent = categories.find(
-        (c: any) => c.id === current.parentCategoryId,
-      );
-      if (!parent) break;
-      chain.unshift(parent.categoryName);
-      current = parent;
-    }
-    return chain.join(" > ");
-  };
 
   const resetProductForm = () => {
     setEditing(null);
@@ -290,25 +272,19 @@ export function ProductsPage() {
               <EmptyTableRow colSpan={7} />
             ) : (
               rows.map((p, idx) => {
-                const skus = (p as any).skus || [];
-                const totalStock = skus.reduce(
-                  (sum: number, s: any) => sum + s.stock,
-                  0,
-                );
+                const totalVariants = (p as any).totalVariants || 0;
                 return (
                   <tr key={p.id} className="border-t border-slate-800">
                     <td className="py-2">{(page - 1) * PAGE_SIZE + idx + 1}</td>
                     <td className="py-2">{p.name || ""}</td>
-                    <td className="py-2">{categoryPath(p.categoryId || "")}</td>
-                    <td className="py-2">{skus.length}</td>
-                    <td className="py-2">{formatInteger(totalStock)}</td>
+                    <td className="py-2">{p.categoryId ? p.categoryId : "-"}</td>
+                    <td className="py-2">{totalVariants}</td>
+                    <td className="py-2">-</td>
                     <td className="py-2" title={p.status || "draft"}>
-                      {getStatusTone(p.status || "draft") === "success" ? (
+                      {p.status === "active" ? (
                         <CircleCheck className="h-4 w-4 text-emerald-400" />
-                      ) : getStatusTone(p.status || "draft") === "warning" ? (
-                        <Circle className="h-4 w-4 text-amber-400" />
                       ) : (
-                        <CircleAlert className="h-4 w-4 text-rose-400" />
+                        <Circle className="h-4 w-4 text-amber-400" />
                       )}
                     </td>
                     <td className="py-2">
@@ -317,38 +293,31 @@ export function ProductsPage() {
                           title="Edit"
                           icon={<Edit3 size={14} />}
                           variant="accent"
-                          onClick={() => {
-                            setEditing(p as any);
-                            setName(p.name || "");
-                            setCategoryId(p.categoryId || "");
-                            setStatus(p.status || "draft");
-                            setDescription(p.description || "");
-                            setImages(p.images || []);
-                            setOptions(
-                              p.options?.length ? p.options : [emptyOption()],
-                            );
-                            const currentOptions = p.options?.length
-                              ? p.options
-                              : [emptyOption()];
-                            const mergedSkuRows = skus.map((s: any) => {
-                              const mergedOptionValues: Record<string, string> =
-                                {};
-                              currentOptions.forEach((o) => {
-                                if (o.name?.trim() && o.values?.length > 0) {
-                                  mergedOptionValues[o.id] =
-                                    s.optionValues[o.id] || "";
-                                }
-                              });
-                              return {
-                                comboKey: JSON.stringify(mergedOptionValues),
-                                code: s.code,
-                                price: s.price,
-                                stock: s.stock,
-                                optionValues: mergedOptionValues,
-                              };
-                            });
-                            setSkuRows(mergedSkuRows);
-                            setProductModalOpen(true);
+                          onClick={async () => {
+                            try {
+                              const productDetail = await getProductDetail(p.id);
+                              setEditing(productDetail as any);
+                              setName(productDetail.name || "");
+                              setCategoryId(productDetail.categoryId || "");
+                              setStatus(productDetail.status || "draft");
+                              setDescription(productDetail.description || "");
+                              setImages(productDetail.images || []);
+                              setOptions(
+                                productDetail.options?.length ? productDetail.options : [emptyOption()],
+                              );
+                              setSkuRows(
+                                productDetail.skus?.map((s: any) => ({
+                                  comboKey: JSON.stringify(s.optionValues),
+                                  code: s.code,
+                                  price: s.price,
+                                  stock: s.stock,
+                                  optionValues: s.optionValues,
+                                })) || []
+                              );
+                              setProductModalOpen(true);
+                            } catch (error) {
+                              console.error('Failed to load product:', error);
+                            }
                           }}
                         />
                         <IconButton
@@ -637,6 +606,7 @@ export function ProductsPage() {
                                 ),
                               )
                             }
+                            disabled
                             className="mx-auto w-28 rounded border border-slate-700 bg-slate-900 px-1 text-center"
                           />
                         </td>

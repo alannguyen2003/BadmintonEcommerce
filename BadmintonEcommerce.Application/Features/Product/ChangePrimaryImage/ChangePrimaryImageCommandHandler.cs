@@ -20,7 +20,7 @@ public class ChangePrimaryImageCommandHandler(
 
         IEnumerable<ProductImage> images = await productImageRepository.Get(
             filter: filter => filter.ProductId == command.ProductId);
-
+        
         foreach (var item in images)
         {
             if (item.Id != command.ImageId) 

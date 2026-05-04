@@ -42,6 +42,7 @@ public class CreateFullProductCommandHandler(
             Brand = command.Brand,
             Description = command.ProductDescription,
             CategoryId = command.ProductCategoryId,
+            Status = command.Status,
             Slug = SlugGenerateProvider.GenerateSlug(command.ProductName),
             CreatedOnUtc = dateTimeProvider.UtcNow,
             Images = new List<Domain.Entities.Catalog.ProductImage>(),
@@ -65,6 +66,8 @@ public class CreateFullProductCommandHandler(
                 CreatedOnUtc = dateTimeProvider.UtcNow,
             });
         }
+
+        product.Images.FirstOrDefault().IsPrimary = true;
 
         var optionValueMap = new Dictionary<(string code, string value), ProductOptionValue>();
         foreach (var item in command.OptionRequests)

@@ -30,6 +30,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(b => b.Slug)
             .IsRequired()
             .HasMaxLength(200);
+        builder.Property(b => b.Status)
+            .IsRequired()
+            .HasDefaultValue(false);
         #endregion  
         
         #region Foreign Keys

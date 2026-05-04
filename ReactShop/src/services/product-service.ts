@@ -69,27 +69,96 @@ export const deleteCategory = async (id: string): Promise<void> => {
     throw error;
   }
 };
-// Products API functions
-export const getProducts = async (): Promise<Product[]> => {
+// Products API functions - Get List
+export const getProducts = async (): Promise<Array<Product & { totalVariants?: number }>> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/products`);
     return response.data.map((item: any) => ({
       id: item.id,
-      name: item.name,
+      name: item.productName,
       categoryId: item.categoryId,
-      status: item.status ? 'active' : 'draft', // Convert boolean to string
-      description: item.description,
-      options: (item.options || []).map((option: any) => ({
-        id: option.code || option.id || option.name || crypto.randomUUID(),
-        name: option.name,
-        values: option.values || [],
-      })),
-      images: item.images || [],
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
+      status: item.status ? 'active' : 'draft',
+      description: item.productDescription,
+      options: [],
+      images: item.primaryImage ? [{
+        id: item.primaryImage.id,
+        name: '',
+        dataUrl: item.primaryImage.url,
+        isPrimary: true,
+      }] : [],
+      createdAt: '',
+      updatedAt: '',
+      totalVariants: item.totalVariants || 0,
     }));
   } catch (error) {
     console.error('Error fetching products:', error);
+    throw error;
+  }
+};
+
+export const getProductDetail = async (id: string): Promise<Product & { skus: Array<{ id: string; code: string; price: number; stock: number; optionValues: Record<string, string> }> }> => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/products/${id}`);
+    const item = response.data;
+    
+    // Transform options: flatten values array
+    const options = (item.options || []).map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      values: (option.values || []).map((v: any) => v.value),
+    }));
+    
+    // Create a map of value ID -> value text and option ID for lookup
+    const valueIdMap = new Map<string, { optionId: string; value: string }>();
+    options.forEach((option: { id: string; name: string; values: string[] }) => {
+      option.values.forEach((value: string) => {
+        // Find the value ID from original response
+        const originalOption = item.options.find((o: any) => o.id === option.id);
+        const originalValue = originalOption?.values.find((v: any) => v.value === value);
+        if (originalValue) {
+          valueIdMap.set(originalValue.id, { optionId: option.id, value });
+        }
+      });
+    });
+    
+    // Transform variants to SKUs
+    const skus = (item.variants || []).map((variant: any) => {
+      const optionValues: Record<string, string> = {};
+      (variant.optionValues || []).forEach((valueId: string) => {
+        const mapped = valueIdMap.get(valueId);
+        if (mapped) {
+          optionValues[mapped.optionId] = mapped.value;
+        }
+      });
+      
+      return {
+        id: variant.id,
+        code: variant.sku,
+        price: variant.price,
+        stock: 0,  // Stock not in API response
+        optionValues,
+      };
+    });
+    
+    return {
+      id: item.id,
+      name: item.name,
+      categoryId: item.categoryId,
+      status: item.status ? 'active' : 'draft',
+      description: item.description,
+      options,
+      images: (item.images || []).map((img: any) => ({
+        id: img.id,
+        name: '',
+        dataUrl: img.imageUrl,
+        isPrimary: img.isPrimary,
+      })),
+      createdAt: '',
+      updatedAt: '',
+      skus,
+    };
+  } catch (error) {
+    console.error('Error fetching product detail:', error);
     throw error;
   }
 };

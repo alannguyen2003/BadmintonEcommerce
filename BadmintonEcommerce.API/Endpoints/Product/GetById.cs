@@ -13,11 +13,11 @@ public class GetById : IEndpoint
     {
         app.MapGet("/products/{id:guid}", async (
             Guid id,
-            IQueryHandler<GetProductByIdQuery, ProductResponse> handler,
+            IQueryHandler<GetProductByIdQuery, ProductDetailResponse> handler,
             CancellationToken cancellationToken
         ) =>
         {
-            Result<ProductResponse> result = await handler.Handle(new GetProductByIdQuery(id), cancellationToken);
+            Result<ProductDetailResponse> result = await handler.Handle(new GetProductByIdQuery(id), cancellationToken);
 
             return result.Match(Results.Ok, CustomResult.Problem);
         }).WithTags(Tags.Product);

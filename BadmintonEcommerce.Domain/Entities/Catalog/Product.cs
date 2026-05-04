@@ -8,6 +8,7 @@ public class Product : Aggregate<Guid>
     public string Description { get; set; }
     public string Brand { get; set; }
     public string Slug { get; set; }
+    public bool Status { get; set; }
     
     #region Foreign Keys
     public Guid CategoryId { get; set; }
