@@ -20,4 +20,9 @@
       <ProjectReference Include="..\BadmintonEcommerce.Domain\BadmintonEcommerce.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Persistence\Profiles\Authentication\Response\" />
+      <Folder Include="Persistence\Profiles\Inventory\" />
+    </ItemGroup>
+
 </Project>

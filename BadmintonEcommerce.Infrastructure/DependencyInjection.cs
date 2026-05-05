@@ -4,6 +4,8 @@ using BadmintonEcommerce.Application.Abstraction.Authentication;
 using BadmintonEcommerce.Application.Abstraction.Repositories;
 using BadmintonEcommerce.Application.Abstraction.Services;
 using BadmintonEcommerce.Infrastructure.Abstractions;
+using BadmintonEcommerce.Infrastructure.Authentication;
+using BadmintonEcommerce.Infrastructure.Authorization;
 using BadmintonEcommerce.Infrastructure.DomainEvents;
 using BadmintonEcommerce.Infrastructure.Persistence.Database;
 using BadmintonEcommerce.Infrastructure.Persistence.Profiles;
@@ -13,6 +15,7 @@ using BadmintonEcommerce.Infrastructure.Time;
 using BadmintonEcommerce.Mapper.Abstractions;
 using BadmintonEcommerce.Mapper.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +36,9 @@ public static class DependencyInjection
             .AddHealthChecks(configuration)
             .AddCloudinary(configuration)
             .AddThirdPartyServices()
-            .AddCustomMapper();
+            .AddCustomMapper()
+            .AddAuthenticationInternal(configuration)
+            .AddAuthorizationInternal();
 
     private static IServiceCollection AddDateTimeProvider(this IServiceCollection services)
     {
@@ -117,12 +122,18 @@ public static class DependencyInjection
                 };
             });
         services.AddHttpContextAccessor();
-        
+        services.AddScoped<IAccountContext, AccountContext>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<ITokenProvider, TokenProvider>();
         return services;
     }
 
     private static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
     {
+        services.AddAuthorization();
+        services.AddScoped<PermissionProvider>();
+        services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+        services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
         return services;
     }
 

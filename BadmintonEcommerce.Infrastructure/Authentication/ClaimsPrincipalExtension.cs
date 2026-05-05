@@ -12,4 +12,9 @@ public static class ClaimsPrincipalExtension
             ? parsedAccountId
             : throw new ApplicationException(Message.Authentication.ClaimsPrincipalMessage.AccountIdIsNotAvailable);
     }
+
+    public static Guid GetAccountRole(this ClaimsPrincipal? principal)
+    {
+        return Guid.NewGuid();
+    }
 }

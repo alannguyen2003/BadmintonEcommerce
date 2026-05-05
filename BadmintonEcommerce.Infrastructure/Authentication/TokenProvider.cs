@@ -10,7 +10,7 @@ namespace BadmintonEcommerce.Infrastructure.Authentication;
 
 public class TokenProvider(IConfiguration configuration) : ITokenProvider
 {
-    public string Create(Account account)
+    public string Create(Account account, List<Role> roles)
     {
         string secretKey = configuration["Jwt:Secret"]!;
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
@@ -22,7 +22,9 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
             Subject = new ClaimsIdentity(
             [
                 new Claim(JwtRegisteredClaimNames.Sub, account.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, account.Email)
+                new Claim(JwtRegisteredClaimNames.Email, account.Email),
+                new Claim(JwtRegisteredClaimNames.Name, account.FullName),
+                new Claim("roles", "")
             ]),
             Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:ExpirationInMinutes")),
             SigningCredentials = credentials,

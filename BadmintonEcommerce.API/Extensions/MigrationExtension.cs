@@ -1,4 +1,5 @@
-﻿using BadmintonEcommerce.Infrastructure.Persistence.Database;
+﻿using BadmintonEcommerce.API.Extensions.Data;
+using BadmintonEcommerce.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace BadmintonEcommerce.API.Extensions;
@@ -13,5 +14,9 @@ public static class MigrationExtension
 
         context.Database.Migrate();
         
+        //Add Roles
+        context.AddRange(Roles.Data);
+
+        context.SaveChanges();
     }
 }

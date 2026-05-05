@@ -51,7 +51,7 @@ export function CategoriesPage() {
     if (!name.trim()) return;
     try {
       if (editingId) {
-        await updateCategory({ id: editingId, categoryName: name.trim() });
+        await updateCategory({ id: editingId, categoryName: name.trim(), parentCategoryId: parentId || undefined });
       } else {
         console.log(parentId);
         await createCategory({ categoryName: name.trim(), parentCategoryId: parentId || undefined });

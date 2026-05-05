@@ -10,4 +10,6 @@ public static class Tags
     public const string ProductOptionValue = "ProductOptionValues";
     public const string Inventory = "Inventories";
     public const string InventoryTransaction = "InventoryTransactions";
+
+    public const string Authentication = "Authentication";
 }

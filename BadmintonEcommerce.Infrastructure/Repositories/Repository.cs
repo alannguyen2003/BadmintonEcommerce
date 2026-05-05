@@ -36,7 +36,9 @@ public class Repository<TEntity>(ApplicationDbContext context) : IRepository<TEn
             query = query.Skip(validPageIndex * validPageSize).Take(validPageSize);
         }
             
-        return query.ToList();
+        return query
+            .AsNoTracking()
+            .ToList();
     }
 
     public TEntity? GetById(object id)
