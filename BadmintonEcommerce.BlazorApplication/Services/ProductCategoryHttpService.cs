@@ -1,4 +1,5 @@
 ﻿using BadmintonEcommerce.BlazorApplication.Abstraction.Services;
+using BadmintonEcommerce.Contracts.API.Presentation.Client.Category;
 using BadmintonEcommerce.Contracts.API.Presentation.Product.Responses;
 using BadmintonEcommerce.Contracts.API.Presentation.ProductCategory.Responses;
 using BadmintonEcommerce.Contracts.Endpoints;
@@ -14,9 +15,9 @@ public class ProductCategoryHttpService : IProductCategoryHttpService
         client = httpClientFactory.CreateClient("api");
     }
     
-    public async Task<List<ProductCategoryResponse>?> GetProductCategories(Guid productCategoryId)
+    public async Task<List<CategoryResponse>?> GetClientCategories()
     {
-        return await client.GetFromJsonAsync<List<ProductCategoryResponse>>(
+        return await client.GetFromJsonAsync<List<CategoryResponse>>(
             ProductCategoryEndpoint.GetCategories());
     }
 

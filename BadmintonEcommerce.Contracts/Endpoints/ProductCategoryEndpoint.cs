@@ -2,7 +2,7 @@
 
 public static class ProductCategoryEndpoint
 {
-    public static readonly string EndpointUrl = "/categories";
+    public static readonly string EndpointUrl = "/client/categories";
     public static string GetCategories()
     {
         return $"{EndpointUrl}";
