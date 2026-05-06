@@ -1,9 +1,8 @@
 ﻿using BadmintonEcommerce.BlazorApplication.Abstraction.Services;
 using BadmintonEcommerce.Contracts.API.Presentation.Client.Category;
-using BadmintonEcommerce.Contracts.API.Presentation.ProductCategory.Responses;
 using Microsoft.AspNetCore.Components;
 
-namespace BadmintonEcommerce.BlazorApplication.Components.Components;
+namespace BadmintonEcommerce.BlazorApplication.Components.Components.Categories;
 
 public partial class Categories(IProductCategoryHttpService productCategoryService) : ComponentBase
 {

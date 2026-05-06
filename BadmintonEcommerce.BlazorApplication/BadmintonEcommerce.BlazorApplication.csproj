@@ -10,4 +10,8 @@
       <ProjectReference Include="..\BadmintonEcommerce.Contracts\BadmintonEcommerce.Contracts.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Mythetech.LocalStorage" Version="5.0.0" />
+    </ItemGroup>
+
 </Project>
