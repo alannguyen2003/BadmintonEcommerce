@@ -19,10 +19,11 @@
 
     <!-- Custom Style CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <HeadOutlet @rendermode="new InteractiveServerRenderMode(prerender: false)"/>
 </head>
 
 <body>
-<Routes/>
+<Routes @rendermode="new InteractiveServerRenderMode(prerender: true)"/>
 <!-- All Script JS Plugins here  -->
 <script src="assets/js/vendor/popper.js" defer="defer"></script>
 <script src="assets/js/vendor/bootstrap.min.js" defer="defer"></script>
@@ -31,6 +32,8 @@
 
 <!-- Customscript js -->
 <script src="assets/js/script.js"></script>
+<script src="assets/js/storage.js"></script>
+
 </body>
 
 </html>

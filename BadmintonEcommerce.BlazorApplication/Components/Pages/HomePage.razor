@@ -1,6 +1,23 @@
 ﻿@page "/"
+@using BadmintonEcommerce.BlazorApplication.Abstraction.Services
 @using BadmintonEcommerce.BlazorApplication.Components.Components.Layout
 @using BadmintonEcommerce.BlazorApplication.Components.Components.Products
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject IStorageService storageService
+@code
+{
+    private string Token { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            string? token = storageService.GetAccessToken();
+            Console.WriteLine(token);
+            StateHasChanged();
+        }
+    }
+}
 
 <PageTitle>Home</PageTitle>
 

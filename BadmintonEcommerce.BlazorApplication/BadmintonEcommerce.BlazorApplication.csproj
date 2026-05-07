@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Blazor.Storage" Version="5.0.0" />
       <PackageReference Include="Mythetech.LocalStorage" Version="5.0.0" />
     </ItemGroup>
 

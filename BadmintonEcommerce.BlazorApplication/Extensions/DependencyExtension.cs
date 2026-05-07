@@ -9,6 +9,10 @@ public static class DependencyExtension
     {
         services.AddScoped<IProductCategoryHttpService, ProductCategoryHttpService>();
         services.AddScoped<IProductHttpService, ProductHttpService>();
+        services.AddScoped<IAuthHttpService, AuthHttpService>();
+        services.AddScoped<IStorageService, CookieStorageService>();
+        
+        services.AddHttpContextAccessor();
         return services;
     }
 }
