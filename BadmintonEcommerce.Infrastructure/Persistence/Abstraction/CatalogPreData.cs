@@ -30,6 +30,11 @@ public static class CatalogPreData
 
         public static class Option
         {
+            public static class Default
+            {
+                public const string DefaultOption = "Default";
+                public const string DefaultOptionValue = "Default";
+            }
             public static class RacquetOption
             {
                 public const string Grip = "Grip";
@@ -136,6 +141,81 @@ public static class CatalogPreData
                     public const string Size3XL = "3XL";
                     public const string Size4XL = "4XL";
                 }
+            }
+        }
+
+        public static class Name
+        {
+            public static class Racquet
+            {
+                public static class Astrox
+                {
+                    public const string Astrox99ProGen2 = "ASTROX 99 PRO (2ND GEN)";
+                    public const string Astrox100TourVA = "VA Astrox 100 Tour";
+                    public const string Astrox70 = "Astrox 70";
+                    public const string Astrox99Game = "Astrox 99 Game";
+                    public const string Astrox88DTour = "Astrox 88D Tour";
+                    public const string Astrox88DPro = "Astrox 88D Pro";
+                    public const string Astrox88SPro = "Astrox 88S Pro";
+                    public const string Astrox88STour = "Astrox 88S Tour";
+                    public const string Astrox88SGame = "Astrox 88S Game";
+                    public const string Astrox77Pro = "Astrox 77 Pro";
+                    public const string Astrox77Tour = "Astrox 77 Tour";
+                    public const string Astrox77Game = "Astrox 77 Game";
+                }
+
+                public static class ArcSaber
+                {
+                    public const string ArcSaber11Pro = "ArcSaber 11 Pro";
+                    public const string ArcSaber11Tour = "ArcSaber 11 Tour";
+                    public const string ArcSaber11Game = "ArcSaber 11 Game";
+                    public const string ArcSaber7Pro = "ArcSaber 7 Pro";
+                    public const string ArcSaber7Tour = "ArcSaber 7 Tour";
+                    public const string ArcSaber7Game = "ArcSaber 7 Game";
+                }
+
+                public static class NanoFlare
+                {
+                    public const string NanoFlareSpeed7 = "NanoFlare Speed 7";
+                    public const string NanoFlare001Feel = "NanoFlare 001 Feel";
+                    public const string NanoFlare700Pro = "NanoFlare 700 Pro";
+                    public const string NanoFlare700Tour = "NanoFlare 700 Tour";
+                    public const string NanoFlare700Game = "NanoFlare 700 Game";
+                    public const string NanoFlare700Play = "NanoFlare 700 Play";
+                    public const string NanoFlare800Pro = "NanoFlare 800 Pro";
+                    public const string NanoFlare800Tour = "NanoFlare 800 Tour";
+                    public const string NanoFlare800Game = "NanoFlare 800 Game";
+                    public const string NanoFlare800Play = "NanoFlare 800 Play";
+                    public const string NanoFlare1000Z = "NanoFlare 1000Z";
+                    public const string NanoFlare1000Tour = "NanoFlare 1000 Tour";
+                    public const string NanoFlare1000Game = "NanoFlare 1000 Game";
+                    public const string NanoFlareNextAge = "NanoFlare Nextage";
+                }
+            }
+
+            public static class Accessories
+            {
+                public const string TowelGrip = "Towel Grip";
+                public const string TowelGripReel = "Towel Grip - Reel";
+                public const string AllSportCrewSocks = "ALL SPORT CREW SOCKS (3 PAIRS)";
+                public const string ElementCrewSocks = "ELEMENT CREW SOCKS";
+                public const string PerformanceCap = "YONEX PERFORMANCE CAP";
+                public const string SmallLogoWristband = "SMALL LOGO WRISTBAND";
+            }
+
+            public static class Shoe
+            {
+                public const string EclipsonZ3Men = "POWER CUSHION ECLIPSION Z (3RD GEN-MENS)";
+                public const string EclipsonZ3Women = "POWER CUSHION ECLIPSION Z (3RD GEN - WOMENS)";
+                public const string ComfortZ3Women = "POWER CUSHION COMFORT Z (3RD GEN-WOMENS)";
+                public const string ComfortZ3Men = "POWER CUSHION COMFORT Z (3RD GEN-MENS)";
+                public const string CascadeDrive = "POWER CUSHION CASCADE DRIVE (2ND GEN)";
+                public const string AerusZWomen = "POWER CUSHION AERUS Z WOMEN";
+                public const string AerusZMen = "POWER CUSHION AERUS Z MEN";
+                public const string AerusZWide = "POWER CUSHION AERUS Z";
+                public const string Cusion88Dial3 = "POWER CUSHION 88 DIAL (3RD GEN)";
+                public const string Cusion88Dial3Wide = "POWER CUSHION 88 DIAL (3RD GEN - WIDE)";
+                public const string SubaxiaGTWide = "SUBAXIA GT - WIDE";
             }
         }
     }

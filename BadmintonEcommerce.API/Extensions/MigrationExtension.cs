@@ -1,5 +1,7 @@
 ﻿using BadmintonEcommerce.Application.Abstraction.Authentication;
 using BadmintonEcommerce.Domain.Entities.Authentication;
+using BadmintonEcommerce.Domain.Entities.Catalog;
+using BadmintonEcommerce.Domain.Entities.Inventory;
 using BadmintonEcommerce.Infrastructure.Persistence.Data;
 using BadmintonEcommerce.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
@@ -21,9 +23,14 @@ public static class MigrationExtension
         //Add Roles
         (List<Account>, List<Role>) authenticationContext = new AuthenticationData(
             passwordHasher, dateTimeProvider).Data();
-        
+        List<ProductCategory> categoryContext = new CatalogData(dateTimeProvider).RootCategories;
+        (List<Product>, List<InventoryItem>) productContext = new CatalogData(dateTimeProvider).Data(categoryContext[0].ChildCategories.ToList());
         context.Accounts.AddRange(authenticationContext.Item1);
         context.Roles.AddRange(authenticationContext.Item2);
+        
+        context.Categories.AddRange(categoryContext);
+        context.Products.AddRange(productContext.Item1);
+        context.InventoryItems.AddRange(productContext.Item2);
 
         context.SaveChanges();
     }

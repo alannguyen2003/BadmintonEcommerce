@@ -49,4 +49,17 @@ public static class SlugGenerateProvider
 
         return result;
     }
+    
+    public static string GenerateSku(string productSlug, List<(string code, string value)> values)
+    {
+        string Normalize(string s) =>
+            s.Trim().ToLowerInvariant().Replace(" ", "-");
+
+        var optionPart = string.Join("-",
+            values
+                .OrderBy(v => v.code)
+                .Select(v => Normalize(v.value)));
+
+        return $"{productSlug}-{optionPart}";
+    }
 }
