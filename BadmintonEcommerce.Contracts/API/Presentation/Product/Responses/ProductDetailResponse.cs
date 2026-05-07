@@ -39,5 +39,4 @@ public class ProductDetailImageResponse
 {
     public Guid Id { get; set; }
     public string ImageUrl { get; set; }
-    public bool IsPrimary { get; set; }
 }

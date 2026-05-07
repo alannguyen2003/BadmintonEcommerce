@@ -8,5 +8,6 @@ public class ProductCategoryByIdResponse
     public string CategoryName { get; set; }
     public string ParentCategoryName { get; set; }
     public int Level { get; set; }
+    public List<ProductCategoryByIdResponse> ChildCategories { get; set; }
     public List<ProductResponse> Products { get; set; }
 }

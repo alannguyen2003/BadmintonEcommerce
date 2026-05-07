@@ -2,6 +2,6 @@
 
 namespace BadmintonEcommerce.BlazorApplication.Components.Components.Products;
 
-public partial class ProductItem : ComponentBase
+public partial class QuickViewWrapper : ComponentBase
 {
 }

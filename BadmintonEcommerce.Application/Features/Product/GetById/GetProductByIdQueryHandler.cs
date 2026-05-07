@@ -46,7 +46,6 @@ public sealed class GetProductByIdQueryHandler(
             {
                 Id = item.Id,
                 ImageUrl = item.Url,
-                IsPrimary = item.IsPrimary
             });
         }
         if (product.Variants.Count > 0)

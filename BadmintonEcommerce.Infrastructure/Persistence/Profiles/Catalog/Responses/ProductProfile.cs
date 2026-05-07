@@ -14,7 +14,7 @@ public class ProductProfile : IMappingProfile
             .ForMember(des => des.ProductDescription,
                 src => src.Description)
             .ForMember(des => des.CategoryName,
-                src => (src.Category != null ? src.Category.CategoryName : null) ?? string.Empty)
+                src => (src.Category.CategoryName) ?? string.Empty)
             .ForMember(des => des.Brand,
                 src => src.Brand)
             .ForMember(des => des.Slug,
@@ -22,6 +22,13 @@ public class ProductProfile : IMappingProfile
             .ForMember(des => des.CategoryId,
                 src => src.CategoryId)
             .ForMember(des => des.TotalVariants,
-                src => src.Variants.Count);
+                src => src.Variants.Count)
+            .ForMember(des => des.PrimaryImage,
+                src => src.Images.Count == 0 ? null : new PrimaryImageResponse()
+                {
+                    Id = src.Images.First(item => item.IsPrimary).Id,
+                    Url = src.Images.First(item => item.IsPrimary).Url
+                });
+        
     }
 }

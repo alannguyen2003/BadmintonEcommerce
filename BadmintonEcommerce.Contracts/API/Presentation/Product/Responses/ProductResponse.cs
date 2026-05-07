@@ -11,7 +11,7 @@ public class ProductResponse
     public string Slug { get; set; }
     public string CategoryName { get; set; }
     public Guid CategoryId { get; set; }
-    public PrimaryImageResponse PrimaryImage { get; set; }
+    public PrimaryImageResponse? PrimaryImage { get; set; }
 }
 
 public class PrimaryImageResponse

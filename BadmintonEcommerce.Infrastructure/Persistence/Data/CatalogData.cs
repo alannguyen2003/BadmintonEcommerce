@@ -211,7 +211,17 @@ public class CatalogData(IDateTimeProvider dateTimeProvider)
                     "in culpa qui officia deserunt mollit anim id est laborum.",
                 CreatedOnUtc = now,
                 Options = new List<ProductOption>(),
-                Variants = new List<ProductVariant>()
+                Variants = new List<ProductVariant>(),
+                Images = new List<ProductImage>()
+                {
+                    new ProductImage()
+                    {
+                        IsPrimary = true,
+                        ImageMetadata = "",
+                        Url = "https://res.cloudinary.com/ds8cv8hcq/image/upload/v1777950873/badminton-ecommerce/bc4q7wuafxjgbjlh6vie.webp",
+                        CreatedOnUtc = dateTimeProvider.UtcNow,
+                    }
+                }
             };
             
             // attach options theo category

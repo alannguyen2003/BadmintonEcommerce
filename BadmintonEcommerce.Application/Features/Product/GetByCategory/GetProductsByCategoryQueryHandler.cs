@@ -15,7 +15,7 @@ public class GetProductsByCategoryQueryHandler(
 {
     public async Task<Result<List<ProductResponse>>> Handle(GetProductsByCategoryQuery query, CancellationToken cancellationToken)
     {
-        Domain.Entities.Catalog.ProductCategory productCategory = productCategoryRepository.GetById(query.ProductCategoryId);
+        Domain.Entities.Catalog.ProductCategory? productCategory = productCategoryRepository.GetById(query.ProductCategoryId);
 
         if (productCategory == null)
             return Result.Failure<List<ProductResponse>>(ProductCategoryError.NotFound(query.ProductCategoryId));
@@ -23,7 +23,7 @@ public class GetProductsByCategoryQueryHandler(
         IEnumerable<Domain.Entities.Catalog.Product> products = await productRepository.Get(
             filter: filter => filter.CategoryId == query.ProductCategoryId,
             null,
-            "Category");
+            "Category,Variants");
 
         List<Domain.Entities.Catalog.Product> productsResponse = products.ToList();
         List<ProductResponse> responses = mapper.Map<List<ProductResponse>>(productsResponse);

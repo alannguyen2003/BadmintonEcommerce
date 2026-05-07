@@ -1,5 +1,9 @@
 ﻿using BadmintonEcommerce.API.Extensions;
 using BadmintonEcommerce.API.Infrastructure;
+using BadmintonEcommerce.Application.Abstraction.Messaging;
+using BadmintonEcommerce.Application.Features.Client.GetProductsByCategory;
+using BadmintonEcommerce.Contracts.API.Presentation;
+using BadmintonEcommerce.Contracts.API.Presentation.Product.Responses;
 using Microsoft.AspNetCore.Mvc;
 using SharedKernel.Patterns;
 
@@ -9,35 +13,17 @@ public class GetProductsByCategory : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("client/products/{categoryId:guid}", async (
-            [FromRoute] Guid categoryId,
+        app.MapPost("client/products", async (
+            [FromBody] PagedRequest<Guid> request,
+            [FromServices] IQueryHandler<GetProductsByCategoryQuery, PagedList<List<ProductResponse>>> handler,
             CancellationToken cancellationToken) =>
         {
-            Dictionary<string, string> items = new Dictionary<string, string>()
-            {
-                {
-                    "categoryId",
-                    "{categoryId}"
-                },
-                {
-                    "categoryId1",
-                    "{categoryId}"
-                },
-                {
-                    "categoryId2",
-                    "{categoryId}"
-                },
-                {
-                    "categoryId3",
-                    "{categoryId}"
-                },
-                {
-                    "categoryId4",
-                    "{categoryId}"
-                },
-            };
-            Result result = Result.Success();
-            return result.Match(Results.NoContent, CustomResult.Problem);
+            Result<PagedList<List<ProductResponse>>> result = await handler.Handle(new GetProductsByCategoryQuery(
+                    PageNumber: request.PageNumber,
+                    PageSize: request.PageSize,
+                    CategoryId: request.Data), 
+                cancellationToken);
+            return result.Match(Results.Ok, CustomResult.Problem);
         });
     }
 }

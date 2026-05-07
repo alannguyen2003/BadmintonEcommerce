@@ -16,8 +16,11 @@ public class GetProductCategoryByIdQueryHandler(IProductCategoryRepository produ
         Domain.Entities.Catalog.ProductCategory category = productCategoryRepository.GetById(query.ProductCategoryId);
         if (category == null)
             return Result.Failure<ProductCategoryByIdResponse>(ProductCategoryError.NotFound(query.ProductCategoryId));
-
-        ProductCategoryByIdResponse response = mapper.Map<ProductCategoryByIdResponse>(category);
+        IEnumerable<Domain.Entities.Catalog.ProductCategory> categories = await productCategoryRepository
+            .Get(filter: filter => filter.Id.Equals(query.ProductCategoryId),
+                orderBy: null,
+                includeProperties: "ChildCategories,Products");
+        ProductCategoryByIdResponse response = mapper.Map<ProductCategoryByIdResponse>(categories.First());
 
         return response;
     }
