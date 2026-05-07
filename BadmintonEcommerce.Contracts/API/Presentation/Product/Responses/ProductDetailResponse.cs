@@ -7,6 +7,7 @@ public class ProductDetailResponse
     public string Description { get; set; }
     public string Brand { get; set; }
     public bool Status { get; set; }
+    public string Slug { get; set; }
     public string CategoryName { get; set; }
     public Guid CategoryId { get; set; }
     public List<ProductOptionResponse> Options { get; set; }
@@ -32,6 +33,7 @@ public class ProductVariantResponse
     public Guid Id { get; set; }
     public string SKU { get; set; }
     public decimal Price { get; set; }
+    public bool IsAvailable { get; set; }
     public List<Guid> OptionValues { get; set; }
 }
 
