@@ -9,6 +9,7 @@ public class ProductResponse
     public bool Status { get; set; }
     public int TotalVariants { get; set; }
     public string Slug { get; set; }
+    public decimal Price { get; set; }
     public string CategoryName { get; set; }
     public Guid CategoryId { get; set; }
     public PrimaryImageResponse? PrimaryImage { get; set; }

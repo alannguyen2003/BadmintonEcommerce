@@ -41,6 +41,14 @@ public class Repository<TEntity>(ApplicationDbContext context) : IRepository<TEn
             .ToList();
     }
 
+    public async Task<int> Count(Expression<Func<TEntity, bool>> filter = null)
+    {
+        IQueryable<TEntity> query = context.Set<TEntity>();
+        query.Where(filter);
+
+        return await query.CountAsync();
+    }
+
     public TEntity? GetById(object id)
     {
         return context.Find<TEntity>(id);

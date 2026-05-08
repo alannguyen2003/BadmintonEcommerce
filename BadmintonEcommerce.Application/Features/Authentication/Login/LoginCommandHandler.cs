@@ -11,9 +11,9 @@ namespace BadmintonEcommerce.Application.Features.Authentication.Login;
 public class LoginCommandHandler(
     IAccountRepository accountRepository,
     ITokenProvider tokenProvider
-    ) : ICommandHandler<LoginCommand, SignInResponse>
+    ) : ICommandHandler<LoginCommand, string>
 {
-    public async Task<Result<SignInResponse>> Handle(LoginCommand command, CancellationToken cancellationToken)
+    public async Task<Result<string>> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
         IEnumerable<Account> accountsQuery = await accountRepository.Get(
 
@@ -21,16 +21,12 @@ public class LoginCommandHandler(
             orderBy: null,
             includeProperties: "AccountRoles");
         if (!accountsQuery.Any())
-            return Result.Failure<SignInResponse>(AuthenticationError.EmailNotExists(command.Email));
+            return Result.Failure<string>(AuthenticationError.EmailNotExists(command.Email));
 
         Account? account = accountsQuery.FirstOrDefault();
         
         string token = tokenProvider.Create(account, await accountRepository.GetAccountRoles(account.Id));
-        return Result.Success(new SignInResponse()
-        {
-            Token = token,
-            Role = 1
-        });
+        return token;
     }
     
 }

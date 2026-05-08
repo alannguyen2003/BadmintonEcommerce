@@ -12,6 +12,8 @@ public interface IRepository<TEntity> where TEntity : class
         int? pageSize = null
     );
 
+    Task<int> Count(Expression<Func<TEntity, bool>> filter = null);
+
     TEntity? GetById(object id);
     void Insert(TEntity entity);
     Task Delete(object id);

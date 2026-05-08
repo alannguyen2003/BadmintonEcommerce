@@ -35,7 +35,6 @@ public partial class ShopPage(IProductCategoryHttpService productCategoryHttpSer
         int currentPage = 0;
         navigationManager.TryGetQueryString<int>("page", out currentPage);
         PagedRequest.PageNumber = currentPage;
-        Console.WriteLine($"Current page: {PagedRequest.PageNumber}");
         if (CategoryId != null) PagedRequest.Data = CategoryId.Value;
         Products = await productHttpService.GetProductsByCategoryAndDefault(PagedRequest);
         if (currentPage == 0) Products.PageNumber = 1;

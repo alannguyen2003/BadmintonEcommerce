@@ -20,6 +20,6 @@ public class GetProductDetail : IEndpoint
             Result<ProductDetailResponse> result = await handler.Handle(new GetProductDetailQuery(id), cancellationToken);
 
             return result.Match(Results.Ok, CustomResult.Problem);
-        });
+        }).WithTags(Tags.Client);
     }
 }

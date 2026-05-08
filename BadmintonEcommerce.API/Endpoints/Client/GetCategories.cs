@@ -17,7 +17,8 @@ public class GetCategories : IEndpoint
             CancellationToken cancellationToken) =>
         {
             Result<List<CategoryResponse>> result = await handler.Handle(new GetCategoriesQuery(), cancellationToken);
+
             return result.Match(Results.Ok, CustomResult.Problem);
-        });
+        }).WithTags(Tags.Client);
     }
 }

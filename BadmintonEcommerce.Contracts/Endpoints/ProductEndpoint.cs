@@ -12,4 +12,5 @@ public static class ProductEndpoint
     {
         return $"{EndpointUrl}/{productId}";
     }
+    
 }

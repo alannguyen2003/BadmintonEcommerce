@@ -24,6 +24,6 @@ public class GetProductsByCategory : IEndpoint
                     CategoryId: request.Data), 
                 cancellationToken);
             return result.Match(Results.Ok, CustomResult.Problem);
-        });
+        }).WithTags(Tags.Client);
     }
 }

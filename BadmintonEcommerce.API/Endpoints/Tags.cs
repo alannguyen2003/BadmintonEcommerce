@@ -12,4 +12,6 @@ public static class Tags
     public const string InventoryTransaction = "InventoryTransactions";
 
     public const string Authentication = "Authentication";
+
+    public const string Client = "Client";
 }

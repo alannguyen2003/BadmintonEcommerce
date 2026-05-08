@@ -16,11 +16,11 @@ public class Login : IEndpoint
     {
         app.MapPost("auth/login", async (
             [FromBody] SignInRequest request,
-            [FromServices] ICommandHandler<LoginCommand, SignInResponse> handler,
+            [FromServices] ICommandHandler<LoginCommand, string> handler,
             [FromServices] IMapper mapper,
             CancellationToken cancellationToken) =>
         {
-            Result<SignInResponse> result = await handler.Handle(
+            Result<string> result = await handler.Handle(
                 mapper.Map<LoginCommand>(request), cancellationToken);
 
             return result.Match(Results.Ok, CustomResult.Problem);

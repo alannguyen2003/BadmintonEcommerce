@@ -23,6 +23,8 @@ public class ProductProfile : IMappingProfile
                 src => src.CategoryId)
             .ForMember(des => des.TotalVariants,
                 src => src.Variants.Count)
+            .ForMember(des => des.Price,
+                src => src.Variants.Min(item => item.Price))
             .ForMember(des => des.PrimaryImage,
                 src => src.Images.Count == 0 ? null : new PrimaryImageResponse()
                 {
