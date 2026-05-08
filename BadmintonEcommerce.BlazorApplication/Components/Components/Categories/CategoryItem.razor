@@ -1,15 +1,33 @@
 ﻿<li class="widget__categories--menu__list">
-    <label class="widget__categories--menu__label d-flex align-items-center">
-        <span class="widget__categories--menu__text">@Category.Name</span>
-        @if (Category.ChildCategories.Count > 0)
-        {
-            <svg class="widget__categories--menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355"
-                 height="8.394">
-                <path d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z"
-                      transform="translate(-6 -8.59)" fill="1"></path>
-            </svg>
-        }
-    </label>
+    @if (Category.ChildCategories.Count > 0)
+    {
+        <label class="widget__categories--menu__label d-flex align-items-center">
+            <span class="widget__categories--menu__text">@Category.Name</span>
+            @if (Category.ChildCategories.Count > 0)
+            {
+                <svg class="widget__categories--menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355"
+                     height="8.394">
+                    <path d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z"
+                          transform="translate(-6 -8.59)" fill="1"></path>
+                </svg>
+            }
+        </label>
+    }
+    else
+    {
+        <a class="widget__categories--menu__label d-flex align-items-center"
+           href="/shop/@Category.Id">
+            <span class="widget__categories--menu__text">@Category.Name</span>
+            @if (Category.ChildCategories.Count > 0)
+            {
+                <svg class="widget__categories--menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355"
+                     height="8.394">
+                    <path d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z"
+                          transform="translate(-6 -8.59)" fill="1"></path>
+                </svg>
+            }
+        </a>
+    }
     @if (Category.ChildCategories.Count > 0)
     {
         <ul class="widget__categories--sub__menu">

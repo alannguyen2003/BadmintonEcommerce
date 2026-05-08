@@ -1,7 +1,11 @@
 ﻿@page "/shop"
+@page "/shop/{categoryId:guid}"
+
 @using BadmintonEcommerce.BlazorApplication.Components.Components.Categories
 @using BadmintonEcommerce.BlazorApplication.Components.Components.Layout
 @using BadmintonEcommerce.BlazorApplication.Components.Components.Products
+
+@inject NavigationManager navigationManager
 <main class="main__content_wrapper">
     @*
     <Breadcrumb/>
@@ -239,7 +243,7 @@
                                     <span class="widget__filter--btn__text">Filter</span>
                                 </button>
                                 <div class="product__view--mode__list product__short--by align-items-center d-flex ">
-                                    <label class="product__view--label">Prev Page :</label>
+                                    <label class="product__view--label">Prev Page</label>
                                     <div class="select shop__header--select">
                                         <select class="product__view--select">
                                             <option selected value="1">65</option>
@@ -251,7 +255,7 @@
                                     </div>
                                 </div>
                                 <div class="product__view--mode__list product__short--by align-items-center d-flex">
-                                    <label class="product__view--label">Sort By :</label>
+                                    <label class="product__view--label">Sort By</label>
                                     <div class="select shop__header--select">
                                         <select class="product__view--select">
                                             <option selected value="1">Sort by latest</option>
@@ -325,7 +329,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="product__showing--count">Showing 1–9 of 21 results</p>
+                            <p class="product__showing--count">Showing @FirstElementOfPage–@LastElementOfPage of @Products.TotalCount results</p>
                         </div>
 
                     </div>
@@ -360,36 +364,65 @@
                     <div class="pagination__area">
                         <nav class="pagination justify-content-center">
                             <ul class="pagination__wrapper d-flex align-items-center justify-content-center">
-                                <li class="pagination__list">
-                                    <a href="shop.html" class="pagination__item--arrow  link ">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443"
-                                             viewBox="0 0 512 512">
-                                            <path fill="none" stroke="currentColor" stroke-linecap="round"
-                                                  stroke-linejoin="round" stroke-width="48"
-                                                  d="M244 400L100 256l144-144M120 256h292"/>
-                                        </svg>
-                                        <span class="visually-hidden">page left arrow</span>
-                                    </a>
-                                </li>
+                                @if (Products.PageNumber - 1 > 0)
+                                {
+                                    <li class="pagination__list">
+                                        <a href="@Paging(Products.PageNumber - 1)" class="pagination__item--arrow  link ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443"
+                                                 viewBox="0 0 512 512">
+                                                <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                                      stroke-linejoin="round" stroke-width="48"
+                                                      d="M244 400L100 256l144-144M120 256h292"/>
+                                            </svg>
+                                            <span class="visually-hidden">page left arrow</span>
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (Products.PageNumber - 2 > 0)
+                                {
+                                    <li class="pagination__list"><a href="@Paging(Products.PageNumber - 2)" class="pagination__item link">
+                                            @(Products.PageNumber - 2)
+                                        </a>
+                                    </li>
+                                }
+                                @if (Products.PageNumber - 1 > 0)
+                                {
+                                    <li class="pagination__list"><a href="@Paging(Products.PageNumber - 1)" class="pagination__item link">
+                                            @(Products.PageNumber - 1)
+                                        </a>
+                                    </li>
+                                }
                                 <li class="pagination__list"><span
-                                        class="pagination__item pagination__item--current">1</span></li>
-                                <li class="pagination__list"><a href="shop.html" class="pagination__item link">2</a>
-                                </li>
-                                <li class="pagination__list"><a href="shop.html" class="pagination__item link">3</a>
-                                </li>
-                                <li class="pagination__list"><a href="shop.html" class="pagination__item link">4</a>
-                                </li>
-                                <li class="pagination__list">
-                                    <a href="/shop" class="pagination__item--arrow  link ">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443"
-                                             viewBox="0 0 512 512">
-                                            <path fill="none" stroke="currentColor" stroke-linecap="round"
-                                                  stroke-linejoin="round" stroke-width="48"
-                                                  d="M268 112l144 144-144 144M392 256H100"/>
-                                        </svg>
-                                        <span class="visually-hidden">page right arrow</span>
-                                    </a>
-                                </li>
+                                        class="pagination__item pagination__item--current">@Products.PageNumber</span></li>
+                                @if (Products.PageNumber + 1 <= Products.TotalPages)
+                                {
+                                    <li class="pagination__list"><a href="@Paging(Products.PageNumber + 1)" class="pagination__item link">
+                                            @(Products.PageNumber + 1)
+                                        </a>
+                                    </li>
+                                }
+                                @if (Products.PageNumber + 2 <= Products.TotalPages)
+                                {
+                                    <li class="pagination__list"><a href="@Paging(Products.PageNumber + 2)" class="pagination__item link">
+                                            @(Products.PageNumber + 2)
+                                        </a>
+                                    </li>
+                                }
+                                @if (Products.PageNumber + 1 <= Products.TotalPages)
+                                {
+                                    <li class="pagination__list">
+                                        <a href="@Paging(Products.PageNumber + 1)" class="pagination__item--arrow  link ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443"
+                                                 viewBox="0 0 512 512">
+                                                <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                                      stroke-linejoin="round" stroke-width="48"
+                                                      d="M268 112l144 144-144 144M392 256H100"/>
+                                            </svg>
+                                            <span class="visually-hidden">page right arrow</span>
+                                        </a>
+                                    </li>
+                                }
                             </ul>
                         </nav>
                     </div>
