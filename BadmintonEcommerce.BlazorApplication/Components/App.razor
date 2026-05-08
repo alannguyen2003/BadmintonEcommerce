@@ -8,7 +8,7 @@
     <meta name="description" content="Morden Bootstrap HTML5 Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
-
+    
     <!-- ======= All CSS Plugins here ======== -->
     <link rel="stylesheet" href="assets/css/plugins/swiper-bundle.min.css">
     <link rel="stylesheet" href="assets/css/plugins/glightbox.min.css">
@@ -16,14 +16,14 @@
 
     <!-- Plugin css -->
     <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
-
+    <ImportMap/>
     <!-- Custom Style CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <HeadOutlet @rendermode="new InteractiveServerRenderMode(prerender: false)"/>
+    <HeadOutlet @rendermode="InteractiveServer"/>
 </head>
 
 <body>
-<Routes @rendermode="new InteractiveServerRenderMode(prerender: true)"/>
+<Routes @rendermode="InteractiveServer"/>
 <!-- All Script JS Plugins here  -->
 <script src="assets/js/vendor/popper.js" defer="defer"></script>
 <script src="assets/js/vendor/bootstrap.min.js" defer="defer"></script>
@@ -33,6 +33,7 @@
 <!-- Customscript js -->
 <script src="assets/js/script.js"></script>
 <script src="assets/js/storage.js"></script>
+<script src="_framework/blazor.web.js"></script>
 
 </body>
 

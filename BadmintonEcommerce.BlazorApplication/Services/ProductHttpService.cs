@@ -28,4 +28,10 @@ public class ProductHttpService: IProductHttpService
         var content = await result.Content.ReadFromJsonAsync<PagedList<List<ProductResponse>>>();
         return content;
     }
+
+    public async Task<ProductDetailResponse?> GetClientProductDetailResponse(Guid productId)
+    {
+        return await client.GetFromJsonAsync<ProductDetailResponse>(
+            ClientEndpoint.GetProductDetailClient(productId));
+    }
 }

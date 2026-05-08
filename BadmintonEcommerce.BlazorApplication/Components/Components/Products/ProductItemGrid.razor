@@ -1,7 +1,7 @@
 ﻿<div class="col-lg-4 col-md-4 col-sm-6 col-6 custom-col mb-30">
     <article class="product__card">
         <div class="product__card--thumbnail">
-            <a class="product__card--thumbnail__link display-block" href="product-details.html">
+            <a class="product__card--thumbnail__link display-block" href="/shop/product/@Product.Id">
                 <img class="product__card--thumbnail__img product__primary--img"
                      src="@Product.PrimaryImage.Url" alt="@Product.PrimaryImage.Id">
                 <img class="product__card--thumbnail__img product__secondary--img"
@@ -103,7 +103,7 @@
                     <span class="rating__review--text">(126) Review</span>
                 </li>
             </ul>*@
-            <h3 class="product__card--title"><a href="/shop">@Product.ProductName</a></h3>
+            <h3 class="product__card--title"><a href="/shop/product/@Product.Id">@Product.ProductName</a></h3>
             <div class="product__card--price">
                 <span class="current__price">$@Product.Price</span>
                 @*

@@ -7,4 +7,5 @@ public interface IProductHttpService
 {
     public Task<List<ProductResponse>?> GetProductsByCategory(Guid productCategoryId);
     public Task<PagedList<List<ProductResponse>>> GetProductsByCategoryAndDefault(PagedRequest<Guid> request);
+    public Task<ProductDetailResponse?> GetClientProductDetailResponse(Guid productId);
 }

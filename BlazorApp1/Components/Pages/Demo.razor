@@ -1,0 +1,56 @@
+﻿@page "/radio-test"
+
+<h3>Chọn chế độ:</h3>
+
+<div>
+    <!-- Sử dụng @bind thay vì @onchange để đồng bộ dữ liệu tốt hơn -->
+    <input type="radio" name="status" value="Active" 
+           checked="@(IsChecked())" 
+           @onchange="@(() => SelectedStatus = "Active")" /> Hoạt động
+    
+    <input type="radio" name="status" value="Inactive" 
+           checked="@(SelectedStatus == "Inactive")" 
+           @onchange="@(() => ChangeStatus("Inactive"))" /> Nghỉ
+</div>
+
+<div class="mt-3">
+    Trạng thái hiện tại: <b>@SelectedStatus</b>
+</div>
+
+@if (isWarningVisible)
+{
+    <div style="color:red">Cảnh báo: Bạn đã chọn trạng thái Nghỉ!</div>
+}
+
+@code {
+    private string _selectedStatus = "Active";
+    private bool isWarningVisible = false;
+
+    public string SelectedStatus
+    {
+        get => _selectedStatus;
+        set
+        {
+            if (_selectedStatus != value)
+            {
+                _selectedStatus = value;
+                
+                // 1. In log ra Console (F12 trong trình duyệt hoặc Output trong VS)
+                Console.WriteLine($"Trạng thái đã đổi sang: {value}");
+
+                // 2. Thay đổi State khác trên cùng trang
+                isWarningVisible = (value == "Inactive");
+            }
+        }
+    }
+
+    private bool IsChecked()
+    {
+        return SelectedStatus == "Active";
+    }
+
+    private void ChangeStatus(string value)
+    {
+        SelectedStatus = value;
+    }
+}

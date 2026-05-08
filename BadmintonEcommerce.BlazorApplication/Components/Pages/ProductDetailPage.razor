@@ -1,14 +1,16 @@
-﻿@page "/shop/product/{ProductId}"
+﻿@page "/shop/product/{ProductId:guid}"
 @using BadmintonEcommerce.BlazorApplication.Components.Components.Layout
 @using FeatureProducts = BadmintonEcommerce.BlazorApplication.Components.Components.Products.FeatureProducts
 
 @using BadmintonEcommerce.BlazorApplication.Components.Components.Products
 
+@rendermode InteractiveServer
+
 <div class="main__content_wrapper">
     @*
     <Breadcrumb/>
     *@
-    <ProductDetail/>
+    <ProductDetail ProductId="@ProductId"/>
     <FeatureProducts/>
     <Features/>
 </div>

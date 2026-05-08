@@ -40,6 +40,8 @@ public class ProductProfile : IMappingProfile
                 src => src.Name)
             .ForMember(des => des.Description,
                 src => src.Description)
+            .ForMember(des => des.Price,
+                src => src.Variants.Min(item => item.Price))
             .ForMember(des => des.CategoryId,
                 src => src.CategoryId)
             .ForMember(des => des.Brand,

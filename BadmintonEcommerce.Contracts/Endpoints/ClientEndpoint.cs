@@ -5,4 +5,9 @@ public static class ClientEndpoint
     public const string EndpointUrl = "/client";
 
     public const string GetProductsByCategoryAndDefault = $"{EndpointUrl}/products";
+
+    public static string GetProductDetailClient(Guid productId)
+    {
+        return $"{EndpointUrl}/products/{productId}";
+    }
 }

@@ -1,7 +1,7 @@
 ﻿<div class="col mb-30">
     <div class="product__card product__list d-flex align-items-center">
         <div class="product__card--thumbnail product__list--thumbnail">
-            <a class="product__card--thumbnail__link display-block" href="#">
+            <a class="product__card--thumbnail__link display-block" href="/shop/product/@Product.Id">
                 <img class="product__card--thumbnail__img product__primary--img"
                      src="@Product.PrimaryImage.Url" alt="@Product.PrimaryImage.Id">
                 <img class="product__card--thumbnail__img product__secondary--img"
@@ -48,7 +48,7 @@
             </ul>
         </div>
         <div class="product__card--content product__list--content">
-            <h3 class="product__card--title"><a href="product-details.html">@Product.ProductName</a></h3>
+            <h3 class="product__card--title"><a href="/shop/product/@Product.Id">@Product.ProductName</a></h3>
             @*<ul class="rating product__card--rating d-flex">
                 <li class="rating__list">
                     <span class="rating__icon">

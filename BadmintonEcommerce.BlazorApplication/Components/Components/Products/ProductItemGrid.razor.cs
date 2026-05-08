@@ -7,4 +7,6 @@ public partial class ProductItemGrid : ComponentBase
 {
     [Parameter]
     public ProductResponse Product { get; set; }
+    
+    
 }
