@@ -22,8 +22,8 @@ public partial class SignIn(IAuthHttpService authHttpService,
         /*
         await sessionStorage.SetAsync("token", content.Token);
         */
-        Token = content.Token;
-        storageService.StoreCookie(content.Token, "");
+        Token = content;
+        storageService.StoreCookie(content, "");
         navigationManager.NavigateTo("/");
     }
 }

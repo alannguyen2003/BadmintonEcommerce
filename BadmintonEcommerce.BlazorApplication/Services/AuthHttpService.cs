@@ -23,11 +23,11 @@ public class AuthHttpService : IAuthHttpService
         return result.Content.ToString();
     }
 
-    public async Task<SignInResponse> Login(SignInRequest request)
+    public async Task<string> Login(SignInRequest request)
     {
         var result = await client.PostAsJsonAsync(
             AuthenticationEndpoint.Login, request);
-        var content = await result.Content.ReadFromJsonAsync<SignInResponse>();
+        var content = await result.Content.ReadFromJsonAsync<string>();
         return content;
     }
 }

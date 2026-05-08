@@ -6,5 +6,5 @@ namespace BadmintonEcommerce.BlazorApplication.Abstraction.Services;
 public interface IAuthHttpService
 {
     public Task<string> Register(RegisterRequest request);
-    public Task<SignInResponse> Login(SignInRequest request);
+    public Task<string> Login(SignInRequest request);
 }
