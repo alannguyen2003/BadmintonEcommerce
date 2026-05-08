@@ -1,11 +1,11 @@
 ﻿<div class="col mb-30">
     <div class="product__card product__list d-flex align-items-center">
         <div class="product__card--thumbnail product__list--thumbnail">
-            <a class="product__card--thumbnail__link display-block" href="product-details.html">
+            <a class="product__card--thumbnail__link display-block" href="#">
                 <img class="product__card--thumbnail__img product__primary--img"
-                     src="assets/img/product/main-product/product4.webp" alt="product-img">
+                     src="@Product.PrimaryImage.Url" alt="@Product.PrimaryImage.Id">
                 <img class="product__card--thumbnail__img product__secondary--img"
-                     src="assets/img/product/main-product/product4.webp" alt="product-img">
+                     src="@Product.PrimaryImage.Url" alt="@Product.PrimaryImage.Id">
             </a>
             @*
             <span class="product__badge">-14%</span>
@@ -48,7 +48,7 @@
             </ul>
         </div>
         <div class="product__card--content product__list--content">
-            <h3 class="product__card--title"><a href="product-details.html">Unde quaerat minus ipsa excei! </a></h3>
+            <h3 class="product__card--title"><a href="product-details.html">@Product.ProductName</a></h3>
             @*<ul class="rating product__card--rating d-flex">
                 <li class="rating__list">
                     <span class="rating__icon">
@@ -105,13 +105,12 @@
                 </li>
             </ul>*@
             <div class="product__list--price">
-                <span class="current__price">$157.52</span>
+                <span class="current__price">$@Product.CategoryName</span>
                 @*
                 <span class="old__price"> $245.00</span>
             *@
             </div>
-            <p class="product__card--content__desc mb-15">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia
-                voluptas dolore doloribus architecto sequi corporis deleniti officia culpa dolor esse there.</p>
+            <p class="product__card--content__desc mb-15">@Product.ProductDescription</p>
             <a class="product__card--btn primary__btn" 
                data-bs-toggle="modal"
                data-bs-target="#examplemodal" 
