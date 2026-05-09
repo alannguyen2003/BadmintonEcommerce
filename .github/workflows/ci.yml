@@ -16,38 +16,64 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      # Checkout source
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.313
 
+      # Restore
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build
+      # Build
+      - name: Build solution
         run: dotnet build --no-restore
 
-      - name: Run tests with coverage
+      # Run unit tests + coverage + trx report
+      - name: Run tests
         run: >
           dotnet test
           --no-build
           --collect:"XPlat Code Coverage"
+          --logger "trx"
           --results-directory ./TestResults
 
+      # Upload raw test results
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: ./TestResults
+
+      # Publish readable test report on GitHub UI
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Unit Test Results
+          path: ./TestResults/**/*.trx
+          reporter: dotnet-trx
+
+      # Install report generator
       - name: Install ReportGenerator
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
-      - name: Generate coverage report
+      # Generate HTML coverage report
+      - name: Generate Coverage Report
         run: >
           reportgenerator
           -reports:./TestResults/**/coverage.cobertura.xml
           -targetdir:./CoverageReport
           -reporttypes:Html
 
-      - name: Upload coverage report
+      # Upload coverage report artifact
+      - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
