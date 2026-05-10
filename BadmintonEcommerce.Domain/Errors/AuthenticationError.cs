@@ -12,4 +12,8 @@ public static class AuthenticationError
     public static Error EmailNotExists(string email) => Error.Problem(
         AuthenticationErrorCommand.EmailNotExists.Code,
         AuthenticationErrorCommand.EmailNotExists.Description + email);
+    
+    public static Error EmailOrPasswordIsWrong() => Error.Problem(
+        AuthenticationErrorCommand.EmailOrPasswordIsWrong.Code,
+        AuthenticationErrorCommand.EmailOrPasswordIsWrong.Description);
 }

@@ -38,4 +38,18 @@ public class LoginCommandValidatorTest
         result.Errors.Should()
             .Contain(prop => prop.PropertyName == Authentication.Login.PasswordField);
     }
+
+    [Fact]
+    public void Validate_ValidEmailAndPassword_ShouldReturnSuccess()
+    {
+        LoginCommand loginCommandBuilder = new LoginCommandBuilder()
+            .WithEmail("admin@gmail.com")
+            .WithPassword("12345678")
+            .Build();
+
+        var result = validator.Validate(loginCommandBuilder);
+        
+        result.IsValid.Should()
+            .BeTrue();
+    }
 }

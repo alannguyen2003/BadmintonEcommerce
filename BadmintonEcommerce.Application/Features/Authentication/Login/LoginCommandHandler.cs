@@ -10,7 +10,8 @@ namespace BadmintonEcommerce.Application.Features.Authentication.Login;
 
 public class LoginCommandHandler(
     IAccountRepository accountRepository,
-    ITokenProvider tokenProvider
+    ITokenProvider tokenProvider,
+    IPasswordHasher passwordHasher
     ) : ICommandHandler<LoginCommand, string>
 {
     public async Task<Result<string>> Handle(LoginCommand command, CancellationToken cancellationToken)
@@ -23,7 +24,13 @@ public class LoginCommandHandler(
         if (!accountsQuery.Any())
             return Result.Failure<string>(AuthenticationError.EmailNotExists(command.Email));
 
-        Account? account = accountsQuery.FirstOrDefault();
+        bool verified = passwordHasher.Verify(command.Password, accountsQuery.First().PasswordHashed);
+
+        if (!verified)
+            return Result.Failure<string>(
+                AuthenticationError.EmailOrPasswordIsWrong());
+        
+        Account? account = accountsQuery.First();
         
         string token = tokenProvider.Create(account, await accountRepository.GetAccountRoles(account.Id));
         return token;

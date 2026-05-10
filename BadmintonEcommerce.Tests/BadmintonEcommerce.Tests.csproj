@@ -21,7 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Applications\Features\" />
       <Folder Include="Helpers\Builders\Queries\" />
     </ItemGroup>
 
