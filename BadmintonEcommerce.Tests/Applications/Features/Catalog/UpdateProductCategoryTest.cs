@@ -6,7 +6,7 @@ using Moq;
 using SharedKernel.Patterns;
 using SharedKernel.Services;
 
-namespace BadmintonEcommerce.Tests.Applications.Features;
+namespace BadmintonEcommerce.Tests.Applications.Features.Catalog;
 
 public class UpdateProductCategoryTest
 {

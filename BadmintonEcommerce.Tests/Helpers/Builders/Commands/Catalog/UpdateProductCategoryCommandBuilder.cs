@@ -36,7 +36,7 @@ public class UpdateProductCategoryCommandBuilder
     public UpdateProductCategoryCommand Valid() => new UpdateProductCategoryCommand()
     {
         Id = Guid.NewGuid(),
-        CategoryName = "Racquets",
-        ParentCategoryId = null
+        CategoryName = Constants.Catalog.Update.UpdateValidCategory.Name,
+        ParentCategoryId = Constants.Catalog.Update.UpdateValidCategory.ParentCategoryId,
     };
 }

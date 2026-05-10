@@ -13,7 +13,7 @@ using Moq;
 using SharedKernel.Patterns;
 using SharedKernel.Services;
 
-namespace BadmintonEcommerce.Tests.Applications.Features;
+namespace BadmintonEcommerce.Tests.Applications.Features.Authentication;
 
 public class RegisterTest
 {

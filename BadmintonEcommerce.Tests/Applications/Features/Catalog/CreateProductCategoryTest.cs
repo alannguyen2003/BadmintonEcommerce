@@ -1,6 +1,5 @@
 ﻿using BadmintonEcommerce.Application.Abstraction.Repositories;
 using BadmintonEcommerce.Application.Features.ProductCategory.Create;
-using BadmintonEcommerce.Domain.Entities.Catalog;
 using BadmintonEcommerce.Domain.Errors;
 using BadmintonEcommerce.Tests.Helpers.Builders.Commands.Catalog;
 using BadmintonEcommerce.Tests.Helpers.Builders.Entities;
@@ -9,7 +8,7 @@ using Moq;
 using SharedKernel.Patterns;
 using SharedKernel.Services;
 
-namespace BadmintonEcommerce.Tests.Applications.Features;
+namespace BadmintonEcommerce.Tests.Applications.Features.Catalog;
 
 public class CreateProductCategoryTest
 {

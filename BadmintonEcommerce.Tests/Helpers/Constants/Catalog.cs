@@ -19,4 +19,13 @@ public static class Catalog
             public static Guid? ParentCategoryId = null;
         }
     }
+
+    public static class Update
+    {
+        public static class UpdateValidCategory
+        {
+            public const string Name = "Racquets";
+            public static Guid? ParentCategoryId = null;
+        }
+    }
 }

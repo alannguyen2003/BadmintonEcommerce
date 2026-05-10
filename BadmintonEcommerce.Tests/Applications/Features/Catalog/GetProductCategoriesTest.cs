@@ -2,14 +2,13 @@
 using BadmintonEcommerce.Application.Abstraction.Repositories;
 using BadmintonEcommerce.Application.Features.ProductCategory.Get;
 using BadmintonEcommerce.Contracts.API.Presentation.ProductCategory.Responses;
-using BadmintonEcommerce.Domain.Entities.Catalog;
 using BadmintonEcommerce.Mapper.Abstractions;
 using BadmintonEcommerce.Tests.Helpers.Builders.Entities;
 using FluentAssertions;
 using Moq;
 using SharedKernel.Patterns;
 
-namespace BadmintonEcommerce.Tests.Applications.Features;
+namespace BadmintonEcommerce.Tests.Applications.Features.Catalog;
 
 public class GetProductCategoriesTest
 {

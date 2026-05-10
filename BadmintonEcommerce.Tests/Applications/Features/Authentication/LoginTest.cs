@@ -4,14 +4,13 @@ using BadmintonEcommerce.Application.Abstraction.Repositories;
 using BadmintonEcommerce.Application.Features.Authentication.Login;
 using BadmintonEcommerce.Domain.Entities.Authentication;
 using BadmintonEcommerce.Domain.Errors;
-using BadmintonEcommerce.Tests.Helpers.Builders.Commands;
 using BadmintonEcommerce.Tests.Helpers.Builders.Commands.Authentication;
 using BadmintonEcommerce.Tests.Helpers.Builders.Entities;
 using FluentAssertions;
 using Moq;
 using SharedKernel.Patterns;
 
-namespace BadmintonEcommerce.Tests.Applications.Features;
+namespace BadmintonEcommerce.Tests.Applications.Features.Authentication;
 
 public class LoginTest
 {
