@@ -7,6 +7,8 @@ public class ProductCategoryBuilder
 {
     private Guid id;
     private string name;
+    private int level;
+    private Guid? parentCategoryId;
 
     public ProductCategoryBuilder WithId(Guid id)
     {
@@ -20,10 +22,24 @@ public class ProductCategoryBuilder
         return this;
     }
 
+    public ProductCategoryBuilder WithLevel(int level)
+    {
+        this.level = level;
+        return this;
+    }
+
+    public ProductCategoryBuilder WithParentCategoryId(Guid? parentCategoryId)
+    {
+        this.parentCategoryId = parentCategoryId;
+        return this;
+    }
+
     public ProductCategory Build() => new ProductCategory()
     {
         Id = this.id,
-        CategoryName = this.name
+        CategoryName = this.name,
+        Level = this.level,
+        ParentCategoryId = this.parentCategoryId
     };
 
     public ProductCategoryResponse ResponseBuild() => new ProductCategoryResponse()
