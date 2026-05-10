@@ -8,6 +8,8 @@ public class AccountBuilder
     private string email;
     private string passwordHashed;
     private string fullname;
+    private string username;
+    private List<AccountRole> accountRoles;
 
     public AccountBuilder WithId(Guid id)
     {
@@ -33,11 +35,25 @@ public class AccountBuilder
         return this;
     }
 
+    public AccountBuilder WithUsername(string username)
+    {
+        this.username = username;
+        return this;
+    }
+
+    public AccountBuilder WithAccountRoles(List<AccountRole> accountRoles)
+    {
+        this.accountRoles = accountRoles;
+        return this;
+    }
+
     public Account Build() => new Account()
     {
         Id = this.id,
         Email = this.email,
         PasswordHashed = this.passwordHashed,
-        FullName = this.fullname
+        FullName = this.fullname,
+        Username = this.username,
+        AccountRoles = this.accountRoles
     };
 }

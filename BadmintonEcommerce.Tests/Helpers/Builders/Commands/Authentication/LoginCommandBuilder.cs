@@ -1,6 +1,6 @@
 ﻿using BadmintonEcommerce.Application.Features.Authentication.Login;
 
-namespace BadmintonEcommerce.Tests.Helpers.Builders.Commands;
+namespace BadmintonEcommerce.Tests.Helpers.Builders.Commands.Authentication;
 
 public class LoginCommandBuilder
 {
@@ -23,5 +23,11 @@ public class LoginCommandBuilder
     {
         Email = email,
         Password = password
+    };
+
+    public LoginCommand Valid() => new LoginCommand()
+    {
+        Email = Constants.Authentication.Login.LoginValid.Email,
+        Password = Constants.Authentication.Login.LoginValid.Password
     };
 }
