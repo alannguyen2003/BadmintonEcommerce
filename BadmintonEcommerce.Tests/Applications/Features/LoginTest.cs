@@ -13,7 +13,7 @@ using SharedKernel.Patterns;
 
 namespace BadmintonEcommerce.Tests.Applications.Features;
 
-public class LoginCommandHandlerTests
+public class LoginTest
 {
     private readonly Mock<IAccountRepository> _accountRepositoryMock;
 
@@ -23,7 +23,7 @@ public class LoginCommandHandlerTests
 
     private readonly LoginCommandHandler _handler;
 
-    public LoginCommandHandlerTests()
+    public LoginTest()
     {
         _accountRepositoryMock = new Mock<IAccountRepository>();
 

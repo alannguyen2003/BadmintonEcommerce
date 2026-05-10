@@ -2,7 +2,7 @@
 using BadmintonEcommerce.Tests.Helpers.Builders.Commands.Authentication;
 using FluentValidation.TestHelper;
 
-namespace BadmintonEcommerce.Tests.Applications.Validators;
+namespace BadmintonEcommerce.Tests.Applications.Validators.Authentication;
 
 public class RegisterCommandValidatorTest
 {
