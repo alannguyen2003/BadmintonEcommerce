@@ -21,7 +21,6 @@ public class GetProductCategoryByIdQueryHandler(IProductCategoryRepository produ
                 orderBy: null,
                 includeProperties: "ChildCategories,Products");
         ProductCategoryByIdResponse response = mapper.Map<ProductCategoryByIdResponse>(categories.First());
-
         return response;
     }
 }
