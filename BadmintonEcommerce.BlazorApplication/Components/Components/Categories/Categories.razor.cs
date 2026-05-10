@@ -11,5 +11,6 @@ public partial class Categories(IProductCategoryHttpService productCategoryServi
     protected override async Task OnInitializedAsync()
     {
         ProductCategories = await productCategoryService.GetClientCategories();
+        Console.WriteLine($"{ProductCategories.Count} categories have been retrieved.");
     }
 }

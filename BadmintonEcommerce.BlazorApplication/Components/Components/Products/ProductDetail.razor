@@ -197,7 +197,7 @@
                     <form action="#">
                         <h2 class="product__details--info__title mb-15">@Product.Name</h2>
                         <div class="product__details--info__price mb-12">
-                            <span class="current__price">$@Product.Price</span>
+                            <span class="current__price">$@CurrentVariant.Price</span>
                         </div>
                         <p class="product__details--info__desc mb-15">@Product.Description</p>
                         <div class="product__variant">
@@ -214,7 +214,7 @@
                                                     var inputId =
                                                         $"{option.Id}_{item.Id}";
                                                     <li class="variant__size--list">
-                                                        <input id="@item.Id" 
+                                                        <input id="@inputId" 
                                                                name="@option.Name" 
                                                                checked="@IsSelected(option.Id, item.Id)"
                                                                @onclick="@(() => SelectOption(option.Id, item.Id))"
@@ -248,7 +248,8 @@
                                             aria-label="quantity value" value="Increase Value">+
                                     </button>
                                 </div>
-                                <button class="primary__btn quickview__cart--btn" type="submit">Add To Cart</button>
+                                <button class="primary__btn quickview__cart--btn" type="button"
+                                        @onclick="AddToCart">Add To Cart</button>
                             </div>
                             <div class="product__variant--list mb-20">
                                 <a class="variant__wishlist--icon mb-15" href="wishlist.html" title="Add to wishlist">

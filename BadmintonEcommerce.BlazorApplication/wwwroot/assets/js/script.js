@@ -15,23 +15,26 @@ var divisor = document.getElementById("divisor"),
     slider = document.getElementById("slider");
 
 function moveDivisor() {
+  if (!handle || !divisor || !slider) {
+    return;
+  }
   handle.style.left = slider.value+"%";
-	divisor.style.width = slider.value+"%";
+  divisor.style.width = slider.value+"%";
 }
 
 window.onload = function() {
-	moveDivisor();
+  moveDivisor();
 };
 
 
 // Preloader
-const preLoader = function () {
+/*const preLoader = function () {
   let preloaderWrapper = document.getElementById("preloader");
   window.onload = () => {
     preloaderWrapper.classList.add("loaded");
   };
 };
-preLoader();
+preLoader();*/
 
 // getSiblings
 var getSiblings = function (elem) {
@@ -48,6 +51,9 @@ var getSiblings = function (elem) {
 
 /* Slide Up */
 var slideUp = (target, time) => {
+  if (!(target instanceof HTMLElement)) {
+    return;
+  }
   const duration = time ? time : 500;
   target.style.transitionProperty = "height, margin, padding";
   target.style.transitionDuration = duration + "ms";
@@ -67,6 +73,11 @@ var slideUp = (target, time) => {
 
 /* Slide Down */
 var slideDown = (target, time) => {
+
+  if (!target) {
+    return;
+  }
+  
   const duration = time ? time : 500;
   target.style.removeProperty("display");
   let display = window.getComputedStyle(target).display;
@@ -91,7 +102,7 @@ var slideDown = (target, time) => {
 // Get window top offset
 function TopOffset(el) {
   let rect = el.getBoundingClientRect(),
-    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   return { top: rect.top + scrollTop };
 }
 
@@ -475,12 +486,12 @@ const tab = function (wrapper) {
       let listItem = evt.target;
       if (listItem.hasAttribute("data-toggle")) {
         let targetId = listItem.dataset.target,
-          targetItem = document.querySelector(targetId);
+            targetItem = document.querySelector(targetId);
         listItem.parentElement
-          .querySelectorAll('[data-toggle="tab"]')
-          .forEach(function (list) {
-            list.classList.remove("active");
-          });
+            .querySelectorAll('[data-toggle="tab"]')
+            .forEach(function (list) {
+              list.classList.remove("active");
+            });
         listItem.classList.add("active");
         targetItem.classList.add("active");
         setTimeout(function () {
@@ -506,23 +517,23 @@ document.querySelectorAll("[data-countdown]").forEach(function (elem) {
     return `<div class="countdown__item" ${label}"><span class="countdown__number">${value}</span><p class="countdown__text">${label}</p></div>`;
   };
   const date = new Date(elem.getAttribute("data-countdown")).getTime(),
-    second = 1000,
-    minute = second * 60,
-    hour = minute * 60,
-    day = hour * 24;
+      second = 1000,
+      minute = second * 60,
+      hour = minute * 60,
+      day = hour * 24;
   const countDownInterval = setInterval(function () {
     let currentTime = new Date().getTime(),
-      timeDistance = date - currentTime,
-      daysValue = Math.floor(timeDistance / day),
-      hoursValue = Math.floor((timeDistance % day) / hour),
-      minutesValue = Math.floor((timeDistance % hour) / minute),
-      secondsValue = Math.floor((timeDistance % minute) / second);
+        timeDistance = date - currentTime,
+        daysValue = Math.floor(timeDistance / day),
+        hoursValue = Math.floor((timeDistance % day) / hour),
+        minutesValue = Math.floor((timeDistance % hour) / minute),
+        secondsValue = Math.floor((timeDistance % minute) / second);
 
     elem.innerHTML =
-      countDownItem(daysValue, "days") +
-      countDownItem(hoursValue, "hrs") +
-      countDownItem(minutesValue, "mins") +
-      countDownItem(secondsValue, "secs");
+        countDownItem(daysValue, "days") +
+        countDownItem(hoursValue, "hrs") +
+        countDownItem(minutesValue, "mins") +
+        countDownItem(secondsValue, "secs");
 
     if (timeDistance < 0) clearInterval(countDownInterval);
   }, 1000);
@@ -531,7 +542,7 @@ document.querySelectorAll("[data-countdown]").forEach(function (elem) {
 // active class remove class activation
 const activeClassAction = function (toggle, target) {
   const to = document.querySelector(toggle),
-    ta = document.querySelector(target);
+      ta = document.querySelector(target);
   if (to && ta) {
     to.addEventListener("click", function (e) {
       e.preventDefault();
@@ -546,12 +557,12 @@ const activeClassAction = function (toggle, target) {
     });
     document.addEventListener("click", function (event) {
       if (
-        !event.target.closest(toggle) &&
-        !event.target.classList.contains(toggle.replace(/\./, ""))
+          !event.target.closest(toggle) &&
+          !event.target.classList.contains(toggle.replace(/\./, ""))
       ) {
         if (
-          !event.target.closest(target) &&
-          !event.target.classList.contains(target.replace(/\./, ""))
+            !event.target.closest(target) &&
+            !event.target.classList.contains(target.replace(/\./, ""))
         ) {
           to.classList.remove("active");
           ta.classList.remove("active");
@@ -562,14 +573,14 @@ const activeClassAction = function (toggle, target) {
 };
 
 activeClassAction(
-  ".offcanvas__account--currency__menu",
-  ".offcanvas__account--currency__submenu"
+    ".offcanvas__account--currency__menu",
+    ".offcanvas__account--currency__submenu"
 );
 activeClassAction(".currency__link", ".dropdown__currency");
 activeClassAction(".language__switcher", ".dropdown__language");
 activeClassAction(
-  ".offcanvas__language--switcher",
-  ".offcanvas__dropdown--language"
+    ".offcanvas__language--switcher",
+    ".offcanvas__dropdown--language"
 );
 
 // OffCanvas Sidebar Activation
@@ -584,8 +595,8 @@ function offcanvsSidebar(openTrigger, closeTrigger, wrapper) {
     if (!eventTarget.closest(wrapper) && !eventTarget.closest(openTrigger)) {
       WrapperSidebar.classList.remove("active");
       document
-        .querySelector("body")
-        .classList.remove(`${wrapperOverlay}_active`);
+          .querySelector("body")
+          .classList.remove(`${wrapperOverlay}_active`);
     }
   }
   if (OpenTriggerprimary__btn && WrapperSidebar) {
@@ -594,8 +605,8 @@ function offcanvsSidebar(openTrigger, closeTrigger, wrapper) {
         if (e.target.dataset.offcanvas != undefined) {
           WrapperSidebar.classList.add("active");
           document
-            .querySelector("body")
-            .classList.add(`${wrapperOverlay}_active`);
+              .querySelector("body")
+              .classList.add(`${wrapperOverlay}_active`);
           document.body.addEventListener("click", handleBodyClass.bind(this));
         }
       });
@@ -607,8 +618,8 @@ function offcanvsSidebar(openTrigger, closeTrigger, wrapper) {
       if (e.target.dataset.offcanvas != undefined) {
         WrapperSidebar.classList.remove("active");
         document
-          .querySelector("body")
-          .classList.remove(`${wrapperOverlay}_active`);
+            .querySelector("body")
+            .classList.remove(`${wrapperOverlay}_active`);
         document.body.removeEventListener("click", handleBodyClass.bind(this));
       }
     });
@@ -617,23 +628,23 @@ function offcanvsSidebar(openTrigger, closeTrigger, wrapper) {
 
 // Mini Cart
 offcanvsSidebar(
-  ".minicart__open--btn",
-  ".minicart__close--btn",
-  ".offCanvas__minicart"
+    ".minicart__open--btn",
+    ".minicart__close--btn",
+    ".offCanvas__minicart"
 );
 
 // Search Bar
 offcanvsSidebar(
-  ".search__open--btn",
-  ".predictive__search--close__btn",
-  ".predictive__search--box"
+    ".search__open--btn",
+    ".predictive__search--close__btn",
+    ".predictive__search--box"
 );
 
 // Offcanvas filter sidebar
 offcanvsSidebar(
-  ".widget__filter--btn",
-  ".offcanvas__filter--close",
-  ".offcanvas__filter--sidebar"
+    ".widget__filter--btn",
+    ".offcanvas__filter--close",
+    ".offcanvas__filter--sidebar"
 );
 
 // Qunatity Button Activation
@@ -674,12 +685,12 @@ function customAccordion(accordionWrapper, singleItem, accordionBody) {
     item.addEventListener("click", function (evt) {
       let itemTarget = evt.target;
       if (
-        itemTarget.classList.contains("accordion__items--button") ||
-        itemTarget.classList.contains("widget__categories--menu__label")
+          itemTarget.classList.contains("accordion__items--button") ||
+          itemTarget.classList.contains("widget__categories--menu__label")
       ) {
         let singleAccordionWrapper = itemTarget.closest(singleItem),
-          singleAccordionBody =
-            singleAccordionWrapper.querySelector(accordionBody);
+            singleAccordionBody =
+                singleAccordionWrapper.querySelector(accordionBody);
         if (singleAccordionWrapper.classList.contains("active")) {
           singleAccordionWrapper.classList.remove("active");
           slideUp(singleAccordionBody);
@@ -698,15 +709,15 @@ function customAccordion(accordionWrapper, singleItem, accordionBody) {
 }
 
 customAccordion(
-  ".accordion__container",
-  ".accordion__items",
-  ".accordion__items--body"
+    ".accordion__container",
+    ".accordion__items",
+    ".accordion__items--body"
 );
 
 customAccordion(
-  ".widget__categories--menu",
-  ".widget__categories--menu__list",
-  ".widget__categories--sub__menu"
+    ".widget__categories--menu",
+    ".widget__categories--menu__list",
+    ".widget__categories--sub__menu"
 );
 
 
@@ -722,9 +733,9 @@ const footerWidgetAccordion = function () {
     let singleItemTarget = evt.target;
     if (singleItemTarget.classList.contains("footer__widget--button")) {
       const footerWidget = singleItemTarget.closest(".footer__widget"),
-        footerWidgetInner = footerWidget.querySelector(
-          ".footer__widget--inner"
-        );
+          footerWidgetInner = footerWidget.querySelector(
+              ".footer__widget--inner"
+          );
       if (footerWidget.classList.contains("active")) {
         footerWidget.classList.remove("active");
         slideUp(footerWidgetInner);
@@ -733,7 +744,7 @@ const footerWidgetAccordion = function () {
         slideDown(footerWidgetInner);
         getSiblings(footerWidget).forEach(function (item) {
           const footerWidgetInner = item.querySelector(
-            ".footer__widget--inner"
+              ".footer__widget--inner"
           );
 
           item.classList.remove("active");
@@ -811,21 +822,21 @@ if (wrapper) {
 /* Offcanvas Mobile Menu Function */
 const offcanvasHeader = function () {
   const offcanvasOpen = document.querySelector(
-      ".offcanvas__header--menu__open--btn"
-    ),
-    offcanvasClose = document.querySelector(".offcanvas__close--btn"),
-    offcanvasHeader = document.querySelector(".offcanvas__header"),
-    offcanvasMenu = document.querySelector(".offcanvas__menu"),
-    body = document.querySelector("body");
+          ".offcanvas__header--menu__open--btn"
+      ),
+      offcanvasClose = document.querySelector(".offcanvas__close--btn"),
+      offcanvasHeader = document.querySelector(".offcanvas__header"),
+      offcanvasMenu = document.querySelector(".offcanvas__menu"),
+      body = document.querySelector("body");
   /* Offcanvas SubMenu Toggle */
   if (offcanvasMenu) {
     offcanvasMenu
-      .querySelectorAll(".offcanvas__sub_menu")
-      .forEach(function (ul) {
-        const subMenuToggle = document.createElement("button");
-        subMenuToggle.classList.add("offcanvas__sub_menu_toggle");
-        ul.parentNode.appendChild(subMenuToggle);
-      });
+        .querySelectorAll(".offcanvas__sub_menu")
+        .forEach(function (ul) {
+          const subMenuToggle = document.createElement("button");
+          subMenuToggle.classList.add("offcanvas__sub_menu_toggle");
+          ul.parentNode.appendChild(subMenuToggle);
+        });
   }
   /* Open/Close Menu On Click Toggle Button */
   if (offcanvasOpen) {
@@ -858,12 +869,12 @@ const offcanvasHeader = function () {
           targetElement.classList.remove("active");
           parent.classList.remove("active");
           parent
-            .querySelectorAll(".offcanvas__sub_menu")
-            .forEach(function (subMenu) {
-              subMenu.parentElement.classList.remove("active");
-              subMenu.nextElementSibling.classList.remove("active");
-              slideUp(subMenu);
-            });
+              .querySelectorAll(".offcanvas__sub_menu")
+              .forEach(function (subMenu) {
+                subMenu.parentElement.classList.remove("active");
+                subMenu.nextElementSibling.classList.remove("active");
+                slideUp(subMenu);
+              });
         } else {
           targetElement.classList.add("active");
           parent.classList.add("active");
@@ -871,12 +882,12 @@ const offcanvasHeader = function () {
           getSiblings(parent).forEach(function (item) {
             item.classList.remove("active");
             item
-              .querySelectorAll(".offcanvas__sub_menu")
-              .forEach(function (subMenu) {
-                subMenu.parentElement.classList.remove("active");
-                subMenu.nextElementSibling.classList.remove("active");
-                slideUp(subMenu);
-              });
+                .querySelectorAll(".offcanvas__sub_menu")
+                .forEach(function (subMenu) {
+                  subMenu.parentElement.classList.remove("active");
+                  subMenu.nextElementSibling.classList.remove("active");
+                  slideUp(subMenu);
+                });
           });
         }
       }
@@ -886,16 +897,16 @@ const offcanvasHeader = function () {
   if (offcanvasHeader) {
     document.addEventListener("click", function (event) {
       if (
-        !event.target.closest(".offcanvas__header--menu__open--btn") &&
-        !event.target.classList.contains(
-          ".offcanvas__header--menu__open--btn".replace(/\./, "")
-        )
+          !event.target.closest(".offcanvas__header--menu__open--btn") &&
+          !event.target.classList.contains(
+              ".offcanvas__header--menu__open--btn".replace(/\./, "")
+          )
       ) {
         if (
-          !event.target.closest(".offcanvas__header") &&
-          !event.target.classList.contains(
-            ".offcanvas__header".replace(/\./, "")
-          )
+            !event.target.closest(".offcanvas__header") &&
+            !event.target.classList.contains(
+                ".offcanvas__header".replace(/\./, "")
+            )
         ) {
           offcanvasHeader.classList.remove("open");
           body.classList.remove("mobile_menu_open");
@@ -921,7 +932,7 @@ const categoryMobileMenu = function () {
   const CategorySubMenu = document.querySelector(".category__mobile--menu");
   if (CategorySubMenu) {
     CategorySubMenu.querySelectorAll(".category__sub--menu").forEach(function (
-      ul
+        ul
     ) {
       let catsubMenuToggle = document.createElement("button");
       catsubMenuToggle.classList.add("category__sub--menu_toggle");
@@ -929,7 +940,7 @@ const categoryMobileMenu = function () {
     });
   }
   let categoryMenuWrapper = document.querySelector(
-    ".category__mobile--menu_ul"
+      ".category__mobile--menu_ul"
   );
   if (categoryMenuWrapper) {
     categoryMenuWrapper.addEventListener("click", function (e) {
@@ -940,12 +951,12 @@ const categoryMobileMenu = function () {
           targetElement.classList.remove("active");
           parent.classList.remove("active");
           parent
-            .querySelectorAll(".category__sub--menu")
-            .forEach(function (subMenu) {
-              subMenu.parentElement.classList.remove("active");
-              subMenu.nextElementSibling.classList.remove("active");
-              slideUp(subMenu);
-            });
+              .querySelectorAll(".category__sub--menu")
+              .forEach(function (subMenu) {
+                subMenu.parentElement.classList.remove("active");
+                subMenu.nextElementSibling.classList.remove("active");
+                slideUp(subMenu);
+              });
         } else {
           targetElement.classList.add("active");
           parent.classList.add("active");
@@ -953,12 +964,12 @@ const categoryMobileMenu = function () {
           getSiblings(parent).forEach(function (item) {
             item.classList.remove("active");
             item
-              .querySelectorAll(".category__sub--menu")
-              .forEach(function (subMenu) {
-                subMenu.parentElement.classList.remove("active");
-                subMenu.nextElementSibling.classList.remove("active");
-                slideUp(subMenu);
-              });
+                .querySelectorAll(".category__sub--menu")
+                .forEach(function (subMenu) {
+                  subMenu.parentElement.classList.remove("active");
+                  subMenu.nextElementSibling.classList.remove("active");
+                  slideUp(subMenu);
+                });
           });
         }
       }
@@ -970,11 +981,11 @@ categoryMobileMenu();
 // Newsletter popup
 const newsletterPopup = function () {
   let newsletterWrapper = document.querySelector(".newsletter__popup"),
-    newsletterCloseButton = document.querySelector(
-      ".newsletter__popup--close__btn"
-    ),
-    dontShowPopup = document.querySelector("#newsletter__dont--show"),
-    popuDontShowMode = localStorage.getItem("newsletter__show");
+      newsletterCloseButton = document.querySelector(
+          ".newsletter__popup--close__btn"
+      ),
+      dontShowPopup = document.querySelector("#newsletter__dont--show"),
+      popuDontShowMode = localStorage.getItem("newsletter__show");
 
   if (newsletterWrapper && popuDontShowMode == null) {
     window.addEventListener("load", (event) => {

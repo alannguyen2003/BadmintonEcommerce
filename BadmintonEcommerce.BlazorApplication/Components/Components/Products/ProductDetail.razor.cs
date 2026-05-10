@@ -17,17 +17,20 @@ public partial class ProductDetail(
     
     private Dictionary<Guid, Guid>
         SelectedOptions = new();
-    
-    
-    
-    private ProductVariantResponse? CurrentVariant { get; set; }
+
+    private ProductVariantResponse? CurrentVariant { get; set; } = new ProductVariantResponse();
     
     [Parameter]
     public Guid ProductId { get; set; }
     protected override async Task OnInitializedAsync()
     {
         Product = await productHttpService.GetClientProductDetailResponse(ProductId);
-        Console.WriteLine(Product.Options.Count);
+
+        foreach (var option in Product.Options)
+        {
+            SelectedOptions[option.Id] = option.Values[0].Id;
+        }
+        UpdateCurrentVariant();
     }
     
     private bool IsSelected(
@@ -44,7 +47,6 @@ public partial class ProductDetail(
     private void SelectOption(Guid optionId, Guid valueId)
     {
         SelectedOptions[optionId] = valueId;
-        Console.WriteLine("Triggered!");
         UpdateCurrentVariant();
     }
     
@@ -61,6 +63,10 @@ public partial class ProductDetail(
                     &&
                     variant.OptionValues.Count ==
                     selectedValueIds.Count);
+    }
+
+    private void AddToCart()
+    {
     }
     
     
