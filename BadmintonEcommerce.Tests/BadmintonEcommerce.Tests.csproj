@@ -21,10 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Helpers\Builders\Queries\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\BadmintonEcommerce.Application\BadmintonEcommerce.Application.csproj" />
     </ItemGroup>
 
