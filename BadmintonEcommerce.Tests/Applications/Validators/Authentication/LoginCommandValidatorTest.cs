@@ -50,7 +50,7 @@ public class LoginCommandValidatorTest
     public void Validate_ValidEmailAndPassword_ShouldReturnSuccess()
     {
         LoginCommand loginCommandBuilder = new LoginCommandBuilder().Valid();
-
+        
         var result = _validator.Validate(loginCommandBuilder);
         
         result.IsValid.Should()
