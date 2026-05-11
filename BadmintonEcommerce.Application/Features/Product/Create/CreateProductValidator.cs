@@ -14,5 +14,8 @@ public class CreateProductValidator : AbstractValidator<CreateProductCommand>
         RuleFor(rule => rule.Brand)
             .NotEmpty()
             .MaximumLength(100);
+        RuleFor(x => x.CategoryId)
+            .NotEmpty()
+            .WithMessage("Category id cannot be empty.");
     }
 }
