@@ -1,10 +1,12 @@
-﻿using BadmintonEcommerce.Application.Abstraction.Messaging;
+﻿using System.Diagnostics.CodeAnalysis;
+using BadmintonEcommerce.Application.Abstraction.Messaging;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
 using SharedKernel.Patterns;
 
 namespace BadmintonEcommerce.Application.Abstraction.Behaviours;
 
+[ExcludeFromCodeCoverage]
 public static class LoggingDecorator
 {
     internal sealed class CommandHandler<TCommand, TResponse>(

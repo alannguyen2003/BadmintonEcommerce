@@ -1,5 +1,8 @@
-﻿namespace BadmintonEcommerce.Contracts.Endpoints;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace BadmintonEcommerce.Contracts.Endpoints;
+
+[ExcludeFromCodeCoverage]
 public static class ProductCategoryEndpoint
 {
     public static readonly string EndpointUrl = "/client/categories";

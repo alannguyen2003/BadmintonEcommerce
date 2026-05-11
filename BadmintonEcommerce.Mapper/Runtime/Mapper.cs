@@ -1,10 +1,12 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using BadmintonEcommerce.Mapper.Abstractions;
 using BadmintonEcommerce.Mapper.Configurations;
 
 namespace BadmintonEcommerce.Mapper.Runtime;
 
+[ExcludeFromCodeCoverage]
 public class Mapper : IMapper
 {
     private readonly MapperConfiguration _config;

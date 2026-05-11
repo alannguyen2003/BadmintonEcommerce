@@ -1,5 +1,8 @@
-﻿namespace SharedKernel.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace SharedKernel.Abstractions;
+
+[ExcludeFromCodeCoverage]
 public abstract class ValueObject
 {
     protected abstract IEnumerable<object> GetEqualityComponents();

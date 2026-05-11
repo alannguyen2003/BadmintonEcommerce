@@ -1,4 +1,5 @@
-﻿using BadmintonEcommerce.Application.Abstraction.Messaging;
+﻿using System.Diagnostics.CodeAnalysis;
+using BadmintonEcommerce.Application.Abstraction.Messaging;
 using FluentValidation;
 using FluentValidation.Results;
 using SharedKernel.Errors;
@@ -6,6 +7,7 @@ using SharedKernel.Patterns;
 
 namespace BadmintonEcommerce.Application.Abstraction.Behaviours;
 
+[ExcludeFromCodeCoverage]
 public static class ValidationDecorator
 {
     internal sealed class CommandHandler<TCommand, TResponse>(

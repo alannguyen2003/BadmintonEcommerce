@@ -1,7 +1,9 @@
-﻿using BadmintonEcommerce.Mapper.Builders;
+﻿using System.Diagnostics.CodeAnalysis;
+using BadmintonEcommerce.Mapper.Builders;
 
 namespace BadmintonEcommerce.Mapper.Configurations;
 
+[ExcludeFromCodeCoverage]
 public class MapperConfiguration
 {
     private readonly Dictionary<string, TypeMap> _maps = new();

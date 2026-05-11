@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using BadmintonEcommerce.Application.Abstraction.Behaviours;
 using BadmintonEcommerce.Application.Abstraction.Messaging;
 /*
@@ -12,6 +13,7 @@ using SharedKernel.Abstractions;
 
 namespace BadmintonEcommerce.Application;
 
+[ExcludeFromCodeCoverage]
 public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
