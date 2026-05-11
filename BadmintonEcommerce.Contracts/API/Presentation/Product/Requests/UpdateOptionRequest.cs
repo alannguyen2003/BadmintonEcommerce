@@ -2,14 +2,18 @@
 
 public class UpdateOptionRequest
 {
+    public Guid ProductId { get; set; }
     public List<AddedOptionRequest> AddedOptions { get; set; } = new List<AddedOptionRequest>();
-    public List<Guid> DeletedOptionValues { get; set; }
-    public List<UpdatedOptionValueRequest> UpdatedOptionValueRequests { get; set; } =
+    public List<AddedVariantRequest> AddedVariants { get; set; }
+
+    public List<UpdatedOptionValueRequest> UpdatedOptionValues { get; set; } =
         new List<UpdatedOptionValueRequest>();
     
-    public List<AddedVariantRequest> AddedVariants { get; set; }
     public List<UpdatedVariantRequest> UpdatedVariants { get; set; }
     
+    public List<Guid> DeletedOptionValues { get; set; }
+    public List<Guid> DeletedVariants { get; set; }
+    public List<Guid> DeletedOptions { get; set; }    
 }
 
 public class AddedOptionRequest

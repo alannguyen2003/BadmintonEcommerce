@@ -62,6 +62,7 @@ public class Repository<TEntity>(ApplicationDbContext context) : IRepository<TEn
     public async Task Delete(object id)
     {
         TEntity? entityToDelete = await context.Set<TEntity>().FindAsync(id);
+        Console.WriteLine(entityToDelete == null);
         if (entityToDelete != null) await Delete(entityToDelete);
     }
 

@@ -135,7 +135,6 @@ export const getProductDetail = async (
       values: (option.values || []).map((v: any) => v.value),
     }));
 
-    // Create a map of value ID -> value text and option ID for lookup
     const valueIdMap = new Map<string, { optionId: string; value: string }>();
 
     item.options.forEach((option: any) => {
