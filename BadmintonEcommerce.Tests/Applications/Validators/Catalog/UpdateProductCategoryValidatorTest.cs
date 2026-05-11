@@ -4,12 +4,12 @@ using FluentValidation.TestHelper;
 
 namespace BadmintonEcommerce.Tests.Applications.Validators.Catalog;
 
-public class UpdateProductCategoryValidator
+public class UpdateProductCategoryValidatorTest
 {
     private readonly UpdateProductCategoryCommandValidator
         _validator;
 
-    public UpdateProductCategoryValidator()
+    public UpdateProductCategoryValidatorTest()
     {
         _validator =
             new UpdateProductCategoryCommandValidator();
