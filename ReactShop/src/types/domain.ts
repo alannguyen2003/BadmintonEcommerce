@@ -1,20 +1,23 @@
-export type ProductStatus = "draft" | "active";
+import type { Category } from "./category";
+import type { Product } from "./product";
+
+export type ProductStatus = "inactive" | "active";
 export type InventoryAction = "import" | "export" | "adjust";
 export type OrderStatus = "placed" | "paid" | "cancelled";
 
-export interface Category {
-  id: string;
-  name: string;
-  parentId: string | null;
-  level: 1 | 2 | 3;
-}
+// export interface Category {
+//   id: string;
+//   name: string;
+//   parentId: string | null;
+//   level: 1 | 2 | 3;
+// }
 
-export interface ProductImage {
-  id: string;
-  name: string;
-  dataUrl: string;
-  isPrimary: boolean;
-}
+// export interface ProductImage {
+//   id: string;
+//   name: string;
+//   dataUrl: string;
+//   isPrimary: boolean;
+// }
 
 export interface ProductOption {
   id: string;
@@ -31,17 +34,19 @@ export interface SKU {
   stock: number;
 }
 
-export interface Product {
-  id: string;
-  name: string;
-  categoryId: string;
-  status: ProductStatus;
-  description: string;
-  options: ProductOption[];
-  images: ProductImage[];
-  createdAt: string;
-  updatedAt: string;
-}
+// export interface Product {
+//   id: string;
+//   name: string;
+//   brand: string;
+//   categoryId: string;
+//   categoryName: string;
+//   status: ProductStatus;
+//   description: string;
+//   options: ProductOption[];
+//   images: ProductImage[];
+//   createdAt: string;
+//   updatedAt: string;
+// }
 
 export interface InventoryTransaction {
   id: string;

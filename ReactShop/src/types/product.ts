@@ -1,21 +1,15 @@
-export type ProductStatus = "draft" | "active";
-
-export interface ProductCategory {
-		id: string;
-		categoryName: string;
-		parentCategoryName: string;
-		parentCategoryId: string;
-		level: number
-}
+export type ProductStatus = "inactive" | "active";
 
 export interface Product {
 	id: string;
 	name: string;
+	categoryId: string;
 	categoryName: string;
 	status: ProductStatus;
 	description: string;
 	images: [];
 	options: [];
+	variants: [];
 	createdAt: string;
 	updatedAt: string;
 }

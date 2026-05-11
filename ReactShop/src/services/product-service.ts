@@ -1,8 +1,11 @@
-import axios from 'axios';
-import type { Category, Product, ProductImage, ProductOption } from '../types/domain';
-import type { ProductCategory } from '../types/product';
+import axios from "axios";
+import type { ProductOption } from "../types/domain";
+import type { Category } from "../types/category";
+import type { ProductImage } from "../types/productImage";
+import type { Product } from "../types/product";
 
-const API_BASE_URL = 'http://localhost:5080';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5080";
 
 // Helper function to calculate category level based on parent
 const calculateLevel = (parentId: string | null): 1 | 2 | 3 => {
@@ -12,12 +15,13 @@ const calculateLevel = (parentId: string | null): 1 | 2 | 3 => {
   return 2;
 };
 
-export const getCategories = async (): Promise<ProductCategory[]> => {
+export const getCategories = async (): Promise<Category[]> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/categories`);
+    console.log(response);
     return response.data;
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    console.error("Error fetching categories:", error);
     throw error;
   }
 };
@@ -31,12 +35,13 @@ export const createCategory = async (data: {
     const item = response.data;
     return {
       id: item.id,
-      name: item.categoryName,
-      parentId: item.parentCategoryId || null,
-      level: calculateLevel(item.parentCategoryId)
+      categoryName: item.categoryName,
+      parentCategoryId: item.parentCategoryId || null,
+      parentCategoryName: item.parentCategoryName || null,
+      level: calculateLevel(item.parentCategoryId),
     };
   } catch (error) {
-    console.error('Error creating category:', error);
+    console.error("Error creating category:", error);
     throw error;
   }
 };
@@ -51,12 +56,13 @@ export const updateCategory = async (data: {
     const item = response.data;
     return {
       id: item.id,
-      name: item.categoryName,
-      parentId: item.parentCategoryId || null,
-      level: calculateLevel(item.parentCategoryId)
+      categoryName: item.categoryName,
+      parentCategoryId: item.parentCategoryId || null,
+      parentCategoryName: item.parentCategoryName || null,
+      level: calculateLevel(item.parentCategoryId),
     };
   } catch (error) {
-    console.error('Error updating category:', error);
+    console.error("Error updating category:", error);
     throw error;
   }
 };
@@ -65,64 +71,85 @@ export const deleteCategory = async (id: string): Promise<void> => {
   try {
     await axios.delete(`${API_BASE_URL}/categories/${id}`);
   } catch (error) {
-    console.error('Error deleting category:', error);
+    console.error("Error deleting category:", error);
     throw error;
   }
 };
 // Products API functions - Get List
-export const getProducts = async (): Promise<Array<Product & { totalVariants?: number }>> => {
+export const getProducts = async (): Promise<
+  Array<Product & { totalVariants?: number }>
+> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/products`);
+    console.log("Service: ", response.data);
     return response.data.map((item: any) => ({
       id: item.id,
       name: item.productName,
+      brand: item.brand,
       categoryId: item.categoryId,
-      status: item.status ? 'active' : 'draft',
+      categoryName: item.categoryName,
+      status: item.status ? "active" : "inactive",
       description: item.productDescription,
       options: [],
-      images: item.primaryImage ? [{
-        id: item.primaryImage.id,
-        name: '',
-        dataUrl: item.primaryImage.url,
-        isPrimary: true,
-      }] : [],
-      createdAt: '',
-      updatedAt: '',
+      images: item.primaryImage
+        ? [
+            {
+              id: item.primaryImage.id,
+              name: "",
+              dataUrl: item.primaryImage.url,
+              isPrimary: true,
+            },
+          ]
+        : [],
+      createdAt: "",
+      updatedAt: "",
       totalVariants: item.totalVariants || 0,
     }));
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
     throw error;
   }
 };
 
-export const getProductDetail = async (id: string): Promise<Product & { skus: Array<{ id: string; code: string; price: number; stock: number; optionValues: Record<string, string> }> }> => {
+export const getProductDetail = async (
+  id: string,
+): Promise<
+  Product & {
+    variants: Array<{
+      id: string;
+      code: string;
+      price: number;
+      stock: number;
+      optionValues: Record<string, string>;
+    }>;
+  }
+> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/products/${id}`);
     const item = response.data;
-    
+    console.log(response.data);
     // Transform options: flatten values array
     const options = (item.options || []).map((option: any) => ({
       id: option.id,
       name: option.name,
       values: (option.values || []).map((v: any) => v.value),
     }));
-    
+
     // Create a map of value ID -> value text and option ID for lookup
     const valueIdMap = new Map<string, { optionId: string; value: string }>();
-    options.forEach((option: { id: string; name: string; values: string[] }) => {
-      option.values.forEach((value: string) => {
-        // Find the value ID from original response
-        const originalOption = item.options.find((o: any) => o.id === option.id);
-        const originalValue = originalOption?.values.find((v: any) => v.value === value);
-        if (originalValue) {
-          valueIdMap.set(originalValue.id, { optionId: option.id, value });
-        }
+
+    item.options.forEach((option: any) => {
+      option.values.forEach((v: any) => {
+        // v ở đây là { id: string, value: string }
+        valueIdMap.set(v.id, {
+          optionId: option.id,
+          value: v.value,
+        });
       });
     });
-    
+
     // Transform variants to SKUs
-    const skus = (item.variants || []).map((variant: any) => {
+    const variants = (item.variants || []).map((variant: any) => {
       const optionValues: Record<string, string> = {};
       (variant.optionValues || []).forEach((valueId: string) => {
         const mapped = valueIdMap.get(valueId);
@@ -130,35 +157,36 @@ export const getProductDetail = async (id: string): Promise<Product & { skus: Ar
           optionValues[mapped.optionId] = mapped.value;
         }
       });
-      
+
       return {
         id: variant.id,
         code: variant.sku,
         price: variant.price,
-        stock: 0,  // Stock not in API response
+        stock: 0,
         optionValues,
       };
     });
-    
+
     return {
       id: item.id,
       name: item.name,
       categoryId: item.categoryId,
-      status: item.status ? 'active' : 'draft',
+      categoryName: item.categoryName,
+      status: item.status ? "active" : "inactive",
       description: item.description,
       options,
       images: (item.images || []).map((img: any) => ({
         id: img.id,
-        name: '',
+        name: "",
         dataUrl: img.imageUrl,
         isPrimary: img.isPrimary,
       })),
-      createdAt: '',
-      updatedAt: '',
-      skus,
+      createdAt: "",
+      updatedAt: "",
+      variants,
     };
   } catch (error) {
-    console.error('Error fetching product detail:', error);
+    console.error("Error fetching product detail:", error);
     throw error;
   }
 };
@@ -170,7 +198,7 @@ export const createProduct = async (data: {
   description: string;
   brand?: string;
   options: ProductOption[];
-  skuRows: Array<{
+  variants: Array<{
     code: string;
     price: number;
     stock: number;
@@ -180,27 +208,28 @@ export const createProduct = async (data: {
 }): Promise<Product> => {
   try {
     const formData = new FormData();
+    console.log(data);
 
     // Add text fields
-    formData.append('name', data.name);
-    formData.append('brand', data.name);
-    formData.append('categoryId', data.categoryId);
-    formData.append('status', data.status ? 'true' : 'false');
-    formData.append('description', data.description);
+    formData.append("name", data.name);
+    formData.append("brand", data.name);
+    formData.append("categoryId", data.categoryId);
+    formData.append("status", data.status ? "true" : "false");
+    formData.append("description", data.description);
     if (data.brand) {
-      formData.append('brand', data.brand);
+      formData.append("brand", data.brand);
     }
 
     // Serialize options in API shape
     const requestOptions = data.options.map((option) => ({
       name: option.name,
       code: option.id,
-      values: option.values || []
+      values: option.values || [],
     }));
-    formData.append('options', JSON.stringify(requestOptions));
+    formData.append("options", JSON.stringify(requestOptions));
 
     // Serialize skuRows in API shape
-    const requestSkuRows = data.skuRows.map((row) => ({
+    const requestSkuRows = data.variants.map((row) => ({
       code: row.code,
       price: row.price,
       stock: row.stock,
@@ -213,24 +242,27 @@ export const createProduct = async (data: {
         };
       }),
     }));
-    formData.append('skuRows', JSON.stringify(requestSkuRows));
+    formData.append("skuRows", JSON.stringify(requestSkuRows));
 
     // Add images
     data.images.forEach((img) => {
-      if (img.dataUrl.startsWith('data:')) {
+      if (img.dataUrl.startsWith("data:")) {
         const blob = dataURLToBlob(img.dataUrl);
-        formData.append('images', blob, img.name);
+        formData.append("images", blob, img.name);
       }
     });
 
-    const response = await axios.post(`${API_BASE_URL}/products/create-products`, formData);
+    const response = await axios.post(
+      `${API_BASE_URL}/products/create-products`,
+      formData,
+    );
 
     const item = response.data;
     return {
       id: item.id,
       name: item.name,
       categoryId: item.categoryId,
-      status: item.status ? 'active' : 'draft',
+      status: item.status ? "active" : "inactive",
       description: item.description,
       options: (item.options || []).map((option: any) => ({
         id: option.code || option.id || option.name || crypto.randomUUID(),
@@ -242,14 +274,14 @@ export const createProduct = async (data: {
       updatedAt: item.updatedAt,
     };
   } catch (error) {
-    console.error('Error creating product:', error);
+    console.error("Error creating product:", error);
     throw error;
   }
 };
 
 // Helper function to convert base64 data URL to Blob
 function dataURLToBlob(dataURL: string): Blob {
-  const arr = dataURL.split(',');
+  const arr = dataURL.split(",");
   const mime = arr[0].match(/:(.*?);/)![1];
   const bstr = atob(arr[1]);
   let n = bstr.length;
@@ -264,7 +296,7 @@ export const deleteProduct = async (id: string): Promise<void> => {
   try {
     await axios.delete(`${API_BASE_URL}/products`, { data: { id } });
   } catch (error) {
-    console.error('Error deleting product:', error);
+    console.error("Error deleting product:", error);
     throw error;
   }
 };

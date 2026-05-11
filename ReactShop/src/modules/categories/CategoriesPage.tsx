@@ -10,12 +10,12 @@ import {
   getCategories,
   updateCategory,
 } from "../../services/product-service";
-import type { ProductCategory } from "../../types/product";
+import type { Category } from "../../types/category";
 
 const PAGE_SIZE = 10;
 
 export function CategoriesPage() {
-  const [categories, setCategories] = useState<ProductCategory[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);

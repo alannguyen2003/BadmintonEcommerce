@@ -20,7 +20,10 @@ import {
   getProductDetail,
   getProducts,
 } from "../../services/product-service";
-import type { Product, ProductImage, ProductOption } from "../../types/domain";
+import type { ProductOption } from "../../types/domain";
+import type { ProductImage } from "../../types/productImage";
+import type { Category } from "../../types/category";
+import type { Product } from "../../types/product";
 
 const PAGE_SIZE = 8;
 const emptyOption = (): ProductOption => ({
@@ -53,11 +56,11 @@ export function ProductsPage() {
 
   const [name, setName] = useState("");
   const [categoryId, setCategoryId] = useState("");
-  const [status, setStatus] = useState<"draft" | "active">("draft");
+  const [status, setStatus] = useState<"inactive" | "active">("inactive");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<ProductImage[]>([]);
   const [options, setOptions] = useState<ProductOption[]>([emptyOption()]);
-  const [skuRows, setSkuRows] = useState<
+  const [variants, setVariants] = useState<
     Array<{
       comboKey: string;
       code: string;
@@ -67,7 +70,7 @@ export function ProductsPage() {
     }>
   >([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -105,11 +108,11 @@ export function ProductsPage() {
     setEditing(null);
     setName("");
     setCategoryId("");
-    setStatus("draft");
+    setStatus("inactive");
     setDescription("");
     setImages([]);
     setOptions([emptyOption()]);
-    setSkuRows([]);
+    setVariants([]);
   };
 
   const onUploadImages = (files: FileList | null) => {
@@ -161,13 +164,14 @@ export function ProductsPage() {
     optionId: string,
     value: string,
   ) => {
-    setSkuRows((prev) =>
+    setVariants((prev) =>
       prev.map((r, i) =>
         i === skuIdx
           ? { ...r, optionValues: { ...r.optionValues, [optionId]: value } }
           : r,
       ),
     );
+    console.log(variants);
   };
 
   const addManualSku = () => {
@@ -177,7 +181,7 @@ export function ProductsPage() {
         initialOptionValues[o.id] = "";
       }
     });
-    setSkuRows((prev) => [
+    setVariants((prev) => [
       ...prev,
       {
         comboKey: `manual_${crypto.randomUUID()}`,
@@ -208,7 +212,7 @@ export function ProductsPage() {
           values: o.values.map((v) => v.trim()).filter(Boolean),
         }))
         .filter((o) => o.name && o.values.length),
-      skuRows,
+      variants: variants,
       images: normalizedImages,
     });
     setProductModalOpen(false);
@@ -260,9 +264,8 @@ export function ProductsPage() {
             <tr>
               <th className="pb-2">#</th>
               <th className="pb-2">Name</th>
+              <th className="pb-2">Brand</th>
               <th className="pb-2">Category</th>
-              <th className="pb-2">SKU</th>
-              <th className="pb-2">Stock</th>
               <th className="pb-2">Status</th>
               <th className="pb-2">Actions</th>
             </tr>
@@ -272,14 +275,12 @@ export function ProductsPage() {
               <EmptyTableRow colSpan={7} />
             ) : (
               rows.map((p, idx) => {
-                const totalVariants = (p as any).totalVariants || 0;
                 return (
                   <tr key={p.id} className="border-t border-slate-800">
                     <td className="py-2">{(page - 1) * PAGE_SIZE + idx + 1}</td>
                     <td className="py-2">{p.name || ""}</td>
-                    <td className="py-2">{p.categoryId ? p.categoryId : "-"}</td>
-                    <td className="py-2">{totalVariants}</td>
-                    <td className="py-2">-</td>
+                    <td className="py-2">{p.brand || ""}</td>
+                    <td className="py-2">{p.categoryName ? p.categoryName : "-"}</td>
                     <td className="py-2" title={p.status || "draft"}>
                       {p.status === "active" ? (
                         <CircleCheck className="h-4 w-4 text-emerald-400" />
@@ -296,17 +297,18 @@ export function ProductsPage() {
                           onClick={async () => {
                             try {
                               const productDetail = await getProductDetail(p.id);
+                              console.log(productDetail);
                               setEditing(productDetail as any);
                               setName(productDetail.name || "");
                               setCategoryId(productDetail.categoryId || "");
-                              setStatus(productDetail.status || "draft");
+                              setStatus(productDetail.status);
                               setDescription(productDetail.description || "");
                               setImages(productDetail.images || []);
                               setOptions(
                                 productDetail.options?.length ? productDetail.options : [emptyOption()],
                               );
-                              setSkuRows(
-                                productDetail.skus?.map((s: any) => ({
+                              setVariants(
+                                productDetail.variants?.map((s: any) => ({
                                   comboKey: JSON.stringify(s.optionValues),
                                   code: s.code,
                                   price: s.price,
@@ -551,7 +553,7 @@ export function ProductsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {skuRows.length === 0 ? (
+                  {variants.length === 0 ? (
                     <tr>
                       <td
                         colSpan={
@@ -565,7 +567,7 @@ export function ProductsPage() {
                       </td>
                     </tr>
                   ) : (
-                    skuRows.map((row, idx) => (
+                    variants.map((row, idx) => (
                       <tr
                         key={row.comboKey}
                         className="border-t border-slate-800"
@@ -598,7 +600,7 @@ export function ProductsPage() {
                           <input
                             value={row.code}
                             onChange={(e) =>
-                              setSkuRows((prev) =>
+                              setVariants((prev) =>
                                 prev.map((r, i) =>
                                   i === idx
                                     ? { ...r, code: e.target.value }
@@ -615,7 +617,7 @@ export function ProductsPage() {
                             type="number"
                             value={row.price}
                             onChange={(e) =>
-                              setSkuRows((prev) =>
+                              setVariants((prev) =>
                                 prev.map((r, i) =>
                                   i === idx
                                     ? { ...r, price: Number(e.target.value) }
@@ -634,7 +636,7 @@ export function ProductsPage() {
                             type="number"
                             value={row.stock}
                             onChange={(e) =>
-                              setSkuRows((prev) =>
+                              setVariants((prev) =>
                                 prev.map((r, i) =>
                                   i === idx
                                     ? { ...r, stock: Number(e.target.value) }
@@ -654,7 +656,7 @@ export function ProductsPage() {
                             icon={<Trash2 size={12} />}
                             variant="danger"
                             onClick={() =>
-                              setSkuRows((prev) =>
+                              setVariants((prev) =>
                                 prev.filter((_, i) => i !== idx),
                               )
                             }

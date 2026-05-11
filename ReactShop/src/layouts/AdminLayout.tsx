@@ -1,9 +1,10 @@
-import { NavLink, Outlet } from "react-router-dom";
-import { Box, Boxes, ChartColumn, FolderTree, Receipt } from "lucide-react";
-import { seedIfNeeded } from "../services/bootstrap";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Box, Boxes, ChartColumn, FolderTree, LogOut, Receipt } from "lucide-react";
+// import { seedIfNeeded } from "../services/bootstrap";
 import { dashboardStats, formatMoney } from "../services/appService";
+import { authService } from "../services/authService";
 
-seedIfNeeded();
+// seedIfNeeded();
 
 const links = [
   { to: "/categories", icon: FolderTree },
@@ -14,14 +15,34 @@ const links = [
 ];
 
 export function AdminLayout() {
+  const navigate = useNavigate();
   const stats = dashboardStats();
+  const userEmail = authService.getUserEmail();
+
+  const handleLogout = () => {
+    authService.logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto flex max-w-7xl gap-4 p-4">
         <aside className="sticky top-4 h-[calc(100vh-2rem)] w-72 rounded-2xl border border-slate-800 bg-slate-900/80 p-4 backdrop-blur">
-          <h1 className="mb-1 text-xl font-bold">ReactShop Admin</h1>
-          <p className="mb-6 text-xs text-slate-400">Badminton shop dashboard</p>
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <div>
+              <h1 className="mb-1 text-xl font-bold">ReactShop Admin</h1>
+              <p className="text-xs text-slate-400">Badminton shop dashboard</p>
+            </div>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-slate-300 transition hover:bg-slate-700"
+              title="Đăng xuất"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
+          {userEmail ? <p className="mb-4 text-xs text-slate-400">Đã đăng nhập: {userEmail}</p> : null}
 
           <div className="mb-6 grid grid-cols-2 gap-2 text-xs">
             <div className="rounded-lg bg-slate-800 p-2"><p className="text-slate-400">Products</p><p className="text-base font-semibold">{stats.totalProducts}</p></div>
