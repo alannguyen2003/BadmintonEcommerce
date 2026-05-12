@@ -22,7 +22,6 @@ public class UpdateOption : IEndpoint
                 AddedOptions = request.AddedOptions,
                 AddedVariants = request.AddedVariants,
                 DeletedVariants = request.DeletedVariants,
-                DeletedOptionValues = request.DeletedOptionValues,
                 DeletedOptions = request.DeletedOptions,
                 ProductId = request.ProductId
             }, cancellationToken);

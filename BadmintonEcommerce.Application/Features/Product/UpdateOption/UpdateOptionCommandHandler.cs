@@ -30,8 +30,15 @@ public class UpdateOptionCommandHandler(
         {
             return Result.Failure<Tuple<int, int>>(ProductError.NotFound(command.ProductId));
         }
+        
+        //Handled Delete
+        foreach (var item in command.DeletedVariants)
+            await productVariantRepository.Delete(item);
+        foreach (var item in command.DeletedOptions) 
+            await productOptionRepository.Delete(item);
+         
         //Handle Added 
-        Tuple<List<ProductOption>, List<ProductVariant>> tuples = await this.HandleAddedOptions(command.AddedOptions,
+        /*Tuple<List<ProductOption>, List<ProductVariant>> tuples = await this.HandleAddedOptions(command.AddedOptions,
             command.AddedVariants,
             product.Slug);
         if (product.Options == null) product.Options = new List<ProductOption>();
@@ -66,15 +73,74 @@ public class UpdateOptionCommandHandler(
             };
             productVariantRepository.Insert(variant);
             inventoryItemRepository.Insert(inventory);
+        }*/
+        var optionValueMap = new Dictionary<(string code, string value), ProductOptionValue>();
+        foreach (var item in command.AddedOptions)
+        {
+            ProductOption productOption = new ProductOption()
+            {
+                OptionName = item.Name,
+                Code = item.Code,
+                OptionValues = new List<ProductOptionValue>()
+            };
+            foreach (var value in item.Values)
+            {
+                ProductOptionValue optionValue = new ProductOptionValue()
+                {
+                    Id = Guid.NewGuid(),
+                    Value = value,
+                    CreatedOnUtc = dateTimeProvider.UtcNow,
+                    Option = productOption
+                };
+                productOption.OptionValues.Add(optionValue);
+                
+                //Khúc này tạo map
+                optionValueMap[(item.Code.ToLower(), value.ToLower())] = optionValue;
+            }
+            product.Options.Add(productOption);
+        }
+
+        foreach (var item in command.AddedVariants)
+        {
+            ProductVariant productVariant = new ProductVariant()
+            {
+                Id = Guid.NewGuid(),
+                CreatedOnUtc = dateTimeProvider.UtcNow,
+                Price = item.Price,
+                SKU = 
+                    SlugGenerateProvider.GenerateSku(product.Slug, 
+                        item.Values.Select(v => (v.Code, v.Value)).ToList()),
+                Combinations = new List<VariantCombination>()
+            };
+            InventoryItem inventoryItem = new InventoryItem()
+            {
+                Id  = Guid.NewGuid(),
+                Quantity = item.Stock,
+                CreatedOnUtc = dateTimeProvider.UtcNow,
+            };
+            inventoryItem.Variant = productVariant;
+            inventoryItemRepository.Insert(inventoryItem);
+            //Tạo combinations
+            foreach (var combination in item.Values)
+            {
+                var key = (combination.Code.ToLower(), combination.Value.ToLower());
+
+                if (!optionValueMap.TryGetValue(key, out var optionValue))
+                {
+                    throw new Exception($"Option value not found: {combination.Code} - {combination.Value}");
+                }
+                
+                productVariant.Combinations.Add(new VariantCombination()
+                {
+                    Variant = productVariant,
+                    OptionValue = optionValue
+                });
+            }
+            
+            product.Variants.Add(productVariant);
         }
         
-        //Handled Delete
-        foreach (var item in command.DeletedVariants)
-            await productVariantRepository.Delete(item);
-        foreach (var item in command.DeletedOptionValues)
-            await productOptionValueRepository.Delete(item);
-        foreach (var item in command.DeletedOptions) 
-            await productOptionRepository.Delete(item);
+
         await productRepository.Update(product);
         await productRepository.SaveChangesAsync();
         return Result.Success();

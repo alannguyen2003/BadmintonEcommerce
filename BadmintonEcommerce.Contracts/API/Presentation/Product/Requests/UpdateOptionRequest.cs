@@ -3,13 +3,8 @@
 public class UpdateOptionRequest
 {
     public Guid ProductId { get; set; }
-    public List<AddedOptionRequest> AddedOptions { get; set; } = new List<AddedOptionRequest>();
-    public List<AddedVariantRequest> AddedVariants { get; set; }
-
-    public List<UpdatedOptionValueRequest> UpdatedOptionValues { get; set; } =
-        new List<UpdatedOptionValueRequest>();
-    
-    public List<UpdatedVariantRequest> UpdatedVariants { get; set; }
+    public List<CreateOptionRequest> AddedOptions { get; set; } = new List<CreateOptionRequest>();
+    public List<CreateVariantRequest> AddedVariants { get; set; }
     
     public List<Guid> DeletedOptionValues { get; set; }
     public List<Guid> DeletedVariants { get; set; }
