@@ -144,6 +144,4 @@ public class CreateFullProductCommandHandler(
         return options.GroupBy(item => item.Code)
             .Any(item => item.Count() > 1);
     }
-
-    
 }
