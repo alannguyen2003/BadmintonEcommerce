@@ -26,10 +26,10 @@ public class ProductProfile : IMappingProfile
             .ForMember(des => des.Price,
                 src => src.Variants.Min(item => item.Price))
             .ForMember(des => des.PrimaryImage,
-                src => src.Images.Count == 0 ? null : new PrimaryImageResponse()
+                src => src.Images == null ? null : new PrimaryImageResponse()
                 {
-                    Id = src.Images.First(item => item.IsPrimary).Id,
-                    Url = src.Images.First(item => item.IsPrimary).Url
+                    Id = src.Images.FirstOrDefault(item => item.IsPrimary).Id,
+                    Url = src.Images.FirstOrDefault(item => item.IsPrimary).Url
                 });
 
 
